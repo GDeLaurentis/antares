@@ -1,0 +1,13 @@
+bh_patch.pyc
+__init__.pyc
+my_warnings.pyc
+tools.pyc
+invariants.pyc
+unknown.pyc
+bh_unknown.pyc
+se_unknown.pyc
+pycuda_tools.pyc
+chy.pyc
+scattering_equations_solver.pyc
+settings.pyc
+numerical_methods.pyc
