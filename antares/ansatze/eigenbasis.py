@@ -9,21 +9,11 @@
 
 # Author: Giuseppe
 
-from __future__ import unicode_literals
-from __future__ import print_function
-
-import numpy as np
-import sympy as sp
-import sys
-import multiprocessing as mp
-import functools
-
 from lips import Particles
 from lips.symmetries import inverse
 
-from copy import deepcopy
 from antares.core.settings import settings
-from antares.core.tools import Progress, MyProcessPool, pSijk, pA2, pS2, pNB, pDijk
+from antares.core.tools import pSijk, pA2, pS2, pNB, pDijk
 from lips.invariants import Invariants
 
 

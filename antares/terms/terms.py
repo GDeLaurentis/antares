@@ -35,7 +35,6 @@ from antares.core.unknown import Unknown
 from antares.scalings.pair import pair_scalings
 from antares.terms.terms_numerator_fit import Terms_numerators_fit
 from antares.terms.term import Term, Numerator, Denominator
-# from antares.ansatze.interface import Ansatz
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -560,7 +559,7 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
         #     print(unicode(_all_friends[j]).ljust(col_width) + " ---> " + unicode(_weights[j]))
 
     def check_md_pw_consistency(self):
-        return all(map(Ansatz.exists, self.ansatze_mass_dimensions, self.ansatze_phase_weights))
+        raise NotImplementedError
 
     def order_terms_by_complexity(self):
         lM = self.ansatze_mass_dimensions
