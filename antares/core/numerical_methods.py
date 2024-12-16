@@ -17,7 +17,7 @@ from lips import Particles
 from lips.invariants import Invariants
 from lips.symmetries import phase_weights_compatible_symmetries
 
-from linac.tensor_function import tensor_function as _tensor_function
+# from linac.tensor_function import tensor_function as _tensor_function
 
 from pyadic.finite_field import ModP, rationalise
 from pyadic.padic import padic_log
@@ -433,6 +433,59 @@ class num_func(Numerical_Methods, object):
     @memoized(name='num_func.__call__', ignore={0})
     def __call__(self, oParticles):
         return self.evaluable_function(oParticles)
+
+
+class _tensor_function(object):
+    """Tensor function supporting indexing and iteration.
+       For instance, the initializer 'callable_function' can be a function returning a numpy.array"""
+    # Taken from linac, import from there once made public
+
+    def __init__(self, callable_function):
+        self.callable_function = callable_function
+        if hasattr(callable_function, "__name__"):
+            self.__name__ = callable_function.__name__
+
+    def flatten(self):
+        return tensor_function(lambda args: self(args).flatten())
+
+    def __getitem__(self, index):
+        return tensor_function(lambda args: self(args)[index])
+
+    def __matmul__(self, other):
+        assert isinstance(other, numpy.ndarray)
+        return tensor_function(lambda args: self(args) @ other)
+
+    @memoized(name='tensor_function.__call__', ignore={0})
+    def __call__(self, *args, **kwargs):
+        res = self.callable_function(*args, **kwargs)
+        if hasattr(res, "shape") and not hasattr(self, "__shape__"):
+            self.shape = res.shape
+        elif isinstance(res, list):
+            self.__size__ = len(res)
+        return res
+
+    def __len__(self):
+        if hasattr(self, "shape"):
+            return self.shape[0]
+        elif hasattr(self, "__size__"):
+            return self.__size__
+        else:
+            raise AttributeError("Length not known. Have you tried evaluating the function at least once?")
+
+    @property
+    def shape(self):
+        if hasattr(self, "__shape__"):
+            return self.__shape__
+        else:
+            raise AttributeError("Shape not known. Have you tried evaluating the function at least once?")
+
+    @shape.setter
+    def shape(self, value):
+        self.__shape__ = value
+
+    def __iter__(self):
+        for entry in self.flatten():
+            yield entry
 
 
 class tensor_function(Numerical_Methods, _tensor_function):
