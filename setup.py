@@ -1,12 +1,18 @@
 from setuptools import setup, find_packages
+from pathlib import Path
+from version import __version__ as version
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 
 setup(
-    name='antares',
-    version='0.1.0',
-    author='Giuseppe De Laurentis',
+    name='antares-hep',
+    version=version,
+    license='GNU General Public License v3.0',
+    author='Giuseppe De Laurentis, Daniel Maitre',
     author_email='g.dl@hotmail.it',
-    description='Automated Numerical To Analytical Rational coefficients Extraction for Spinor helicity scattering amplitudes',
+    description='Automated Numerical To Analytical REconstruction Software',
     packages=find_packages(),
     include_package_data=True,
     data_files=[],
@@ -25,4 +31,14 @@ setup(
             'SpinorLatexCompiler=antares.scripts.SpinorLatexCompiler:main',  # Define the entry point
         ],
     },
+    classifiers=[
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering :: Physics',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+    ],
 )

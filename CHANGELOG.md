@@ -9,15 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `TermsList` class now replaces `basis` related functions.
-
 ### Changed
 
 ### Fixed
 
-- Fixed issue where `Particles` objects used in `Numerical_Methods.mass_dimensions` and `.phase_weights` would not all trigger an `lru_cache` hit, likely due to mutable nature of the object (despite hasing and equality being correctly implemented).
-
 ### Deprecated
+
+
+## [0.6.1] - 2024-12-16
+
+### Added
+
+- `TermsList` class now replaces `basis` related functions.
+
+### Fixed
+
+- Fixed issue where `Particles` objects used in `Numerical_Methods.mass_dimensions` and `.phase_weights` would not all trigger an `lru_cache` hit, likely due to mutable nature of the object (despite hasing and equality being correctly implemented).
 
 
 ## [0.6.0] - 2024-06-18
