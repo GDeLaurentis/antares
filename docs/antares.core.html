@@ -1,0 +1,1047 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>antares.core package &mdash; antares 0.6.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2bd037f0"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="antares.partial_fractioning package" href="antares.partial_fractioning.html" />
+    <link rel="prev" title="antares.ansatze package" href="antares.ansatze.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            antares
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Modules Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">antares</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="antares.html">antares package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="antares.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="antares.ansatze.html">antares.ansatze package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">antares.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.partial_fractioning.html">antares.partial_fractioning package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.scalings.html">antares.scalings package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.scripts.html">antares.scripts package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html">antares.terms package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.topologies.html">antares.topologies package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.html#antares-analytical-to-analytical-module">antares.analytical_to_analytical module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.html#antares-bh-to-readable-module">antares.bh_to_readable module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.html#antares-check-results-module">antares.check_results module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.html#antares-encode-cut-constructible-parts-module">antares.encode_cut_constructible_parts module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.html#antares-numerical-to-analytical-module">antares.numerical_to_analytical module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.html#module-antares">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">antares</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">antares</a></li>
+          <li class="breadcrumb-item"><a href="antares.html">antares package</a></li>
+      <li class="breadcrumb-item active">antares.core package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/antares.core.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="antares-core-package">
+<h1>antares.core package<a class="headerlink" href="#antares-core-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-antares.core.bh_patch">
+<span id="antares-core-bh-patch-module"></span><h2>antares.core.bh_patch module<a class="headerlink" href="#module-antares.core.bh_patch" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.bh_patch.accuracy">
+<span class="sig-prename descclassname"><span class="pre">antares.core.bh_patch.</span></span><span class="sig-name descname"><span class="pre">accuracy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_patch.accuracy" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.bh_patch.file_compatible_print">
+<span class="sig-prename descclassname"><span class="pre">antares.core.bh_patch.</span></span><span class="sig-name descname"><span class="pre">file_compatible_print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_patch.file_compatible_print" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-antares.core.bh_unknown">
+<span id="antares-core-bh-unknown-module"></span><h2>antares.core.bh_unknown module<a class="headerlink" href="#module-antares.core.bh_unknown" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.bh_unknown.</span></span><span class="sig-name descname"><span class="pre">BHUnknown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">helconf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loopid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amppart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ampindex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#antares.core.numerical_methods.Numerical_Methods" title="antares.core.numerical_methods.Numerical_Methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical_Methods</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.BH_process">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BH_process</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.BH_process" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.BH_vectori">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BH_vectori</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.BH_vectori" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.ampindex">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ampindex</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.ampindex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.amppart">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">amppart</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.amppart" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.amppart_and_ampindex">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">amppart_and_ampindex</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.amppart_and_ampindex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.basis_functions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">basis_functions</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.basis_functions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.basis_functions_invs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">basis_functions_invs</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.basis_functions_invs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.call_cache_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">call_cache_path</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.call_cache_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.count_gluons">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">count_gluons</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.count_gluons" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.count_photons">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">count_photons</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.count_photons" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.count_quarks">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">count_quarks</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.count_quarks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.easy_boxes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">easy_boxes</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.easy_boxes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.get_analytical_boxes">
+<span class="sig-name descname"><span class="pre">get_analytical_boxes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.get_analytical_boxes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.get_call_cache">
+<span class="sig-name descname"><span class="pre">get_call_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.get_call_cache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.get_topology_info">
+<span class="sig-name descname"><span class="pre">get_topology_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.get_topology_info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.helconf">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">helconf</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.helconf" title="Link to this definition"></a></dt>
+<dd><p>Helicity configuration. Accepts string or list with following words: (qp|qm|qbp|qbm|gp|gm|p|m). Returns a list.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.helconf_and_loopid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">helconf_and_loopid</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.helconf_and_loopid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.loopid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loopid</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.loopid" title="Link to this definition"></a></dt>
+<dd><p>Id of the particle in the loop. An helicity configuration needs to be set beforehand.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.multiplicity">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">multiplicity</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.multiplicity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.print_graphs">
+<span class="sig-name descname"><span class="pre">print_graphs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.print_graphs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.print_topology_info">
+<span class="sig-name descname"><span class="pre">print_topology_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.print_topology_info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.process_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process_name</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.process_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.reload_call_cache">
+<span class="sig-name descname"><span class="pre">reload_call_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.reload_call_cache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.res_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">res_path</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.res_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.save_call_cache">
+<span class="sig-name descname"><span class="pre">save_call_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.save_call_cache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.shelconf">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shelconf</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.shelconf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.short_process_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">short_process_name</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.short_process_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.spurious_poles">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spurious_poles</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.spurious_poles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.BHUnknown.upper_res_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upper_res_path</span></span><a class="headerlink" href="#antares.core.bh_unknown.BHUnknown.upper_res_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.bh_unknown.Upload_Momentum_Configuration">
+<span class="sig-prename descclassname"><span class="pre">antares.core.bh_unknown.</span></span><span class="sig-name descname"><span class="pre">Upload_Momentum_Configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oParticles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.bh_unknown.Upload_Momentum_Configuration" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-antares.core.my_warnings">
+<span id="antares-core-my-warnings-module"></span><h2>antares.core.my_warnings module<a class="headerlink" href="#module-antares.core.my_warnings" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.my_warnings.warnings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.my_warnings.</span></span><span class="sig-name descname"><span class="pre">warnings</span></span><a class="headerlink" href="#antares.core.my_warnings.warnings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.my_warnings.warnings.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.my_warnings.warnings.clear" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.my_warnings.warnings.raise_error">
+<span class="sig-name descname"><span class="pre">raise_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.my_warnings.warnings.raise_error" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.my_warnings.warnings.silent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">silent</span></span><a class="headerlink" href="#antares.core.my_warnings.warnings.silent" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.my_warnings.warnings.warn">
+<span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.my_warnings.warnings.warn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.my_warnings.warnings.warning">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">warning</span></span><a class="headerlink" href="#antares.core.my_warnings.warnings.warning" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-antares.core.numerical_methods">
+<span id="antares-core-numerical-methods-module"></span><h2>antares.core.numerical_methods module<a class="headerlink" href="#module-antares.core.numerical_methods" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">Numerical_Methods</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.all_symmetries">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">all_symmetries</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.all_symmetries" title="Link to this definition"></a></dt>
+<dd><p>Obtain the symmetries of the function, by numerical evaluation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.collinear_data">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collinear_data</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.collinear_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.do_double_collinear_limits">
+<span class="sig-name descname"><span class="pre">do_double_collinear_limits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.do_double_collinear_limits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.do_single_collinear_limits">
+<span class="sig-name descname"><span class="pre">do_single_collinear_limits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.do_single_collinear_limits" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.finite_field_mass_dimension">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">finite_field_mass_dimension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">powers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.finite_field_mass_dimension" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.finite_field_phase_weight">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">finite_field_phase_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">powers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.finite_field_phase_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.internal_masses">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">internal_masses</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.internal_masses" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.is_iterable">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_iterable</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.is_iterable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.is_zero">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_zero</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.is_zero" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.mass_dimension">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mass_dimension</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.mass_dimension" title="Link to this definition"></a></dt>
+<dd><p>Returns the mass (a.k.a. energy) dimension. The value is expected to be a (half-)integer. Return type is float, vectorized depending on input.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.mass_dimension_and_phase_weights_lParticles">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mass_dimension_and_phase_weights_lParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multiplicity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.mass_dimension_and_phase_weights_lParticles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.mass_dimension_lParticles">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mass_dimension_lParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multiplicity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.mass_dimension_lParticles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.mpc_mass_dimension">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mpc_mass_dimension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.mpc_mass_dimension" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.mpc_phase_weight">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mpc_phase_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.mpc_phase_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.padic_mass_dimension">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">padic_mass_dimension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.padic_mass_dimension" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.padic_phase_weight">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">padic_phase_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.padic_phase_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.phase_weights">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">phase_weights</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.phase_weights" title="Link to this definition"></a></dt>
+<dd><p>Returns the phase weights (a.k.a. little group scalings). Return type is a list of int’s, vectorized depending on input.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.phase_weights_lParticles">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">phase_weights_lParticles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multiplicity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.phase_weights_lParticles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.soft_weights">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">soft_weights</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.soft_weights" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.as_scalar_if_scalar">
+<span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">as_scalar_if_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.as_scalar_if_scalar" title="Link to this definition"></a></dt>
+<dd><p>Turns numpy arrays with zero dimensions into ‘real’ scalars.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.composed">
+<span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">composed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">decorators</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.composed" title="Link to this definition"></a></dt>
+<dd><p>Apply an arbitrary number of decorators in a single line.</p>
+<p>The following are equivalent:</p>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
+<p>Using <cite>composed</cite>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@composed</span><span class="p">(</span><span class="n">decorator1</span><span class="p">,</span> <span class="n">decorator2</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Using individual decorators:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nd">@decorator1</span>
+<span class="gp">... </span><span class="nd">@decorator2</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+</pre></div>
+</div>
+</section>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>decorators<span class="classifier">callable</span></dt><dd><p>An arbitrary number of decorator functions to be applied.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>callable</dt><dd><p>A function decorated with all the provided decorators.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.memoized">
+<span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">memoized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">decorator_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">decorator_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.memoized" title="Link to this definition"></a></dt>
+<dd><p>Diskcaching decorator generator.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.num_func">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">num_func</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evaluable_function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.num_func" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#antares.core.numerical_methods.Numerical_Methods" title="antares.core.numerical_methods.Numerical_Methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical_Methods</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.numpy_vectorized">
+<span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">numpy_vectorized</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">decorator_args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">decorator_kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.numpy_vectorized" title="Link to this definition"></a></dt>
+<dd><p>Similar to numpy.vectorize when used as a decorator, but retains the __name__ of the decorated function and accepts args and kwargs.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.regulated_division">
+<span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">regulated_division</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.regulated_division" title="Link to this definition"></a></dt>
+<dd><p>Like division, but sends 0 / 0 to 1.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.tensor_function">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">tensor_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callable_function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.tensor_function" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#antares.core.numerical_methods.Numerical_Methods" title="antares.core.numerical_methods.Numerical_Methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical_Methods</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">_tensor_function</span></code></p>
+</dd></dl>
+
+</section>
+<section id="antares-core-pycuda-tools-module">
+<h2>antares.core.pycuda_tools module<a class="headerlink" href="#antares-core-pycuda-tools-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-antares.core.se_unknown">
+<span id="antares-core-se-unknown-module"></span><h2>antares.core.se_unknown module<a class="headerlink" href="#module-antares.core.se_unknown" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.se_unknown.SEUnknown">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.se_unknown.</span></span><span class="sig-name descname"><span class="pre">SEUnknown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">se_arguement</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.se_unknown.SEUnknown" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.se_unknown.upload_mom_conf_joe">
+<span class="sig-prename descclassname"><span class="pre">antares.core.se_unknown.</span></span><span class="sig-name descname"><span class="pre">upload_mom_conf_joe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oParticles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.se_unknown.upload_mom_conf_joe" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-antares.core.settings">
+<span id="antares-core-settings-module"></span><h2>antares.core.settings module<a class="headerlink" href="#module-antares.core.settings" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.settings.Settings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.settings.</span></span><span class="sig-name descname"><span class="pre">Settings</span></span><a class="headerlink" href="#antares.core.settings.Settings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.settings.Settings.BHsettings">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BHsettings</span></span><a class="headerlink" href="#antares.core.settings.Settings.BHsettings" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.settings.Settings.Cores">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Cores</span></span><a class="headerlink" href="#antares.core.settings.Settings.Cores" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.settings.Settings.PWTestingCachePath">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PWTestingCachePath</span></span><a class="headerlink" href="#antares.core.settings.Settings.PWTestingCachePath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.settings.Settings.base_cache_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">base_cache_path</span></span><a class="headerlink" href="#antares.core.settings.Settings.base_cache_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.settings.Settings.base_res_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">base_res_path</span></span><a class="headerlink" href="#antares.core.settings.Settings.base_res_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.settings.Settings.gmp_precision">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gmp_precision</span></span><a class="headerlink" href="#antares.core.settings.Settings.gmp_precision" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.settings.Settings.logfile">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">logfile</span></span><a class="headerlink" href="#antares.core.settings.Settings.logfile" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.settings.Settings.read_from_file">
+<span class="sig-name descname"><span class="pre">read_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_full_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.settings.Settings.read_from_file" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.settings.Settings.run_file_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_file_name</span></span><a class="headerlink" href="#antares.core.settings.Settings.run_file_name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.settings.Settings.to_int_prec">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_int_prec</span></span><a class="headerlink" href="#antares.core.settings.Settings.to_int_prec" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-antares.core.tools">
+<span id="antares-core-tools-module"></span><h2>antares.core.tools module<a class="headerlink" href="#module-antares.core.tools" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.Compute">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Compute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lBrackets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lExponents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lCoefficients</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oParticles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Compute" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.Generate_LaTeX_and_PDF">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Generate_LaTeX_and_PDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_tex_to_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Generate_LaTeX_and_PDF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.LaTeXToPython">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">LaTeXToPython</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.LaTeXToPython" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.tools.MyProcessPool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">MyProcessPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.MyProcessPool" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.tools.MyShelf">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">MyShelf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.MyShelf" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.tools.MyThreadPool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">MyThreadPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.MyThreadPool" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.Negative_Entries">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Negative_Entries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lIntegers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Negative_Entries" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.tools.NoDaemonProcess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">NoDaemonProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">daemon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.NoDaemonProcess" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Process</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.tools.NoDaemonProcess.daemon">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">daemon</span></span><a class="headerlink" href="#antares.core.tools.NoDaemonProcess.daemon" title="Link to this definition"></a></dt>
+<dd><p>Return whether process is a daemon</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.tools.NoDaemonProcessPool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">NoDaemonProcessPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxtasksperchild</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.NoDaemonProcessPool" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pool</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.tools.NoDaemonProcessPool.Process">
+<span class="sig-name descname"><span class="pre">Process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.NoDaemonProcessPool.Process" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.tools.OutputGrabber">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">OutputGrabber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threaded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.OutputGrabber" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class used to grab standard output or another stream.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="antares.core.tools.OutputGrabber.escape_char">
+<span class="sig-name descname"><span class="pre">escape_char</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x08'</span></em><a class="headerlink" href="#antares.core.tools.OutputGrabber.escape_char" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.tools.OutputGrabber.readOutput">
+<span class="sig-name descname"><span class="pre">readOutput</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.OutputGrabber.readOutput" title="Link to this definition"></a></dt>
+<dd><p>Read the stream data (one byte at a time)
+and save the text in <cite>capturedtext</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.tools.OutputGrabber.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.OutputGrabber.start" title="Link to this definition"></a></dt>
+<dd><p>Start capturing the stream data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.tools.OutputGrabber.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.OutputGrabber.stop" title="Link to this definition"></a></dt>
+<dd><p>Stop capturing the stream data and save the text in <cite>capturedtext</cite>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.PartialCompute">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">PartialCompute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lBrackets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lExponents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lCoefficients</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.PartialCompute" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.Positive_Entries">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Positive_Entries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lIntegers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Positive_Entries" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.tools.Progress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UseParallelisation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Progress" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.tools.Progress.decrement">
+<span class="sig-name descname"><span class="pre">decrement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Progress.decrement" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.tools.Progress.increment">
+<span class="sig-name descname"><span class="pre">increment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Progress.increment" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.tools.Progress.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Progress.write" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.Sum_Abs">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Sum_Abs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lIntegers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Sum_Abs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.Write">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lBrackets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lExponents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lCoefficients</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Write" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.all_non_empty_subsets">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">all_non_empty_subsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.all_non_empty_subsets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.cgmp_to_mpc">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">cgmp_to_mpc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cgmp_nbr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.cgmp_to_mpc" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.chained_gcd">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">chained_gcd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlier_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.chained_gcd" title="Link to this definition"></a></dt>
+<dd><p>GCD of array, exluding outliers from both ends of the sorted array.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.chunks">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.chunks" title="Link to this definition"></a></dt>
+<dd><p>Yield successive n-sized chunks from l.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.configuration_unpacker">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">configuration_unpacker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sys_argv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.configuration_unpacker" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.tools.fakeManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">fakeManager</span></span><a class="headerlink" href="#antares.core.tools.fakeManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.tools.fakeManager.Value">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.fakeManager.Value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.tools.fakeValue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">fakeValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.fakeValue" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.filterThreads">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">filterThreads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lambda_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.filterThreads" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.flatten">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursion_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treat_list_subclasses_as_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treat_tuples_as_lists</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_recursion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.flatten" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.forbidden_ordering">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">forbidden_ordering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_one</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_two</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oUnknown</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.forbidden_ordering" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.fraction_to_proper_fraction">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">fraction_to_proper_fraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">match</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.fraction_to_proper_fraction" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.generate_BH_cpp_files">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">generate_BH_cpp_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shelconf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PWRespath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_rational</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.generate_BH_cpp_files" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.get_common_Q_factor">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">get_common_Q_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlier_fraction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.get_common_Q_factor" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.get_max_abs_numerator">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">get_max_abs_numerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.get_max_abs_numerator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.get_max_denominator">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">get_max_denominator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.get_max_denominator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.log_linear_fit">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">log_linear_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xaxis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaxis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.log_linear_fit" title="Link to this definition"></a></dt>
+<dd><p>Fit slope of straight line in a log-log scatter plot. Slope has to be integer or half integer.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="antares.core.tools.log_linear_fit_Exception">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">log_linear_fit_Exception</span></span><a class="headerlink" href="#antares.core.tools.log_linear_fit_Exception" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.mapThreads">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">mapThreads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.mapThreads" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.mpc_to_cgmp">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">mpc_to_cgmp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mpc_nbr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.mpc_to_cgmp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.tools.nullcontext">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">nullcontext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enter_result</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.nullcontext" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.output_needs_grabbing">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">output_needs_grabbing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.output_needs_grabbing" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.printBHcpp">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">printBHcpp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oTerms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NameAmpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coef_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.printBHcpp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.printBHcpp_inner">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">printBHcpp_inner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BHcpp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.printBHcpp_inner" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.progress_wrapper">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">progress_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.progress_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.rand_frac">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">rand_frac</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.rand_frac" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.retry">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">retry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ExceptionsToCheck</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.retry" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.worker">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.worker" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-antares.core.unknown">
+<span id="antares-core-unknown-module"></span><h2>antares.core.unknown module<a class="headerlink" href="#module-antares.core.unknown" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.unknown.</span></span><span class="sig-name descname"><span class="pre">Unknown</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">original_unknown</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_partial_results</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#antares.core.numerical_methods.Numerical_Methods" title="antares.core.numerical_methods.Numerical_Methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical_Methods</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.add_partial_piece">
+<span class="sig-name descname"><span class="pre">add_partial_piece</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partial_piece</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.add_partial_piece" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.ampindex">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ampindex</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.ampindex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.amppart">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">amppart</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.amppart" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.amppart_and_ampindex">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">amppart_and_ampindex</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.amppart_and_ampindex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.basis_functions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">basis_functions</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.basis_functions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.basis_functions_invs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">basis_functions_invs</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.basis_functions_invs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.does_not_require_partial_fractioning">
+<span class="sig-name descname"><span class="pre">does_not_require_partial_fractioning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.does_not_require_partial_fractioning" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.easy_boxes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">easy_boxes</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.easy_boxes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.fit_single_scalings_result">
+<span class="sig-name descname"><span class="pre">fit_single_scalings_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">split_pole_orders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.fit_single_scalings_result" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.get_partial_fractioned_terms">
+<span class="sig-name descname"><span class="pre">get_partial_fractioned_terms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">invariant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nbr_terms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.get_partial_fractioned_terms" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.helconf">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">helconf</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.helconf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.helconf_and_loopid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">helconf_and_loopid</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.helconf_and_loopid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.internal_masses">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">internal_masses</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.internal_masses" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.loopid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loopid</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.loopid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.mass_dimension">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mass_dimension</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.mass_dimension" title="Link to this definition"></a></dt>
+<dd><p>Returns the mass (a.k.a. energy) dimension. The value is expected to be a (half-)integer. Return type is float, vectorized depending on input.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.multiplicity">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">multiplicity</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.multiplicity" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.phase_weights">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">phase_weights</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.phase_weights" title="Link to this definition"></a></dt>
+<dd><p>Returns the phase weights (a.k.a. little group scalings). Return type is a list of int’s, vectorized depending on input.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.poles_to_be_eliminated">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">poles_to_be_eliminated</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.poles_to_be_eliminated" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.print_partial_result">
+<span class="sig-name descname"><span class="pre">print_partial_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">partial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_tex_to_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.print_partial_result" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.recursively_extract_original_unknown">
+<span class="sig-name descname"><span class="pre">recursively_extract_original_unknown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.recursively_extract_original_unknown" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.recursively_extract_terms">
+<span class="sig-name descname"><span class="pre">recursively_extract_terms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.recursively_extract_terms" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.remove_last_partial_piece">
+<span class="sig-name descname"><span class="pre">remove_last_partial_piece</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.remove_last_partial_piece" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.reorder_invariants_for_partial_fractioning">
+<span class="sig-name descname"><span class="pre">reorder_invariants_for_partial_fractioning</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.reorder_invariants_for_partial_fractioning" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.res_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">res_path</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.res_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.reset" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.save_original_unknown_call_cache">
+<span class="sig-name descname"><span class="pre">save_original_unknown_call_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.Unknown.save_original_unknown_call_cache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.soft_weights">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">soft_weights</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.soft_weights" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.spurious_poles">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spurious_poles</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.spurious_poles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.core.unknown.Unknown.what_am_I">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">what_am_I</span></span><a class="headerlink" href="#antares.core.unknown.Unknown.what_am_I" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.unknown.caching_decorator">
+<span class="sig-prename descclassname"><span class="pre">antares.core.unknown.</span></span><span class="sig-name descname"><span class="pre">caching_decorator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.unknown.caching_decorator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-antares.core">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-antares.core" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="antares.ansatze.html" class="btn btn-neutral float-left" title="antares.ansatze package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="antares.partial_fractioning.html" class="btn btn-neutral float-right" title="antares.partial_fractioning package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018, Giuseppe De Laurentis &amp; Daniel Maitre.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

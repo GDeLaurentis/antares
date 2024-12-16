@@ -1,0 +1,557 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>antares package &mdash; antares 0.6.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2bd037f0"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="antares.ansatze package" href="antares.ansatze.html" />
+    <link rel="prev" title="antares" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            antares
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Modules Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">antares</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">antares package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.ansatze.html">antares.ansatze package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html">antares.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.partial_fractioning.html">antares.partial_fractioning package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.scalings.html">antares.scalings package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.scripts.html">antares.scripts package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html">antares.terms package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.topologies.html">antares.topologies package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#antares-analytical-to-analytical-module">antares.analytical_to_analytical module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#antares-bh-to-readable-module">antares.bh_to_readable module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#antares-check-results-module">antares.check_results module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#antares-encode-cut-constructible-parts-module">antares.encode_cut_constructible_parts module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#antares-numerical-to-analytical-module">antares.numerical_to_analytical module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-antares">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">antares</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">antares</a></li>
+      <li class="breadcrumb-item active">antares package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/antares.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="antares-package">
+<h1>antares package<a class="headerlink" href="#antares-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="antares.ansatze.html">antares.ansatze package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-numerator-ansatz-generator-cp-sat-module">antares.ansatze.Numerator_Ansatz_Generator_CP_SAT module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-numerator-ansatz-generator-cp-sat-2higgses-module">antares.ansatze.Numerator_Ansatz_Generator_CP_SAT_2Higgses module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-numerator-ansatz-generator-cp-sat-higgs-module">antares.ansatze.Numerator_Ansatz_Generator_CP_SAT_Higgs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-numerator-ansatz-generator-cp-sat-w-boson-module">antares.ansatze.Numerator_Ansatz_Generator_CP_SAT_W_Boson module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#module-antares.ansatze.eigenbasis">antares.ansatze.eigenbasis module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.ansatze.html#antares.ansatze.eigenbasis.CanonicalOrdering"><code class="docutils literal notranslate"><span class="pre">CanonicalOrdering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.ansatze.html#antares.ansatze.eigenbasis.Image"><code class="docutils literal notranslate"><span class="pre">Image()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-fitter-module">antares.ansatze.fitter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-generator-module">antares.ansatze.generator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-interface-module">antares.ansatze.interface module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-matrix-loader-module">antares.ansatze.matrix_loader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#module-antares.ansatze">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="antares.core.html">antares.core package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#module-antares.core.bh_patch">antares.core.bh_patch module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.bh_patch.accuracy"><code class="docutils literal notranslate"><span class="pre">accuracy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.bh_patch.file_compatible_print"><code class="docutils literal notranslate"><span class="pre">file_compatible_print()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#module-antares.core.bh_unknown">antares.core.bh_unknown module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown"><code class="docutils literal notranslate"><span class="pre">BHUnknown</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.BH_process"><code class="docutils literal notranslate"><span class="pre">BHUnknown.BH_process</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.BH_vectori"><code class="docutils literal notranslate"><span class="pre">BHUnknown.BH_vectori</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.ampindex"><code class="docutils literal notranslate"><span class="pre">BHUnknown.ampindex</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.amppart"><code class="docutils literal notranslate"><span class="pre">BHUnknown.amppart</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.amppart_and_ampindex"><code class="docutils literal notranslate"><span class="pre">BHUnknown.amppart_and_ampindex</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.basis_functions"><code class="docutils literal notranslate"><span class="pre">BHUnknown.basis_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.basis_functions_invs"><code class="docutils literal notranslate"><span class="pre">BHUnknown.basis_functions_invs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.call_cache_path"><code class="docutils literal notranslate"><span class="pre">BHUnknown.call_cache_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.count_gluons"><code class="docutils literal notranslate"><span class="pre">BHUnknown.count_gluons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.count_photons"><code class="docutils literal notranslate"><span class="pre">BHUnknown.count_photons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.count_quarks"><code class="docutils literal notranslate"><span class="pre">BHUnknown.count_quarks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.easy_boxes"><code class="docutils literal notranslate"><span class="pre">BHUnknown.easy_boxes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.get_analytical_boxes"><code class="docutils literal notranslate"><span class="pre">BHUnknown.get_analytical_boxes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.get_call_cache"><code class="docutils literal notranslate"><span class="pre">BHUnknown.get_call_cache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.get_topology_info"><code class="docutils literal notranslate"><span class="pre">BHUnknown.get_topology_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.helconf"><code class="docutils literal notranslate"><span class="pre">BHUnknown.helconf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.helconf_and_loopid"><code class="docutils literal notranslate"><span class="pre">BHUnknown.helconf_and_loopid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.loopid"><code class="docutils literal notranslate"><span class="pre">BHUnknown.loopid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.multiplicity"><code class="docutils literal notranslate"><span class="pre">BHUnknown.multiplicity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.print_graphs"><code class="docutils literal notranslate"><span class="pre">BHUnknown.print_graphs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.print_topology_info"><code class="docutils literal notranslate"><span class="pre">BHUnknown.print_topology_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.process_name"><code class="docutils literal notranslate"><span class="pre">BHUnknown.process_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.reload_call_cache"><code class="docutils literal notranslate"><span class="pre">BHUnknown.reload_call_cache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.res_path"><code class="docutils literal notranslate"><span class="pre">BHUnknown.res_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.save_call_cache"><code class="docutils literal notranslate"><span class="pre">BHUnknown.save_call_cache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.shelconf"><code class="docutils literal notranslate"><span class="pre">BHUnknown.shelconf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.short_process_name"><code class="docutils literal notranslate"><span class="pre">BHUnknown.short_process_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.spurious_poles"><code class="docutils literal notranslate"><span class="pre">BHUnknown.spurious_poles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.BHUnknown.upper_res_path"><code class="docutils literal notranslate"><span class="pre">BHUnknown.upper_res_path</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.bh_unknown.Upload_Momentum_Configuration"><code class="docutils literal notranslate"><span class="pre">Upload_Momentum_Configuration()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#module-antares.core.my_warnings">antares.core.my_warnings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.my_warnings.warnings"><code class="docutils literal notranslate"><span class="pre">warnings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.my_warnings.warnings.clear"><code class="docutils literal notranslate"><span class="pre">warnings.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.my_warnings.warnings.raise_error"><code class="docutils literal notranslate"><span class="pre">warnings.raise_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.my_warnings.warnings.silent"><code class="docutils literal notranslate"><span class="pre">warnings.silent</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.my_warnings.warnings.warn"><code class="docutils literal notranslate"><span class="pre">warnings.warn()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.my_warnings.warnings.warning"><code class="docutils literal notranslate"><span class="pre">warnings.warning</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#module-antares.core.numerical_methods">antares.core.numerical_methods module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.all_symmetries"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.all_symmetries</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.collinear_data"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.collinear_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.do_double_collinear_limits"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.do_double_collinear_limits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.do_single_collinear_limits"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.do_single_collinear_limits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.finite_field_mass_dimension"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.finite_field_mass_dimension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.finite_field_phase_weight"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.finite_field_phase_weight()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.internal_masses"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.internal_masses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.is_iterable"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.is_iterable</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.is_zero"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.is_zero</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.mass_dimension"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.mass_dimension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.mass_dimension_and_phase_weights_lParticles"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.mass_dimension_and_phase_weights_lParticles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.mass_dimension_lParticles"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.mass_dimension_lParticles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.mpc_mass_dimension"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.mpc_mass_dimension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.mpc_phase_weight"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.mpc_phase_weight()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.padic_mass_dimension"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.padic_mass_dimension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.padic_phase_weight"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.padic_phase_weight()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.phase_weights"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.phase_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.phase_weights_lParticles"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.phase_weights_lParticles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.Numerical_Methods.soft_weights"><code class="docutils literal notranslate"><span class="pre">Numerical_Methods.soft_weights</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.as_scalar_if_scalar"><code class="docutils literal notranslate"><span class="pre">as_scalar_if_scalar()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.composed"><code class="docutils literal notranslate"><span class="pre">composed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.memoized"><code class="docutils literal notranslate"><span class="pre">memoized()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.num_func"><code class="docutils literal notranslate"><span class="pre">num_func</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.numpy_vectorized"><code class="docutils literal notranslate"><span class="pre">numpy_vectorized()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.regulated_division"><code class="docutils literal notranslate"><span class="pre">regulated_division()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.numerical_methods.tensor_function"><code class="docutils literal notranslate"><span class="pre">tensor_function</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#antares-core-pycuda-tools-module">antares.core.pycuda_tools module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#module-antares.core.se_unknown">antares.core.se_unknown module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.se_unknown.SEUnknown"><code class="docutils literal notranslate"><span class="pre">SEUnknown</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.se_unknown.upload_mom_conf_joe"><code class="docutils literal notranslate"><span class="pre">upload_mom_conf_joe()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#module-antares.core.settings">antares.core.settings module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings"><code class="docutils literal notranslate"><span class="pre">Settings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings.BHsettings"><code class="docutils literal notranslate"><span class="pre">Settings.BHsettings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings.Cores"><code class="docutils literal notranslate"><span class="pre">Settings.Cores</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings.PWTestingCachePath"><code class="docutils literal notranslate"><span class="pre">Settings.PWTestingCachePath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings.base_cache_path"><code class="docutils literal notranslate"><span class="pre">Settings.base_cache_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings.base_res_path"><code class="docutils literal notranslate"><span class="pre">Settings.base_res_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings.gmp_precision"><code class="docutils literal notranslate"><span class="pre">Settings.gmp_precision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings.logfile"><code class="docutils literal notranslate"><span class="pre">Settings.logfile</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings.read_from_file"><code class="docutils literal notranslate"><span class="pre">Settings.read_from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings.run_file_name"><code class="docutils literal notranslate"><span class="pre">Settings.run_file_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.settings.Settings.to_int_prec"><code class="docutils literal notranslate"><span class="pre">Settings.to_int_prec</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#module-antares.core.tools">antares.core.tools module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.Compute"><code class="docutils literal notranslate"><span class="pre">Compute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.Generate_LaTeX_and_PDF"><code class="docutils literal notranslate"><span class="pre">Generate_LaTeX_and_PDF()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.LaTeXToPython"><code class="docutils literal notranslate"><span class="pre">LaTeXToPython()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.MyProcessPool"><code class="docutils literal notranslate"><span class="pre">MyProcessPool</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.MyShelf"><code class="docutils literal notranslate"><span class="pre">MyShelf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.MyThreadPool"><code class="docutils literal notranslate"><span class="pre">MyThreadPool</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.Negative_Entries"><code class="docutils literal notranslate"><span class="pre">Negative_Entries()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.NoDaemonProcess"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcess</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.tools.NoDaemonProcess.daemon"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcess.daemon</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.NoDaemonProcessPool"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcessPool</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.tools.NoDaemonProcessPool.Process"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcessPool.Process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.OutputGrabber"><code class="docutils literal notranslate"><span class="pre">OutputGrabber</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.tools.OutputGrabber.escape_char"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.escape_char</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.tools.OutputGrabber.readOutput"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.readOutput()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.tools.OutputGrabber.start"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.tools.OutputGrabber.stop"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.stop()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.PartialCompute"><code class="docutils literal notranslate"><span class="pre">PartialCompute()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.Positive_Entries"><code class="docutils literal notranslate"><span class="pre">Positive_Entries()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.Progress"><code class="docutils literal notranslate"><span class="pre">Progress</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.tools.Progress.decrement"><code class="docutils literal notranslate"><span class="pre">Progress.decrement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.tools.Progress.increment"><code class="docutils literal notranslate"><span class="pre">Progress.increment()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.tools.Progress.write"><code class="docutils literal notranslate"><span class="pre">Progress.write()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.Sum_Abs"><code class="docutils literal notranslate"><span class="pre">Sum_Abs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.Write"><code class="docutils literal notranslate"><span class="pre">Write()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.all_non_empty_subsets"><code class="docutils literal notranslate"><span class="pre">all_non_empty_subsets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.cgmp_to_mpc"><code class="docutils literal notranslate"><span class="pre">cgmp_to_mpc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.chained_gcd"><code class="docutils literal notranslate"><span class="pre">chained_gcd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.chunks"><code class="docutils literal notranslate"><span class="pre">chunks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.configuration_unpacker"><code class="docutils literal notranslate"><span class="pre">configuration_unpacker()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.fakeManager"><code class="docutils literal notranslate"><span class="pre">fakeManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.tools.fakeManager.Value"><code class="docutils literal notranslate"><span class="pre">fakeManager.Value()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.fakeValue"><code class="docutils literal notranslate"><span class="pre">fakeValue</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.filterThreads"><code class="docutils literal notranslate"><span class="pre">filterThreads()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.forbidden_ordering"><code class="docutils literal notranslate"><span class="pre">forbidden_ordering()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.fraction_to_proper_fraction"><code class="docutils literal notranslate"><span class="pre">fraction_to_proper_fraction()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.generate_BH_cpp_files"><code class="docutils literal notranslate"><span class="pre">generate_BH_cpp_files()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.get_common_Q_factor"><code class="docutils literal notranslate"><span class="pre">get_common_Q_factor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.get_max_abs_numerator"><code class="docutils literal notranslate"><span class="pre">get_max_abs_numerator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.get_max_denominator"><code class="docutils literal notranslate"><span class="pre">get_max_denominator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.log_linear_fit"><code class="docutils literal notranslate"><span class="pre">log_linear_fit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.log_linear_fit_Exception"><code class="docutils literal notranslate"><span class="pre">log_linear_fit_Exception</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.mapThreads"><code class="docutils literal notranslate"><span class="pre">mapThreads()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.mpc_to_cgmp"><code class="docutils literal notranslate"><span class="pre">mpc_to_cgmp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.nullcontext"><code class="docutils literal notranslate"><span class="pre">nullcontext</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.output_needs_grabbing"><code class="docutils literal notranslate"><span class="pre">output_needs_grabbing()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.printBHcpp"><code class="docutils literal notranslate"><span class="pre">printBHcpp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.printBHcpp_inner"><code class="docutils literal notranslate"><span class="pre">printBHcpp_inner()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.progress_wrapper"><code class="docutils literal notranslate"><span class="pre">progress_wrapper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.rand_frac"><code class="docutils literal notranslate"><span class="pre">rand_frac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.retry"><code class="docutils literal notranslate"><span class="pre">retry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.tools.worker"><code class="docutils literal notranslate"><span class="pre">worker()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#module-antares.core.unknown">antares.core.unknown module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown"><code class="docutils literal notranslate"><span class="pre">Unknown</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.add_partial_piece"><code class="docutils literal notranslate"><span class="pre">Unknown.add_partial_piece()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.ampindex"><code class="docutils literal notranslate"><span class="pre">Unknown.ampindex</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.amppart"><code class="docutils literal notranslate"><span class="pre">Unknown.amppart</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.amppart_and_ampindex"><code class="docutils literal notranslate"><span class="pre">Unknown.amppart_and_ampindex</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.basis_functions"><code class="docutils literal notranslate"><span class="pre">Unknown.basis_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.basis_functions_invs"><code class="docutils literal notranslate"><span class="pre">Unknown.basis_functions_invs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.does_not_require_partial_fractioning"><code class="docutils literal notranslate"><span class="pre">Unknown.does_not_require_partial_fractioning()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.easy_boxes"><code class="docutils literal notranslate"><span class="pre">Unknown.easy_boxes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.fit_single_scalings_result"><code class="docutils literal notranslate"><span class="pre">Unknown.fit_single_scalings_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.get_partial_fractioned_terms"><code class="docutils literal notranslate"><span class="pre">Unknown.get_partial_fractioned_terms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.helconf"><code class="docutils literal notranslate"><span class="pre">Unknown.helconf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.helconf_and_loopid"><code class="docutils literal notranslate"><span class="pre">Unknown.helconf_and_loopid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.internal_masses"><code class="docutils literal notranslate"><span class="pre">Unknown.internal_masses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.loopid"><code class="docutils literal notranslate"><span class="pre">Unknown.loopid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.mass_dimension"><code class="docutils literal notranslate"><span class="pre">Unknown.mass_dimension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.multiplicity"><code class="docutils literal notranslate"><span class="pre">Unknown.multiplicity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.phase_weights"><code class="docutils literal notranslate"><span class="pre">Unknown.phase_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.poles_to_be_eliminated"><code class="docutils literal notranslate"><span class="pre">Unknown.poles_to_be_eliminated</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.print_partial_result"><code class="docutils literal notranslate"><span class="pre">Unknown.print_partial_result()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.recursively_extract_original_unknown"><code class="docutils literal notranslate"><span class="pre">Unknown.recursively_extract_original_unknown()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.recursively_extract_terms"><code class="docutils literal notranslate"><span class="pre">Unknown.recursively_extract_terms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.remove_last_partial_piece"><code class="docutils literal notranslate"><span class="pre">Unknown.remove_last_partial_piece()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.reorder_invariants_for_partial_fractioning"><code class="docutils literal notranslate"><span class="pre">Unknown.reorder_invariants_for_partial_fractioning()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.res_path"><code class="docutils literal notranslate"><span class="pre">Unknown.res_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.reset"><code class="docutils literal notranslate"><span class="pre">Unknown.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.save_original_unknown_call_cache"><code class="docutils literal notranslate"><span class="pre">Unknown.save_original_unknown_call_cache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.soft_weights"><code class="docutils literal notranslate"><span class="pre">Unknown.soft_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.spurious_poles"><code class="docutils literal notranslate"><span class="pre">Unknown.spurious_poles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.core.html#antares.core.unknown.Unknown.what_am_I"><code class="docutils literal notranslate"><span class="pre">Unknown.what_am_I</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.core.html#antares.core.unknown.caching_decorator"><code class="docutils literal notranslate"><span class="pre">caching_decorator()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.core.html#module-antares.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="antares.partial_fractioning.html">antares.partial_fractioning package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="antares.partial_fractioning.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.partial_fractioning.html#antares-partial-fractioning-automatic-module">antares.partial_fractioning.automatic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.partial_fractioning.html#antares-partial-fractioning-by-guesses-module">antares.partial_fractioning.by_guesses module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.partial_fractioning.html#antares-partial-fractioning-v3-module">antares.partial_fractioning.v3 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.partial_fractioning.html#module-antares.partial_fractioning">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="antares.scalings.html">antares.scalings package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="antares.scalings.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.scalings.html#module-antares.scalings.pair">antares.scalings.pair module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.scalings.html#antares.scalings.pair.clean_pair_scalings_from_numerator"><code class="docutils literal notranslate"><span class="pre">clean_pair_scalings_from_numerator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.scalings.html#antares.scalings.pair.pair_scaling"><code class="docutils literal notranslate"><span class="pre">pair_scaling()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.scalings.html#antares.scalings.pair.pair_scalings"><code class="docutils literal notranslate"><span class="pre">pair_scalings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.scalings.html#module-antares.scalings.single">antares.scalings.single module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.scalings.html#antares.scalings.single.single_scaling"><code class="docutils literal notranslate"><span class="pre">single_scaling()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.scalings.html#antares.scalings.single.single_scalings"><code class="docutils literal notranslate"><span class="pre">single_scalings()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.scalings.html#module-antares.scalings">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="antares.scripts.html">antares.scripts package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="antares.scripts.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.scripts.html#antares-scripts-coeffbuilder-module">antares.scripts.CoeffBuilder module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.scripts.html#module-antares.scripts.SpinorLatexCompiler">antares.scripts.SpinorLatexCompiler module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.scripts.html#antares.scripts.SpinorLatexCompiler.generate_pdf"><code class="docutils literal notranslate"><span class="pre">generate_pdf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.scripts.html#antares.scripts.SpinorLatexCompiler.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.scripts.html#module-antares.scripts">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="antares.terms.html">antares.terms package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="antares.terms.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.terms.html#module-antares.terms.term">antares.terms.term module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.Denominator"><code class="docutils literal notranslate"><span class="pre">Denominator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator"><code class="docutils literal notranslate"><span class="pre">Numerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.CommonInvsString"><code class="docutils literal notranslate"><span class="pre">Numerator.CommonInvsString</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.isolate_common_invariants_and_exponents"><code class="docutils literal notranslate"><span class="pre">Numerator.isolate_common_invariants_and_exponents()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.lCoefsString"><code class="docutils literal notranslate"><span class="pre">Numerator.lCoefsString</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.lInvsString"><code class="docutils literal notranslate"><span class="pre">Numerator.lInvsString</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term"><code class="docutils literal notranslate"><span class="pre">Term</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.Image"><code class="docutils literal notranslate"><span class="pre">Term.Image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.am_I_a_symmetry"><code class="docutils literal notranslate"><span class="pre">Term.am_I_a_symmetry</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.canonical_ordering"><code class="docutils literal notranslate"><span class="pre">Term.canonical_ordering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.cluster"><code class="docutils literal notranslate"><span class="pre">Term.cluster()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.from_single_scalings"><code class="docutils literal notranslate"><span class="pre">Term.from_single_scalings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.internal_masses"><code class="docutils literal notranslate"><span class="pre">Term.internal_masses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.is_fully_reduced"><code class="docutils literal notranslate"><span class="pre">Term.is_fully_reduced</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.multiplicity"><code class="docutils literal notranslate"><span class="pre">Term.multiplicity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.rawImage"><code class="docutils literal notranslate"><span class="pre">Term.rawImage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.simplify_factored_monomials"><code class="docutils literal notranslate"><span class="pre">Term.simplify_factored_monomials()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.cluster_invariant"><code class="docutils literal notranslate"><span class="pre">cluster_invariant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.cluster_symmetry"><code class="docutils literal notranslate"><span class="pre">cluster_symmetry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.make_proper"><code class="docutils literal notranslate"><span class="pre">make_proper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.parse_monomial"><code class="docutils literal notranslate"><span class="pre">parse_monomial()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.terms.html#module-antares.terms.terms">antares.terms.terms module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.terms.FittingSettings"><code class="docutils literal notranslate"><span class="pre">FittingSettings</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.terms.LoadResults"><code class="docutils literal notranslate"><span class="pre">LoadResults()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms"><code class="docutils literal notranslate"><span class="pre">Terms</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.Image"><code class="docutils literal notranslate"><span class="pre">Terms.Image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.Write_LaTex"><code class="docutils literal notranslate"><span class="pre">Terms.Write_LaTex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.ansatze_angle_degrees"><code class="docutils literal notranslate"><span class="pre">Terms.ansatze_angle_degrees</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.ansatze_mass_dimensions"><code class="docutils literal notranslate"><span class="pre">Terms.ansatze_mass_dimensions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.ansatze_phase_weights"><code class="docutils literal notranslate"><span class="pre">Terms.ansatze_phase_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.ansatze_square_degrees"><code class="docutils literal notranslate"><span class="pre">Terms.ansatze_square_degrees</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.are_fully_reduced"><code class="docutils literal notranslate"><span class="pre">Terms.are_fully_reduced</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.canonical_ordering"><code class="docutils literal notranslate"><span class="pre">Terms.canonical_ordering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.check_against_unknown"><code class="docutils literal notranslate"><span class="pre">Terms.check_against_unknown()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.check_md_pw_consistency"><code class="docutils literal notranslate"><span class="pre">Terms.check_md_pw_consistency()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.cluster"><code class="docutils literal notranslate"><span class="pre">Terms.cluster()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.collapse"><code class="docutils literal notranslate"><span class="pre">Terms.collapse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.common_coeff_factor"><code class="docutils literal notranslate"><span class="pre">Terms.common_coeff_factor</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.compactify_symmetries"><code class="docutils literal notranslate"><span class="pre">Terms.compactify_symmetries()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.do_exploratory_double_collinear_limits"><code class="docutils literal notranslate"><span class="pre">Terms.do_exploratory_double_collinear_limits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.explicit_representation"><code class="docutils literal notranslate"><span class="pre">Terms.explicit_representation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.index_of_last_symmetry"><code class="docutils literal notranslate"><span class="pre">Terms.index_of_last_symmetry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.internal_masses"><code class="docutils literal notranslate"><span class="pre">Terms.internal_masses</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.invs_only_in_iDen"><code class="docutils literal notranslate"><span class="pre">Terms.invs_only_in_iDen()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.llCoefs"><code class="docutils literal notranslate"><span class="pre">Terms.llCoefs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.llDenExps"><code class="docutils literal notranslate"><span class="pre">Terms.llDenExps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.llDenInvs"><code class="docutils literal notranslate"><span class="pre">Terms.llDenInvs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.lllNumExps"><code class="docutils literal notranslate"><span class="pre">Terms.lllNumExps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.lllNumInvs"><code class="docutils literal notranslate"><span class="pre">Terms.lllNumInvs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.lphase_weights"><code class="docutils literal notranslate"><span class="pre">Terms.lphase_weights</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.mass_dimensions"><code class="docutils literal notranslate"><span class="pre">Terms.mass_dimensions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.max_abs_numerator"><code class="docutils literal notranslate"><span class="pre">Terms.max_abs_numerator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.max_denominator"><code class="docutils literal notranslate"><span class="pre">Terms.max_denominator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.multiplicity"><code class="docutils literal notranslate"><span class="pre">Terms.multiplicity</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.order_terms_by_complexity"><code class="docutils literal notranslate"><span class="pre">Terms.order_terms_by_complexity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.rearrange_and_finalise"><code class="docutils literal notranslate"><span class="pre">Terms.rearrange_and_finalise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.relevant_old_Terms"><code class="docutils literal notranslate"><span class="pre">Terms.relevant_old_Terms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.remove_duplicates"><code class="docutils literal notranslate"><span class="pre">Terms.remove_duplicates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.summarise"><code class="docutils literal notranslate"><span class="pre">Terms.summarise()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.toFORM"><code class="docutils literal notranslate"><span class="pre">Terms.toFORM()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.toFortran"><code class="docutils literal notranslate"><span class="pre">Terms.toFortran()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.toSaM"><code class="docutils literal notranslate"><span class="pre">Terms.toSaM()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.toSympy"><code class="docutils literal notranslate"><span class="pre">Terms.toSympy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.update_invs_set"><code class="docutils literal notranslate"><span class="pre">Terms.update_invs_set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.with_normalized_coeffs"><code class="docutils literal notranslate"><span class="pre">Terms.with_normalized_coeffs</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.terms.caching_decorator"><code class="docutils literal notranslate"><span class="pre">caching_decorator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.terms.fix_old_automatic_partial_fractioning_format"><code class="docutils literal notranslate"><span class="pre">fix_old_automatic_partial_fractioning_format()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.terms.parse_pNBs_to_functions"><code class="docutils literal notranslate"><span class="pre">parse_pNBs_to_functions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.terms.string_toSaM"><code class="docutils literal notranslate"><span class="pre">string_toSaM()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.terms.html#antares-terms-terms-ad-hoc-ansatze-module">antares.terms.terms_ad_hoc_ansatze module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.terms.html#module-antares.terms.terms_numerator_fit">antares.terms.terms_numerator_fit module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.terms_numerator_fit.Terms_numerators_fit"><code class="docutils literal notranslate"><span class="pre">Terms_numerators_fit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms_numerator_fit.Terms_numerators_fit.fit_numerators"><code class="docutils literal notranslate"><span class="pre">Terms_numerators_fit.fit_numerators()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms_numerator_fit.Terms_numerators_fit.refine_fit"><code class="docutils literal notranslate"><span class="pre">Terms_numerators_fit.refine_fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms_numerator_fit.Terms_numerators_fit.set_inversion_accuracy"><code class="docutils literal notranslate"><span class="pre">Terms_numerators_fit.set_inversion_accuracy()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.terms.html#antares-terms-vs-basis-module">antares.terms.vs_basis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.terms.html#module-antares.terms">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="antares.topologies.html">antares.topologies package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="antares.topologies.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.topologies.html#module-antares.topologies.topology">antares.topologies.topology module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.Topology"><code class="docutils literal notranslate"><span class="pre">Topology</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.Topology.equivalence_class"><code class="docutils literal notranslate"><span class="pre">Topology.equivalence_class</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.Topology.models"><code class="docutils literal notranslate"><span class="pre">Topology.models</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.Topology.nbr_external_antiquarks"><code class="docutils literal notranslate"><span class="pre">Topology.nbr_external_antiquarks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.Topology.nbr_external_gluons"><code class="docutils literal notranslate"><span class="pre">Topology.nbr_external_gluons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.Topology.nbr_external_photons"><code class="docutils literal notranslate"><span class="pre">Topology.nbr_external_photons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.Topology.nbr_external_quarks"><code class="docutils literal notranslate"><span class="pre">Topology.nbr_external_quarks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.Topology.topology"><code class="docutils literal notranslate"><span class="pre">Topology.topology</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.all_topologies"><code class="docutils literal notranslate"><span class="pre">all_topologies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.box_topologies"><code class="docutils literal notranslate"><span class="pre">box_topologies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.bubble_topologies"><code class="docutils literal notranslate"><span class="pre">bubble_topologies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.conversion_rules"><code class="docutils literal notranslate"><span class="pre">conversion_rules()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.convert_invariant"><code class="docutils literal notranslate"><span class="pre">convert_invariant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.corners_from_label"><code class="docutils literal notranslate"><span class="pre">corners_from_label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.equivalent_strings"><code class="docutils literal notranslate"><span class="pre">equivalent_strings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.flip_helicities"><code class="docutils literal notranslate"><span class="pre">flip_helicities()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.flip_quark_line"><code class="docutils literal notranslate"><span class="pre">flip_quark_line()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.get_external_quarks"><code class="docutils literal notranslate"><span class="pre">get_external_quarks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.get_label"><code class="docutils literal notranslate"><span class="pre">get_label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.get_nbr_quark_lines"><code class="docutils literal notranslate"><span class="pre">get_nbr_quark_lines()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.helconf_from_label"><code class="docutils literal notranslate"><span class="pre">helconf_from_label()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.independent_topologies"><code class="docutils literal notranslate"><span class="pre">independent_topologies()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.internal_symmetry"><code class="docutils literal notranslate"><span class="pre">internal_symmetry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.sign_of_permutation"><code class="docutils literal notranslate"><span class="pre">sign_of_permutation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.topology_info"><code class="docutils literal notranslate"><span class="pre">topology_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.topologies.html#antares.topologies.topology.triangle_topologies"><code class="docutils literal notranslate"><span class="pre">triangle_topologies()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="antares.topologies.html#module-antares.topologies">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="antares-analytical-to-analytical-module">
+<h2>antares.analytical_to_analytical module<a class="headerlink" href="#antares-analytical-to-analytical-module" title="Link to this heading"></a></h2>
+</section>
+<section id="antares-bh-to-readable-module">
+<h2>antares.bh_to_readable module<a class="headerlink" href="#antares-bh-to-readable-module" title="Link to this heading"></a></h2>
+</section>
+<section id="antares-check-results-module">
+<h2>antares.check_results module<a class="headerlink" href="#antares-check-results-module" title="Link to this heading"></a></h2>
+</section>
+<section id="antares-encode-cut-constructible-parts-module">
+<h2>antares.encode_cut_constructible_parts module<a class="headerlink" href="#antares-encode-cut-constructible-parts-module" title="Link to this heading"></a></h2>
+</section>
+<section id="antares-numerical-to-analytical-module">
+<h2>antares.numerical_to_analytical module<a class="headerlink" href="#antares-numerical-to-analytical-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-antares">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-antares" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="antares" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="antares.ansatze.html" class="btn btn-neutral float-right" title="antares.ansatze package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018, Giuseppe De Laurentis &amp; Daniel Maitre.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
