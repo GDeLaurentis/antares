@@ -2,7 +2,7 @@
 import re
 
 repo_owner = "GDeLaurentis"
-repo_name = "antares-dev"
+repo_name = "antares"
 
 
 def update_coverage_badge():
