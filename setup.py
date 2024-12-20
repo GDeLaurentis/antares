@@ -5,14 +5,22 @@ from version import __version__ as version
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
-
 setup(
-    name='antares-hep',
+    name='antares_hep',
     version=version,
     license='GNU General Public License v3.0',
+    description='Automated Numerical To Analytical REconstruction Software',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Giuseppe De Laurentis, Daniel Maitre',
     author_email='g.dl@hotmail.it',
-    description='Automated Numerical To Analytical REconstruction Software',
+    url='https://github.com/GDeLaurentis/antares',
+    download_url=f'https://github.com/GDeLaurentis/antares/archive/v{version}.tar.gz',
+    project_urls={
+        'Documentation': 'https://gdelaurentis.github.io/antares/',
+        'Issues': 'https://github.com/GDeLaurentis/antares/issues',
+    },
+    keywords=['Analytic Reconstruction', 'Spinor Helicity', 'Scattering Amplitudes', 'QFT'],
     packages=find_packages(),
     include_package_data=True,
     data_files=[],
