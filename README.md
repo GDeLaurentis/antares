@@ -5,7 +5,7 @@
 
 [![CI Lint](https://github.com/GDeLaurentis/antares-dev/actions/workflows/ci_lint.yml/badge.svg)](https://github.com/GDeLaurentis/antares-dev/actions/workflows/ci_lint.yml)
 [![CI Test](https://github.com/GDeLaurentis/antares-dev/actions/workflows/ci_test.yml/badge.svg)](https://github.com/GDeLaurentis/antares-dev/actions/workflows/ci_test.yml)
-[![Coverage](https://img.shields.io/badge/Coverage-46%25-red?labelColor=2a2f35)](https://github.com/GDeLaurentis/antares-dev/actions)
+[![Coverage](https://img.shields.io/badge/Coverage-37%25-red?labelColor=2a2f35)](https://github.com/GDeLaurentis/antares/actions)
 [![Docs](https://github.com/GDeLaurentis/antares-dev/actions/workflows/cd_docs.yml/badge.svg?label=Docs)](https://gdelaurentis.github.io/antares-dev/)
 [![DOI](https://zenodo.org/badge/902351393.svg)](https://doi.org/10.5281/zenodo.14501989)
 [![Python](https://img.shields.io/pypi/pyversions/antares?label=Python)](https://pypi.org/project/antares/)
