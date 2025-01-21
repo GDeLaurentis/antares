@@ -22,11 +22,12 @@ from antares.core.tools import mapThreads, log_linear_fit, retry, log_linear_fit
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
-def single_scalings(oUnknown, invariants, seed=0, silent=True):
+def single_scalings(oUnknown, invariants, seed=0, verbose=False):
     if oUnknown.is_zero:
         return [0 for inv in invariants]
     else:
-        return mapThreads(single_scaling, oUnknown, invariants, seed=seed, UseParallelisation=settings.UseParallelisation, Cores=settings.Cores)
+        return mapThreads(single_scaling, oUnknown, invariants, seed=seed, verbose=verbose,
+                          UseParallelisation=settings.UseParallelisation, Cores=settings.Cores)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #

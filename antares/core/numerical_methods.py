@@ -312,10 +312,10 @@ class Numerical_Methods:
         else:
             return True
 
-    def do_single_collinear_limits(self, silent=False):
+    def do_single_collinear_limits(self, invariants=None, verbose=True):
         from antares.terms.term import Term
         from antares.terms.terms import Terms
-        self.oTermFromSingleScalings = Term.from_single_scalings(self)
+        self.oTermFromSingleScalings = Term.from_single_scalings(self, invariants=invariants, verbose=verbose)
         if hasattr(self, "save_original_unknown_call_cache"):
             self.save_original_unknown_call_cache()
         self.num_invs, _num_exps = self.oTermFromSingleScalings.oNum.llInvs[0], self.oTermFromSingleScalings.oNum.llExps[0]
@@ -324,7 +324,7 @@ class Numerical_Methods:
         self.den_exps = dict(zip(self.den_invs, _den_exps))
         self.oTermsFromSingleScalings = Terms([self.oTermFromSingleScalings])
         self.oTermsFromSingleScalings.oUnknown = self
-        if silent is False:
+        if verbose:
             print("")
             print("Mass dimension & phase weights:", end='')
             print("{},".format(self.mass_dimension), end='')

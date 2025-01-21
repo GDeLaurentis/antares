@@ -4,7 +4,7 @@ from lips import Particles
 from lips.fields import Field
 
 from antares.core.settings import settings
-from antares.terms.terms import Terms
+from antares.terms.terms import Term, Terms
 
 
 def test_str_and_rstr_big_powers():
@@ -92,6 +92,11 @@ def test_terms_with_trace():
     """)
     oPs = Particles(7, field=Field("finite field", 2 ** 31 - 1, 1))
     assert coeff_v1(oPs) - coeff_v2(oPs) == 0
+
+
+def test_term_with_mass():
+    string = """+(-7/3⟨2|4⟩⟨1|4|2]⟨3|4|1]+7/3⟨3|4⟩mt2²-14/3⟨3|4⟩⟨1|3|1]mt2+7/3⟨3|4⟩⟨1|3|1]²+7/3⟨2|4⟩⟨3|4|2]⟨1|4|1]-7/3⟨4|3|1]⟨1|3⟩mt2)/((s_123-mt2)⟨1|3|1]⟨1|3|2])"""
+    assert len(str(Term(string))) == len(string)
 
 
 def test_coeffs_normalization():

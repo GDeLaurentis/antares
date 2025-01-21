@@ -16,6 +16,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 
+## [0.6.2] - 2025-01-21
+
+### Changed
+
+- `Numerical_Methods.do_single_collinar_limits` and related functions now accept a list of invariants as optional `kwarg`.
+
+### Fixed
+
+- Fixed issue where `Terms.__rstr__` would fail to properly load a numerator with mass dependence.
+
+
 ## [0.6.1] - 2024-12-16
 
 ### Added
@@ -30,5 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.6.0] - 2024-06-18
 
 
-[unreleased]: https://github.com/GDeLaurentis/antares/compare/v0.6.0...HEAD
+[unreleased]: https://github.com/GDeLaurentis/antares/compare/v0.6.2...HEAD
+[0.6.2]: https://github.com/GDeLaurentis/antares/releases/compare/v0.6.1...v0.6.2
+[0.6.1]: https://github.com/GDeLaurentis/antares/releases/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/GDeLaurentis/antares/releases/tag/v0.6.0

@@ -60,16 +60,21 @@ class Term(Numerical_Methods, object):
         self.simplify_factored_monomials()
 
     @classmethod
-    def from_single_scalings(cls, oUnknown, silent=True):
+    def from_single_scalings(cls, oUnknown, invariants=None, verbose=False):
 
         # Choose the variables
-        oInvariants = Invariants(oUnknown.multiplicity, Restrict3Brackets=settings.Restrict3Brackets,
-                                 Restrict4Brackets=settings.Restrict4Brackets, FurtherRestrict4Brackets=settings.FurtherRestrict4Brackets)
-        if settings.SingleScalingsUse4Brackets is True:
-            invariants = oInvariants.full
+        if invariants is None:
+            oInvariants = Invariants(oUnknown.multiplicity, Restrict3Brackets=settings.Restrict3Brackets,
+                                     Restrict4Brackets=settings.Restrict4Brackets, FurtherRestrict4Brackets=settings.FurtherRestrict4Brackets)
+            if settings.SingleScalingsUse4Brackets is True:
+                invariants = oInvariants.full
+            else:
+                invariants = oInvariants.full_minus_4_brackets
         else:
-            invariants = oInvariants.full_minus_4_brackets
-        exponents = single_scalings(oUnknown, invariants, silent)
+            invariants = copy(invariants)
+
+        # Calculate the exponents
+        exponents = single_scalings(oUnknown, invariants, verbose)
 
         # Clean invariants and exponents of zeros and failed scalings
         for i in range(len(invariants)):
@@ -96,8 +101,10 @@ class Term(Numerical_Methods, object):
         oTerm = cls(Numerator([num_invs], [num_exps]), Denominator(den_invs, den_exps))
         oTerm.multiplicity = oUnknown.multiplicity
 
-        print("The partial result is:   ")
-        print(oTerm)
+        if verbose:
+            print("The partial result is:   ")
+            print(oTerm)
+
         return oTerm
 
     @property
@@ -458,6 +465,7 @@ class Numerator(object):
         if string[0] == "+":
             string = string[1:]
         split_numerator = re.split(r"(?<!tr)(\()(?=[\+\-]{0,1}\d)", string)
+        # print(split_numerator)
         if len(split_numerator) == 1:  # single monomial without (gaussian) rational coefficient
             lInvs, lExps = parse_monomial(split_numerator[0][1:-1])
             llInvs, llExps = [lInvs], [lExps]
@@ -473,7 +481,8 @@ class Numerator(object):
             if rest_numerator.count("(") < rest_numerator.count(")") and rest_numerator[-1] == ")":
                 rest_numerator = rest_numerator[:-1]
             rest_numerator = rest_numerator[1:-1]
-            split_rest_numerator = re.split(r"(?<!\||_)(?<![tr\(\|\+\-]\d)((?:^|[\+\-])\d+[/\d+]*[IiJj]{0,1})(?!\||_)", rest_numerator)
+            split_rest_numerator = re.split(r"(?<!\||_)(?<![\(\|\+\-]\d)((?:^|[\+\-])\d+[/\d+]*[IiJj]{0,1})(?!\||_)", rest_numerator)
+            # print(split_rest_numerator)
             split_rest_numerator_fixed = []  # rejoin split pieces until parentheses are balanced
             comulative_string = ""
             for entry in split_rest_numerator:
@@ -577,6 +586,9 @@ class Denominator(object):
         if not all([other.lExps[other.lInvs.index(inv)] <= self.lExps[self.lInvs.index(inv)] for inv in other.lInvs]):
             return False  # for each pole in other, that same pole in self has at least the degree of other
         return True
+
+    def as_dict(self):
+        return dict(zip(self.lInvs, self.lExps))
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
