@@ -32,7 +32,7 @@ setup(
         'pyyaml',
         'pandas',
         'multiset',
-        'ortools',
+        # 'ortools',
     ],
     entry_points={
         'console_scripts': [
