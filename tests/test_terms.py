@@ -5,6 +5,7 @@ from lips.fields import Field
 
 from antares.core.settings import settings
 from antares.terms.terms import Term, Terms
+from antares.core.tools import NaI
 
 
 def test_str_and_rstr_big_powers():
@@ -30,8 +31,7 @@ def test_terms_phase_weights_and_mass_dimensions():
     oTerms.multiplicity = 6
     with pytest.raises(ValueError):
         oTerms.mass_dimension
-    with pytest.raises(ValueError):
-        oTerms.phase_weights
+    assert NaI in oTerms.phase_weights
     assert oTerms.mass_dimensions == [-8.0, -8.0, -14.0]
     assert oTerms.lphase_weights == [[1, -2, -2, -1, 2, 2], [-2, -2, 1, 2, 2, -1], [-1, -3, -1, 1, 3, 1]]
     settings.field = Field("mpc", 0, 300)
