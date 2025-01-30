@@ -16,6 +16,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 
+## [0.6.3] - 2025-01-30
+
+### Changed
+
+- `single_scalings` and `pair_scalings` raise an exception if run with finite fields.
+
+### Fixed
+
+- monomial parser for `Term` numerator no longer fails with linear masses.
+
+
 ## [0.6.2] - 2025-01-21
 
 ### Changed
@@ -41,7 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.6.0] - 2024-06-18
 
 
-[unreleased]: https://github.com/GDeLaurentis/antares/compare/v0.6.2...HEAD
+[unreleased]: https://github.com/GDeLaurentis/antares/compare/v0.6.3...HEAD
+[0.6.2]: https://github.com/GDeLaurentis/antares/releases/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/GDeLaurentis/antares/releases/compare/v0.6.1...v0.6.2
 [0.6.1]: https://github.com/GDeLaurentis/antares/releases/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/GDeLaurentis/antares/releases/tag/v0.6.0

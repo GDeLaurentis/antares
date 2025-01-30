@@ -105,6 +105,10 @@ def pair_scaling(oUnknown, all_invariants, relative, sFriends, invs_tuple, seed=
         oParticles.variety((some_inv, other_inv), (1, 1,))
         pair_exp = oUnknown(oParticles).n
 
+    else:
+
+        raise Exception("Pair scaling requires field to be mpc or padic.")
+
     pair_invs = [some_inv, other_inv]
     key1 = "{}&{}".format(some_inv, other_inv)
     if sys.version_info.major < 2:

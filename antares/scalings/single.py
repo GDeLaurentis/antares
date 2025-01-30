@@ -56,3 +56,7 @@ def single_scaling(oUnknown, invariant, seed=0):
         if res.k == 0:
             raise Exception("Lost all padic digits.")
         return res.n
+
+    else:
+
+        raise Exception("Single scaling requires field to be mpc or padic.")

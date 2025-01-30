@@ -74,7 +74,7 @@ class Term(Numerical_Methods, object):
             invariants = copy(invariants)
 
         # Calculate the exponents
-        exponents = single_scalings(oUnknown, invariants, verbose)
+        exponents = single_scalings(oUnknown, invariants, verbose=verbose)
 
         # Clean invariants and exponents of zeros and failed scalings
         for i in range(len(invariants)):
@@ -183,7 +183,7 @@ class Term(Numerical_Methods, object):
             if hasattr(self, "multiplicity"):
                 oSymTerm.multiplicity = self.multiplicity
         else:
-            den_sign = int(reduce(mul, [Image(inv, Rule)[1] ** exp for inv, exp in zip(self.oDen.lInvs, self.oDen.lExps)]))
+            den_sign = int(reduce(mul, [Image(inv, Rule)[1] ** exp for inv, exp in zip(self.oDen.lInvs, self.oDen.lExps)], 1))
             num_common_sign = int(reduce(mul, [Image(inv, Rule)[1] ** exp for inv, exp in zip(self.oNum.lCommonInvs, self.oNum.lCommonExps)]) if self.oNum.lCommonInvs != [] else 1)
             num_signs = map(int, ([num_common_sign * reduce(mul, [Image(inv, Rule)[1] ** exp for inv, exp in zip(lInvs, lExps)]) for lInvs, lExps in zip(self.oNum.llInvs, self.oNum.llExps)]
                                   if self.oNum.llInvs != [[]] else []))
@@ -597,7 +597,7 @@ class Denominator(object):
 def parse_monomial(string):
     if string == '':
         return [], []
-    splitted_string = [entry for entry in re.split(r"(?<![\+\-\(])(?<![a-zA-Z])(?<!tr5)([⟨\[\(a-zA-ZΔΩΠ])", string) if entry != '']
+    splitted_string = [entry for entry in re.split(r"(?<![\+\-\(])(?<!tr5)([⟨\[]|(?<![a-zA-Z])[\(a-zA-ZΔΩΠ])", string) if entry != '']
     splitted_string = [splitted_string[i] + splitted_string[i + 1] for i in range(len(splitted_string))[::2]]
     # sqeuentially remerge strings until parenthesis are (minimally) balanced
     splitted_string_partially_remerged = [splitted_string[0]]

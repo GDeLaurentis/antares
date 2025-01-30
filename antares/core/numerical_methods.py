@@ -22,8 +22,9 @@ from lips.symmetries import phase_weights_compatible_symmetries
 from pyadic.finite_field import ModP, rationalise
 from pyadic.padic import padic_log
 
-from antares.core.settings import settings
-from antares.scalings.pair import pair_scalings
+from .settings import settings
+from ..scalings.pair import pair_scalings
+from .tools import NaI
 
 local_directory = os.path.dirname(os.path.abspath(__file__))
 mpmath.mp.dps = 300
@@ -202,6 +203,7 @@ class Numerical_Methods:
     @composed(as_scalar_if_scalar, numpy_vectorized(excluded=[1, 2]))
     def finite_field_phase_weight(ratio, search_range, powers):
         if int(ratio) not in search_range:
+            return NaI
             raise ValueError("Phase weight not found in search range.")
         return powers[search_range.index(int(ratio))]
 

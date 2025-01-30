@@ -5,6 +5,8 @@ from lips.fields.field import Field
 
 from antares.core.settings import settings
 from antares.core.numerical_methods import num_func, tensor_function
+from antares.terms.terms import Terms
+from antares.core.tools import NaI
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -63,3 +65,11 @@ def test_tensor_function_len_and_shape():
     oTF(1)  # evaluating it once should set the properties
     assert len(oTF) == 2
     assert oTF.shape == (2, 2)
+
+
+def test_non_uniform_phase_weights():
+    oTermsTest = Terms("""
+    +(⟨1|2⟩+[1|2])
+    """)
+    oTermsTest.multiplicity = 4
+    assert oTermsTest.phase_weights == [NaI, NaI, 0, 0]

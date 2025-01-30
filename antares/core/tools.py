@@ -1201,3 +1201,73 @@ def chunks(l, n):
 
 def all_non_empty_subsets(iterable):
     return itertools.chain(*map(lambda x: itertools.combinations(iterable, x), range(1, len(iterable) + 1)))
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+
+class Singleton:
+
+    _instances = {}
+
+    def __new__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__new__(cls)
+        return cls._instances[cls]
+
+
+class NotAnInteger(Singleton):
+
+    def __init__(self):
+        pass
+
+    def __repr__(self):
+        return "NaI"
+
+    def __str__(self):
+        return "NaI"
+
+    def __add__(self, other):
+        return self
+
+    def __sub__(self, other):
+        return self
+
+    def __mul__(self, other):
+        return self
+
+    def __truediv__(self, other):
+        return self
+
+    def __floordiv__(self, other):
+        return self
+
+    def __mod__(self, other):
+        return self
+
+    def __pow__(self, other):
+        return self
+
+    def __radd__(self, other):
+        return self
+
+    def __rsub__(self, other):
+        return self
+
+    def __rmul__(self, other):
+        return self
+
+    def __rtruediv__(self, other):
+        return self
+
+    def __rfloordiv__(self, other):
+        return self
+
+    def __rmod__(self, other):
+        return self
+
+    def __rpow__(self, other):
+        return self
+
+
+NaI = NotAnInteger()

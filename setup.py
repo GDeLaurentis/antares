@@ -28,7 +28,7 @@ setup(
         'lips',
         'pyadic',
         'syngular',
-        # 'linac',
+        'linac',
         'pyyaml',
         'pandas',
         'multiset',

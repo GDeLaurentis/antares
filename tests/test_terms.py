@@ -99,6 +99,13 @@ def test_term_with_mass():
     assert len(str(Term(string))) == len(string)
 
 
+def test_term_with_linear_mass():
+    oTerms = Terms("""
+    +(-7/6mt[3|1]⟨1|3|5|4⟩)/((s_123-mt2)⟨1|3|2])
+    """)
+    assert set(oTerms[0].oNum.llInvs[0]) == {'[3|1]', 'mt', '⟨1|3|5|4⟩'}
+
+
 def test_coeffs_normalization():
     oPs = Particles(6, field=Field("finite field", 2 ** 31 - 1, 1))
     oTerms = Terms("""

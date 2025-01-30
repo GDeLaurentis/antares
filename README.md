@@ -7,8 +7,9 @@
 [![CI Test](https://github.com/GDeLaurentis/antares-dev/actions/workflows/ci_test.yml/badge.svg)](https://github.com/GDeLaurentis/antares-dev/actions/workflows/ci_test.yml)
 [![Coverage](https://img.shields.io/badge/Coverage-37%25-red?labelColor=2a2f35)](https://github.com/GDeLaurentis/antares/actions)
 [![Docs](https://github.com/GDeLaurentis/antares-dev/actions/workflows/cd_docs.yml/badge.svg?label=Docs)](https://gdelaurentis.github.io/antares-dev/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/lips.svg?label=PyPI%20downloads)](https://pypi.org/project/antares-hep/)
 [![DOI](https://zenodo.org/badge/902351393.svg)](https://doi.org/10.5281/zenodo.14501989)
-[![Python](https://img.shields.io/pypi/pyversions/antares?label=Python)](https://pypi.org/project/antares/)
+[![Python](https://img.shields.io/pypi/pyversions/antares-hep?label=Python)](https://pypi.org/project/antares-hep/)
 
 </div>
 
@@ -22,7 +23,7 @@ Reconstruction routines coming soon!
 Antares will provide tools to reconstruct (or simplify) analytical expressions for functions in the field of fractions over polynomial quotient rings, such as loop integral coefficients, from numerical evaluations. It is based on the study and fitting of pole residues in complexified momentum space. The divergence of expressions near the poles is handled via arbitrary-precision floating-point arithmetics or $p$-adic numbers. Alternatively finite fields can also be used (may involve semi-numerical slices).
 
 ## Installation
-The package is available on the [Python Package Index](https://pypi.org/project/antares/)
+The package is available on the [Python Package Index](https://pypi.org/project/antares-hep/)
 ```console
 pip install antares-hep
 ```
