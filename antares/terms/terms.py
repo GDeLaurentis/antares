@@ -27,14 +27,14 @@ from lips.tools import pNB as pNB_internal
 from lips.particles_eval import pNB as pNB_overall
 from lips.symmetries import inverse
 
-from antares.core.tools import Write, LaTeXToPython, flatten, get_common_Q_factor, get_max_abs_numerator, get_max_denominator
-from antares.core.settings import settings
-from antares.core.numerical_methods import Numerical_Methods
-from antares.core.bh_patch import accuracy
-from antares.core.unknown import Unknown
-from antares.scalings.pair import pair_scalings
-from antares.terms.terms_numerator_fit import Terms_numerators_fit
-from antares.terms.term import Term, Numerator, Denominator
+from ..core.tools import Write, LaTeXToPython, flatten, get_common_Q_factor, get_max_abs_numerator, get_max_denominator
+from ..core.settings import settings
+from ..core.numerical_methods import Numerical_Methods
+from ..core.bh_patch import accuracy
+from ..core.unknown import Unknown
+from ..scalings.pair import pair_scalings
+from .terms_numerator_fit import Terms_numerators_fit
+from .term import Term, Numerator, Denominator
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #

@@ -4,9 +4,9 @@ import pathlib
 
 from lips.symmetries import inverse
 
-from antares.core.tools import Generate_LaTeX_and_PDF
-from antares.terms.terms import LoadResults, Terms
+from ..core.tools import Generate_LaTeX_and_PDF
 from ..core.numerical_methods import Numerical_Methods
+from .terms import LoadResults, Terms
 
 
 class TermsList(Numerical_Methods, list):

@@ -23,8 +23,8 @@ from lips.symmetries import phase_weights_compatible_symmetries
 from pyadic.finite_field import ModP, rationalise
 from pyadic.padic import padic_log
 
-from .settings import settings
 from ..scalings.pair import pair_scalings
+from .settings import settings
 from .tools import NaI
 
 local_directory = os.path.dirname(os.path.abspath(__file__))

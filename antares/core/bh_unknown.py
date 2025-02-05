@@ -18,14 +18,15 @@ import mpmath
 import multiprocessing
 import antares
 
-from antares.core.settings import settings
-from antares.core.bh_patch import BH_found, gmpTools_found
-from antares.core.tools import OutputGrabber, MyShelf, mpc_to_cgmp, cgmp_to_mpc, flatten
-from antares.core.numerical_methods import Numerical_Methods
 from lips.invariants import Invariants
 
+from .settings import settings
+from .bh_patch import BH_found, gmpTools_found
+from .tools import OutputGrabber, MyShelf, mpc_to_cgmp, cgmp_to_mpc, flatten
+from .numerical_methods import Numerical_Methods
+
 if BH_found:
-    from antares.core.bh_patch import BH
+    from .bh_patch import BH
 if gmpTools_found:
     import gmpTools
 

@@ -9,9 +9,6 @@
 
 # Author: Giuseppe
 
-from __future__ import unicode_literals
-from __future__ import print_function
-
 import sys
 import re
 import itertools
@@ -20,7 +17,7 @@ from lips import Particles
 from lips.tools import pNB as pNB_internal
 from lips.particles_eval import pNB as pNB_overall
 
-from antares.core.tools import flatten
+from ..core.tools import flatten
 
 if sys.version_info[0] > 2:
     unicode = str

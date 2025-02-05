@@ -9,9 +9,6 @@
 
 # Author: Giuseppe
 
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import sys
 import os
 import subprocess
@@ -31,9 +28,9 @@ import mpmath
 import fractions
 import copyreg
 
-from antares.core.bh_patch import BH_found
+from .bh_patch import BH_found
 if BH_found:
-    from antares.core.bh_patch import BH
+    from .bh_patch import BH
 
 if sys.version_info[0] > 2:
     unicode = str

@@ -9,14 +9,10 @@
 
 # Author: Giuseppe
 
-
-from __future__ import unicode_literals
-from __future__ import print_function
-
 from lips import Particles, myException
 
-from antares.core.settings import settings
-from antares.core.tools import mapThreads, log_linear_fit, retry, log_linear_fit_Exception
+from ..core.settings import settings
+from ..core.tools import mapThreads, log_linear_fit, retry, log_linear_fit_Exception
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #

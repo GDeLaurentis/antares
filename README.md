@@ -27,8 +27,9 @@ The package is available on the [Python Package Index](https://pypi.org/project/
 ```console
 pip install antares-hep
 ```
-Alternativelty, it can be installed by cloning the repo
+Alternativelty, it can be installed by cloning the repository
 ```console
-git clone https://github.com/GDeLaurentis/antares.git path/to/repo
-pip install -e path/to/repo
+git clone https://github.com/GDeLaurentis/antares.git path/to/antares-repo
+pip install -e path/to/antares-repo/
 ```
+It is recommended to have distinct names for the repository folder and the package folder within it (especially in case of import errors).

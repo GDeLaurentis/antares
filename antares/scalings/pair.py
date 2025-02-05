@@ -9,16 +9,13 @@
 
 # Author: Giuseppe
 
-from __future__ import unicode_literals
-from __future__ import print_function
-
 import sys
 
 from mpmath.libmp.libhyper import NoConvergence
 from lips import Particles, myException
 
-from antares.core.settings import settings
-from antares.core.tools import mapThreads, log_linear_fit, MyShelf, retry, log_linear_fit_Exception
+from ..core.settings import settings
+from ..core.tools import mapThreads, log_linear_fit, MyShelf, retry, log_linear_fit_Exception
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #

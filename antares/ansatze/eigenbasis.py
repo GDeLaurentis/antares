@@ -16,6 +16,9 @@ from antares.core.settings import settings
 from antares.core.tools import pSijk, pA2, pS2, pNB, pDijk
 from lips.invariants import Invariants
 
+from ..core.settings import settings
+from ..core.tools import Progress, MyProcessPool, pSijk, pA2, pS2, pNB, pDijk
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 

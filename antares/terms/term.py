@@ -9,9 +9,6 @@
 
 # Author: Giuseppe
 
-from __future__ import unicode_literals
-from __future__ import print_function
-
 import lips
 import mpmath
 import pyadic
@@ -23,13 +20,14 @@ from fractions import Fraction
 from operator import mul
 from copy import copy, deepcopy
 
-from antares.core.settings import settings
-from antares.core.numerical_methods import Numerical_Methods
-from antares.scalings.single import single_scalings
 
 from lips.tools import subs_dict
 from lips.invariants import Invariants
 from lips.particles_eval import unicode_powers, non_unicode_powers
+
+from ..core.settings import settings
+from ..core.numerical_methods import Numerical_Methods
+from ..scalings.single import single_scalings
 
 if sys.version_info.major > 2:
     unicode = str

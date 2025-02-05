@@ -18,7 +18,7 @@ import logging
 
 from syngular import Field
 
-from antares.core.bh_patch import BH_found
+from .bh_patch import BH_found
 
 if BH_found:
     import BH

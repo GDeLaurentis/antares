@@ -18,11 +18,12 @@ from copy import deepcopy
 
 from lips import Particles
 
-from antares.core.bh_unknown import BHUnknown
-from antares.core.settings import settings
-from antares.core.tools import Generate_LaTeX_and_PDF, forbidden_ordering, flatten
 from lips.invariants import Invariants
-from antares.core.numerical_methods import Numerical_Methods
+
+from .bh_unknown import BHUnknown
+from .settings import settings
+from .tools import Generate_LaTeX_and_PDF, forbidden_ordering, flatten
+from .numerical_methods import Numerical_Methods
 
 local_directory = os.path.dirname(os.path.abspath(__file__))
 mpmath.mp.dps = 300
