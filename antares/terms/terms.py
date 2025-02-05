@@ -501,13 +501,19 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
             NewTerms.oUnknown = self.oUnknown
         return NewTerms
 
-    def do_exploratory_double_collinear_limits(self):
-        oInvariants = Invariants(self.multiplicity, Restrict3Brackets=settings.Restrict3Brackets,
-                                 Restrict4Brackets=settings.Restrict4Brackets, FurtherRestrict4Brackets=settings.FurtherRestrict4Brackets)
-        other_invariants = [inv for inv in oInvariants.invs_2 + oInvariants.invs_3 + oInvariants.invs_s if all(
-            [inv not in oTerm.oDen.lInvs + flatten(oTerm.oNum.llInvs) for oTerm in self if not oTerm.am_I_a_symmetry])]
+    def do_exploratory_double_collinear_limits(self, invariants=None, ):
+        if invariants is None:
+            oInvariants = Invariants(self.multiplicity, Restrict3Brackets=settings.Restrict3Brackets,
+                                     Restrict4Brackets=settings.Restrict4Brackets, FurtherRestrict4Brackets=settings.FurtherRestrict4Brackets)
+            all_invariants = oInvariants.full
+            other_invariants = [inv for inv in oInvariants.invs_2 + oInvariants.invs_3 + oInvariants.invs_s if all(
+                [inv not in oTerm.oDen.lInvs + flatten(oTerm.oNum.llInvs) for oTerm in self if not oTerm.am_I_a_symmetry])]
+        else:
+            all_invariants = copy.copy(invariants)
+            other_invariants = [inv for inv in all_invariants if all(
+                [inv not in oTerm.oDen.lInvs + flatten(oTerm.oNum.llInvs) for oTerm in self if not oTerm.am_I_a_symmetry])]
         # check all double scalings of the invariants only in iDen with the ones not appearing anywhere
-        _pair_invs, _pair_exps, _pair_friends = pair_scalings(self.oUnknown, self[0].oDen.lInvs, other_invariants, oInvariants.full)
+        _pair_invs, _pair_exps, _pair_friends = pair_scalings(self.oUnknown, self[0].oDen.lInvs, other_invariants, all_invariants)
         if hasattr(self.oUnknown, "save_original_unknown_call_cache"):
             self.oUnknown.save_original_unknown_call_cache()
         sys.stdout.write("\r Finished calculating pair scalings.",)
