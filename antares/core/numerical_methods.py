@@ -11,6 +11,7 @@ import pandas
 import numpy
 import mpmath
 
+from copy import copy
 from fractions import Fraction as Q
 
 from lips import Particles
@@ -337,10 +338,20 @@ class Numerical_Methods:
             print(self.oTermsFromSingleScalings.ansatze_phase_weights[0])
             print("")
 
-    def do_double_collinear_limits(self, silent=False):
-        oInvariants = Invariants(self.multiplicity, Restrict3Brackets=settings.Restrict3Brackets,
-                                 Restrict4Brackets=settings.Restrict4Brackets, FurtherRestrict4Brackets=settings.FurtherRestrict4Brackets)
-        _pair_invs, _pair_exps, _pair_friends = pair_scalings(self, self.den_invs, self.den_invs, oInvariants.full)
+    def do_double_collinear_limits(self, invariants=None, silent=False):
+
+        # Choose the variables
+        if invariants is None:
+            oInvariants = Invariants(self.multiplicity, Restrict3Brackets=settings.Restrict3Brackets,
+                                     Restrict4Brackets=settings.Restrict4Brackets, FurtherRestrict4Brackets=settings.FurtherRestrict4Brackets)
+            if settings.SingleScalingsUse4Brackets is True:
+                invariants = oInvariants.full
+            else:
+                invariants = oInvariants.full_minus_4_brackets
+        else:
+            invariants = copy(invariants)
+
+        _pair_invs, _pair_exps, _pair_friends = pair_scalings(self, self.den_invs, self.den_invs, invariants)
         if hasattr(self, "save_original_unknown_call_cache"):
             self.save_original_unknown_call_cache()
         partial_filter = functools.partial(filter, lambda x: x in self.den_invs or (x in self.spurious_poles if hasattr(self, 'spurious_poles') else False) or x == "F")
