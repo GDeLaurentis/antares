@@ -12,6 +12,8 @@
 import sys
 
 from mpmath.libmp.libhyper import NoConvergence
+
+from syngular import SingularException
 from lips import Particles, myException
 
 from ..core.settings import settings
@@ -79,7 +81,8 @@ def pair_scalings(oUnknown, some_invs, other_invs, all_invariants, relative=1, s
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
-@retry((myException, log_linear_fit_Exception, AssertionError, TimeoutError, AttributeError, NoConvergence), max_tries=2, silent=False)
+@retry((myException, log_linear_fit_Exception, AssertionError, TimeoutError, AttributeError,
+        NoConvergence, SingularException), max_tries=2, silent=False)
 def pair_scaling(oUnknown, all_invariants, relative, sFriends, invs_tuple, seed=0):
 
     some_inv, other_inv = invs_tuple[0], invs_tuple[1]

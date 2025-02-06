@@ -10,6 +10,7 @@
 # Author: Giuseppe
 
 from lips import Particles, myException
+from syngular import SingularException
 
 from ..core.settings import settings
 from ..core.tools import mapThreads, log_linear_fit, retry, log_linear_fit_Exception
@@ -29,7 +30,7 @@ def single_scalings(oUnknown, invariants, seed=0, verbose=False):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
-@retry((myException, log_linear_fit_Exception, AssertionError, AttributeError, ), max_tries=2, silent=False)
+@retry((myException, log_linear_fit_Exception, AssertionError, AttributeError, SingularException), max_tries=2, silent=False)
 def single_scaling(oUnknown, invariant, seed=0):
 
     oParticles = Particles(oUnknown.multiplicity, seed=seed, field=settings.field)
