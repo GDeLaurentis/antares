@@ -28,9 +28,9 @@ setup(
     include_package_data=True,
     data_files=[],
     install_requires=[
-        'lips',
-        'pyadic',
-        'syngular',
+        'lips>=0.5.0',
+        'pyadic>=0.2.4',
+        'syngular>=0.5.0',
         # 'linac',
         'pyyaml',
         'pandas',
