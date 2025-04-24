@@ -419,13 +419,11 @@ def convert_invariant(Invariant, Rule):
         from antares.core.tools import pDijk, pOijk, pPijk
         oParticles = Particles(n)
         if "Δ" in Invariant:
-            match_list = pDijk.findall(Invariant)[0]
-            if match_list[0] == '':
-                # adjacent = False  # not used?
-                NonOLists = [list(map(int, corner)) for corner in match_list[1:]]
+            match = pDijk.findall(Invariant)[0]
+            if "|" in match:
+                NonOLists = [list(map(int, corner)) for corner in match.split("|")]
             else:
-                # adjacent = True  # not used?
-                NonOLists = oParticles.ijk_to_3NonOverlappingLists(list(map(int, match_list[0])))
+                NonOLists = oParticles.ijk_to_3NonOverlappingLists(list(map(int, match)))
         elif "Ω" in Invariant:
             ijk = list(map(int, pOijk.findall(Invariant)[0]))
             NonOLists = oParticles.ijk_to_3NonOverlappingLists(ijk)

@@ -28,6 +28,10 @@ import mpmath
 import fractions
 import copyreg
 
+from pathlib import Path
+
+from lips.tools import pSijk, pd5, ptr5, pDijk, pOijk, pPijk, pA2, pS2, p3B, pNB  # noqa
+
 from .bh_patch import BH_found
 if BH_found:
     from .bh_patch import BH
@@ -107,17 +111,17 @@ Pauli_z = numpy.array([[1, 0], [0, -1]])
 Pauli = numpy.array([Pauli_zero, Pauli_x, Pauli_y, Pauli_z])
 Pauli_bar = numpy.array([Pauli_zero, -Pauli_x, -Pauli_y, -Pauli_z])
 
-# Lorentz Invariants String Patterns
-pSijk = re.compile(r'^(?:s_|S_)(\d+)$')
-pd5 = re.compile(r'^δ5$')
-ptr5 = re.compile(r'^(?:tr5_)(\d+)$')
-pDijk = re.compile(r'(?:^Δ_(\d+)$)|(?:^Δ_(\d+)\|(\d+)\|(\d+)$)')
-pOijk = re.compile(r'^(?:Ω_)(\d+)$')
-pPijk = re.compile(r'^(?:Π_)(\d+)$')
-pA2 = re.compile(r'^(?:⟨)([0-9])(?:\|)([0-9])(?:⟩)$')
-pS2 = re.compile(r'^(?:\[)([0-9])(?:\|)([0-9])(?:\])$')
-p3B = re.compile(r'^(?:⟨|\[)(\d)(?:\|\({0,1})([\d[\+|-]*]*)(?:\){0,1}\|)(\d)(?:⟩|\])$')
-pNB = re.compile(r'^(?:⟨|\[)(?P<start>\d)(?:\|)(?P<middle>(?:(?:\([\d[\+|-]{1,}]{,1}\))|(?:[\d[\+|-]{1,}]{,1}))*)(?:\|)(?P<end>\d)(?:⟩|\])$')
+# Lorentz Invariants String Patterns - deprecated, use lips - remove in future
+# pSijk = re.compile(r'^(?:s_|S_)(\d+)$')
+# pd5 = re.compile(r'^δ5$')
+# ptr5 = re.compile(r'^(?:tr5_)(\d+)$')
+# pDijk = re.compile(r'(?:^Δ_(\d+)$)|(?:^Δ_(\d+)\|(\d+)\|(\d+)$)')
+# pOijk = re.compile(r'^(?:Ω_)(\d+)$')
+# pPijk = re.compile(r'^(?:Π_)(\d+)$')
+# pA2 = re.compile(r'^(?:⟨)([0-9])(?:\|)([0-9])(?:⟩)$')
+# pS2 = re.compile(r'^(?:\[)([0-9])(?:\|)([0-9])(?:\])$')
+# p3B = re.compile(r'^(?:⟨|\[)(\d)(?:\|\({0,1})([\d[\+|-]*]*)(?:\){0,1}\|)(\d)(?:⟩|\])$')
+# pNB = re.compile(r'^(?:⟨|\[)(?P<start>\d)(?:\|)(?P<middle>(?:(?:\([\d[\+|-]{1,}]{,1}\))|(?:[\d[\+|-]{1,}]{,1}))*)(?:\|)(?P<end>\d)(?:⟩|\])$')
 
 # BlackHat variables
 if BH_found:
@@ -357,7 +361,6 @@ class MyThreadPool(object):      # context manager pool (no new processes, curre
 
 
 def progress_wrapper(func, *args, **kwargs):
-    global lock, prog
     with lock if lock is not None else nullcontext():
         prog.increment()
         if type(args[-1]) in [list, tuple] and type(args[-1][0]) in [str, unicode] and len(", ".join(args[-1])) < 40:
@@ -680,6 +683,8 @@ def Generate_LaTeX_and_PDF(message, res_path, partial=False, compile_tex_to_pdf=
         oFile.write("\\DeclareMathSizes{1}{1}{1}{0.1}\n")
         oFile.write("\\usepackage{unicode-math}\n")
         oFile.write("\\usepackage{mathtools}\n")
+        oFile.write("\\newcommand{\\tr}{\\text{tr}}\n")
+        oFile.write("\\newcommand{\\trfive}{\\text{tr5}}\n")
         oFile.write("\\standaloneenv{my}\n\n")
         oFile.write("\\begin{document}\n")
         if sys.version_info[0] > 2:
@@ -689,7 +694,8 @@ def Generate_LaTeX_and_PDF(message, res_path, partial=False, compile_tex_to_pdf=
         oFile.write("\\end{document}\n")
     if compile_tex_to_pdf:
         with open(os.devnull, 'wb') as devnull:
-            subprocess.check_call([MainPythonDirectory + '/scripts/SpinorLatexCompiler.py', res_path], stdout=devnull, stderr=devnull)
+            subprocess.check_call(['SpinorLatexCompiler', Path(res_path).name],
+                                  stdout=devnull, stderr=devnull, cwd=Path(res_path).parent)
         if partial is False:
             if os.path.isfile(res_path[:-4] + "_partial.tex"):
                 os.system("rm " + res_path[:-4].replace("(", "(").replace(")", ")") + "_partial.tex")
@@ -1093,7 +1099,7 @@ def LaTeXToPython(res_path, partial_only=False):
         python_result = python_result.replace("\\langle", "⟨").replace("\\rangle", "⟩").replace("\\frac{", "(")
         python_result = re.sub(r"{([\d\|]+)}", r"\1", python_result)
         python_result = re.sub(r"{(\d).(\d)}", r"\1.\2", python_result)
-        python_result = python_result.replace("}{", ")\\(").replace("}+", ")+")
+        python_result = python_result.replace("}{", ")/(").replace("}+", ")+")
         if python_result[-1] == "}":
             python_result = python_result[:-1] + ")"
         python_result = python_result.replace("}", "").replace("{", "")
@@ -1102,13 +1108,14 @@ def LaTeXToPython(res_path, partial_only=False):
         python_result = re.sub(r"\|(?P<nbr>\d)\-", r"|(\g<nbr>-", python_result)
         python_result = re.sub(r"\+(?P<nbr>\d)\|", r"+\g<nbr>)|", python_result)
         python_result = re.sub(r"\-(?P<nbr>\d)\|", r"-\g<nbr>)|", python_result)
-        python_result = python_result.replace("\\", "/")
-        python_result = re.sub(r"(\d+),/;/text", r"'\1',", python_result)
-        python_result = python_result.replace(",/;-", ",'-'").replace(",/;+", ",'+'")
+        python_result = re.sub(r"(\d+),\\;\\text", r"'\1',", python_result)
+        python_result = python_result.replace(r",\;-", ",'-'").replace(r",\;+", ",'+'")
         python_result = python_result.replace("False)", "False,'+')").replace("True)", "True,'+')")
         python_result = re.sub(r"⟨(\d)(\d)⟩", r"⟨\1|\2⟩", python_result)
         python_result = re.sub(r"\[(\d)(\d)\]", r"[\1|\2]", python_result)
-        python_result = python_result.replace("/Delta", "Δ").replace("/Omega", "Ω").replace("/Pi", "Π")
+        python_result = python_result.replace("\\Delta", "Δ").replace("\\Omega", "Ω").replace("\\Pi", "Π")
+        python_result = python_result.replace("\\trfive", "tr5")
+        python_result = python_result.replace("\\", "")
         # print(python_result, end="\n\n")
         python_results[i] = Terms(python_result)
     return python_results, partial

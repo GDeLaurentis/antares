@@ -1,16 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 #    ___             _ _
 #   | _ \___ ____  _| | |_
 #   |   / -_|_-< || | |  _|
 #   |_|_\___/__/\_,_|_|\__|
 
-
 # Author: Giuseppe
-
-from __future__ import unicode_literals
-from __future__ import print_function
 
 import sys
 import math
@@ -19,6 +12,7 @@ import copy
 import numpy
 import sympy
 import functools
+import operator
 
 from lips import Particles
 from lips.invariants import Invariants
@@ -27,7 +21,7 @@ from lips.tools import pNB as pNB_internal
 from lips.particles_eval import pNB as pNB_overall
 from lips.symmetries import inverse
 
-from ..core.tools import Write, LaTeXToPython, flatten, get_common_Q_factor, get_max_abs_numerator, get_max_denominator
+from ..core.tools import LaTeXToPython, flatten, get_common_Q_factor, get_max_abs_numerator, get_max_denominator
 from ..core.settings import settings
 from ..core.numerical_methods import Numerical_Methods
 from ..core.bh_patch import accuracy
@@ -148,16 +142,6 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
     def __div__(self, other):
         return Terms([oTerm / other for oTerm in self])
 
-        # print("\n\n\n\n WTF!! \n\n\n\n\n")
-        # if type(other) is int:
-        #     new = copy.deepcopy(self)
-        #     for lCoefs in new[-1:].llCoefs:
-        #         for i, coef in enumerate(lCoefs):
-        #             lCoefs[i] = tuple([coef[0] / other, coef[1] / other])
-        #     return new
-        # else:
-        #     raise Exception("Terms division implemented only for integers.")
-
     def __getitem__(self, item):
         if isinstance(list.__getitem__(self, item), Term):
             oTerm = list.__getitem__(self, item)
@@ -197,14 +181,10 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
                 return True
 
     def __str__(self):
-        string = "\n".join([str(oTerm) if hasattr(oTerm, 'oNum') else "+" + str(oTerm) for oTerm in self])
-        if sys.version_info.major > 2:
-            return string
-        else:
-            return string.encode('utf-8')
+        return "\n".join([f"+{oTerm}" for oTerm in self])
 
     def __rstr__(self, string):
-        self.__init__([Term(entry) for entry in string.replace(" ", "").split("\n") if entry != ''])
+        self.__init__([Term(entry) for entry in string.splitlines() if entry.replace(" ", "") != ''])
 
     def __repr__(self):
         return f"Terms(\"\"\"{self}\"\"\")"
@@ -370,6 +350,11 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
     def llDenExps(self):
         return [oTerm.oDen.lExps for oTerm in self if oTerm.am_I_a_symmetry is False]
 
+    @property
+    @caching_decorator
+    def variables(self):
+        return functools.reduce(operator.or_, [oTerm.variables for oTerm in self if oTerm.am_I_a_symmetry is False])
+
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     @functools.cached_property
@@ -403,7 +388,7 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
     def __call__(self, oParticles):
         InvsDict = {}
         for inv in self.invs_set:
-            InvsDict[inv] = oParticles.compute(inv)
+            InvsDict[inv] = oParticles(inv)
         SymInvsDict = {}
         for oTerm in self:
             if oTerm.am_I_a_symmetry is True and oTerm.tSym not in SymInvsDict.keys():
@@ -412,7 +397,7 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
                 if oTerm.tSym[1] is True:
                     NewParticles.angles_for_squares()
                 for inv in self.invs_set:
-                    NewDict[inv] = NewParticles.compute(inv)
+                    NewDict[inv] = NewParticles(inv)
                 SymInvsDict[oTerm.tSym] = NewDict
         NumericalResult = 0
         for i, iTerm in enumerate(self):
@@ -423,10 +408,18 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
                         break
                     elif jTerm.am_I_a_symmetry is False:
                         something_was_not_a_symmetry = True
+                        next_numerical_bit = jTerm(SymInvsDict[iTerm.tSym])
+                        if isinstance(next_numerical_bit, numpy.ndarray):  # if result is a tensor indices must be aligned
+                            massive_fermions = [i + 1 for i, oP in enumerate(oParticles) if hasattr(oP, 'spin_index')]
+                            assert len(massive_fermions) <= 2  # otherwise not implemented
+                            from lips.symmetries import identity
+                            if ("".join(iTerm.tSym[0][i - 1] for i in massive_fermions) ==
+                               "".join(identity(len(iTerm.tSym[0]))[0][i - 1] for i in massive_fermions)[::-1]):
+                                next_numerical_bit = next_numerical_bit.T
                         if iTerm.tSym[2] == "-":
-                            NumericalResult -= jTerm(SymInvsDict[iTerm.tSym])
+                            NumericalResult -= next_numerical_bit
                         else:
-                            NumericalResult += jTerm(SymInvsDict[iTerm.tSym])
+                            NumericalResult += next_numerical_bit
             else:
                 NumericalResult += iTerm(InvsDict)
         return NumericalResult
@@ -471,17 +464,10 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
             oTerm.canonical_ordering()
 
     def update_invs_set(self):
-        invs_set = []
-        for oTerm in self:
-            if oTerm.am_I_a_symmetry is True:
-                continue
-            invs_set += flatten(oTerm.oNum.llInvs)
-            invs_set += flatten(oTerm.oNum.lCommonInvs)
-            invs_set += flatten(oTerm.oDen.lInvs)
+        self.invs_set = functools.reduce(operator.or_, [oTerm.variables for oTerm in self], set())
         if hasattr(self, "multiplicity"):
             for oTerm in self:
                 oTerm.multiplicity = self.multiplicity
-        self.invs_set = set(invs_set)
 
     def relevant_old_Terms(self, i):
         oOldTerms = self.oUnknown.recursively_extract_terms()
@@ -699,68 +685,35 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
     def Write_LaTex(self):
         # generate latex message and print the full result
         latex_result = ""
-        for i, iTerm in enumerate(self):
-            if hasattr(iTerm, "oNum"):
-                latex_result += "("
-                # build numerator, if there is more then one term in this numerator write the common invs at the beginning
-                if len(iTerm.oNum.lCommonInvs) >= 1:
-                    latex_result += Write(iTerm.oNum.lCommonInvs, iTerm.oNum.lCommonExps)[1:-3]
-                    latex_result += "("
-                for j in range(len(iTerm.oNum.llInvs)):
-                    if len(iTerm.oNum.lCoefs) > 0:
-                        real = iTerm.oNum.lCoefs[j][0]
-                        imag = iTerm.oNum.lCoefs[j][1]
-                        if real != 0 or imag != 0:
-                            if real == 0:
-                                latex_result += "{}i".format(imag)
-                            elif imag == 0:
-                                latex_result += "{}".format(real)
-                            elif imag > 0:
-                                latex_result += "{}+{}i".format(real, imag)
-                            elif imag < 0:
-                                latex_result += "{}{}i".format(real, imag)
-                    else:
-                        assert len(iTerm.oNum.llInvs) == 1
-                        latex_result += "1"
-                    jInvs = copy.copy(iTerm.oNum.llInvs[j])
-                    jExps = copy.copy(iTerm.oNum.llExps[j])
-                    latex_result += Write(jInvs, jExps)[1:-3]
-                    latex_result += " + "
-                latex_result = latex_result[:-3]
-                if len(iTerm.oNum.lCommonInvs) >= 1:
-                    latex_result += ")"
-                if iTerm.oDen.lInvs != []:
-                    latex_result += ")/"
-                    # add denominator
-                    latex_result += Write(iTerm.oDen.lInvs, iTerm.oDen.lExps)[:-2]
-                else:
-                    latex_result += ")"
-            elif hasattr(iTerm, "tSym"):
+        for iTerm in self:
+            if iTerm.am_I_a_symmetry:
                 if iTerm.tSym[2] == "-":
                     latex_result += r"\scriptscriptstyle({},\;\text{{{}}},\;{})".format(iTerm.tSym[0], iTerm.tSym[1], iTerm.tSym[2])
                 else:
                     latex_result += r"\scriptscriptstyle({},\;\text{{{}}})".format(iTerm.tSym[0], iTerm.tSym[1])
+                latex_result += " +\\\\\n"
+                continue
+            #  print the analytic expression
+            if iTerm.oDen != Denominator():
+                if len(iTerm.oNum.polynomial) > 1:
+                    latex_result += rf"\scriptscriptstyle\frac{{{iTerm.oNum}}}{{{iTerm.oDen}}}"
+                else:
+                    latex_result += rf"\scriptscriptstyle\frac{{{str(iTerm.oNum)[1:-1]}}}{{{iTerm.oDen}}}"
             else:
-                raise Exception("Counld't understand a term while writing latex expression.")
+                latex_result += rf"\scriptscriptstyle {iTerm.oNum}"
             latex_result += " +\\\\\n"
         latex_result = latex_result[:-4]
         if len(self) > 1:
             latex_result += "\\phantom{+}"
+        latex_result = "\n".join(" ".join(line.split()) for line in latex_result.splitlines())
         latex_result = latex_result.replace(".0", "")
-        latex_result = latex_result.replace(" ", "")
-        latex_result = latex_result.replace("|(", "|")
-        latex_result = latex_result.replace(")|", "|")
+        latex_result = latex_result.replace("|(", "|").replace(")|", "|")
         latex_result = re.sub(r"\[(?P<a>\d)\|(?P<b>\d)\]", r"[\g<a>\g<b>]", latex_result)
         latex_result = re.sub(r"⟨(?P<a>\d)\|(?P<b>\d)⟩", r"⟨\g<a>\g<b>⟩", latex_result)
         latex_result = latex_result.replace("+-", "-")
-        latex_frac = re.compile(r"\((?P<num>[/i\-\+\d⟨⟩\[\]\|a-zA-ZΔΩΠ_\^\(\)(?!/).]*)\)/\((?P<den>[/i\-\+\d⟨⟩\[\]\|a-zA-ZΔΩΠ_\^\(\)(?!/)]*)\)")
-        latex_result = re.sub(latex_frac, r"\\scriptscriptstyle\\frac{\g<num>}{\g<den>}", latex_result)
-        latex_frac = re.compile(r"\((?P<number>[/i\-\+\d⟨⟩\[\]\|a-zA-ZΔΩΠ_\^\(\)(?!/).]*)\)(?!/|\}\{)")
-        latex_result = re.sub(latex_frac, r"\\scriptscriptstyle(\g<number>)", latex_result)
-        latex_s_ijk = re.compile(r"s_(?P<numbers>[\d]*)")
+        latex_s_ijk = re.compile(r"s_?(?P<numbers>[\d]+)")
         latex_result = re.sub(latex_s_ijk, r"s_{\g<numbers>}", latex_result)
-        latex_D_ijk_new = re.compile(r"Δ_(?P<numbers1>[\d]*)\|(?P<numbers2>[\d]*)\|(?P<numbers3>[\d]*)")
-        latex_result = re.sub(latex_D_ijk_new, r"Δ_{\g<numbers1>|\g<numbers2>|\g<numbers3>}", latex_result)
+        latex_result = re.sub(pDijk_non_adjacent, r"Δ_{\1}", latex_result)
         latex_D_ijk = re.compile(r"Δ_(?P<numbers>[\d]+)")
         latex_result = re.sub(latex_D_ijk, r"Δ_{\g<numbers>}", latex_result)
         latex_O_ijk = re.compile(r"Ω_(?P<numbers>[\d]*)")
@@ -769,6 +722,8 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
         latex_result = re.sub(latex_P_ijk, r"Π_{\g<numbers>}", latex_result)
         latex_tr5_ijk = re.compile(r"tr5_(?P<numbers>[\d]*)")
         latex_result = re.sub(latex_tr5_ijk, r"tr5_{\g<numbers>}", latex_result)
+        latex_result = re.sub(r"tr\(", r"\\tr(", latex_result)
+        latex_result = re.sub(r"tr5_", r"\\trfive_", latex_result)
         latex_result = latex_result.replace("+\n", "+")
         latex_result = re.sub(r'(?<!\n)(?<!^)\\scriptscriptstyle', '', latex_result)
         latex_message = "\\begin{my}\n$\\begin{gathered}\n" + latex_result + "\n\\end{gathered}$\n\\end{my}\n"
@@ -916,7 +871,7 @@ def string_toSaM(string):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
-def LoadResults(res_path, load_partial_results_only=False, silent=True, callable_to_check_with=None):
+def LoadResults(res_path, load_partial_results_only=False, silent=True, callable_to_check_with=None, multiplicity=None):
 
     lResults, loaded_result_is_partial = LaTeXToPython(res_path, load_partial_results_only)
 
@@ -934,6 +889,8 @@ def LoadResults(res_path, load_partial_results_only=False, silent=True, callable
         lResults[i] = oRes
         if callable_to_check_with is not None:
             lResults[i].multiplicity = callable_to_check_with.multiplicity
+        elif multiplicity is not None:
+            lResults[i].multiplicity = multiplicity
     if silent is False:
         print("Loaded:\n", lResults)
     if loaded_result_is_partial is False and callable_to_check_with is not None:

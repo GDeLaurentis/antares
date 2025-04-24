@@ -84,6 +84,8 @@ def as_scalar_if_scalar(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         res = func(*args, **kwargs)
+        if not hasattr(res, 'shape'):
+            return res
         if res.shape == ():
             return res[()]  # pops the scalar out of array(scalar) or does nothing if array has non-trivial dimensions.
         elif functools.reduce(operator.mul, res.shape) == 1:
@@ -211,29 +213,37 @@ class Numerical_Methods:
     @property
     def phase_weights(self):
         """Returns the phase weights (a.k.a. little group scalings). Return type is a list of int's, vectorized depending on input."""
-        oParticles = Particles(self.multiplicity, field=settings.field, seed=0, internal_masses=self.internal_masses)
-        phase_weights = []
-        z = 3  # do not use 2! Different (small) powers have same values in finite fields.
-        if settings.field.name in ["padic", "finite field"]:
-            search_start, search_stop = -100, 100
-            powers = range(search_start, search_stop, 1)
-            search_range = [int(ModP(Q(z) ** power, settings.field.characteristic)) for power in powers]
-        for oParticle in oParticles:
-            before = self(oParticles.copy())
-            oParticle.r_sp_u = oParticle.r_sp_u * z
-            oParticle.l_sp_u = oParticle.l_sp_u / z
-            after = self(oParticles)
-            if settings.field.name == "mpc":
-                temp_p_w = self.mpc_phase_weight(regulated_division(after, before), z)
-            elif settings.field.name == "padic" and settings.field.digits > 1:
-                temp_p_w = self.padic_phase_weight(regulated_division(after, before), z)
-            elif settings.field.name in ["padic", "finite field"]:
-                temp_p_w = self.finite_field_phase_weight(regulated_division(after, before), search_range, powers)
-            phase_weights += [temp_p_w]
-        phase_weights = numpy.moveaxis(numpy.array(phase_weights), 0, -1)
-        if len(phase_weights.shape) == 1:
-            phase_weights = phase_weights.tolist()
-        return phase_weights
+        if hasattr(self, '_phase_weights'):
+            return self._phase_weights
+        else:
+            oParticles = Particles(self.multiplicity, field=settings.field, seed=0, internal_masses=self.internal_masses)
+            phase_weights = []
+            z = 3  # do not use 2! Different (small) powers have same values in finite fields.
+            if settings.field.name in ["padic", "finite field"]:
+                search_start, search_stop = -100, 100
+                powers = range(search_start, search_stop, 1)
+                search_range = [int(ModP(Q(z) ** power, settings.field.characteristic)) for power in powers]
+            for oParticle in oParticles:
+                before = self(oParticles.copy())
+                oParticle.r_sp_u = oParticle.r_sp_u * z
+                oParticle.l_sp_u = oParticle.l_sp_u / z
+                after = self(oParticles)
+                if settings.field.name == "mpc":
+                    temp_p_w = self.mpc_phase_weight(regulated_division(after, before), z)
+                elif settings.field.name == "padic" and settings.field.digits > 1:
+                    temp_p_w = self.padic_phase_weight(regulated_division(after, before), z)
+                elif settings.field.name in ["padic", "finite field"]:
+                    temp_p_w = self.finite_field_phase_weight(regulated_division(after, before), search_range, powers)
+                phase_weights += [temp_p_w]
+            phase_weights = numpy.moveaxis(numpy.array(phase_weights), 0, -1)
+            if len(phase_weights.shape) == 1:
+                phase_weights = phase_weights.tolist()
+            self._phase_weights = phase_weights
+            return self._phase_weights
+
+    @phase_weights.setter
+    def phase_weights(self, temp_phase_weights):
+        self._phase_weights = temp_phase_weights
 
     @property
     def all_symmetries(self, possible_symmetries=None, field=settings.field):
@@ -316,27 +326,17 @@ class Numerical_Methods:
             return True
 
     def do_single_collinear_limits(self, invariants=None, verbose=True):
-        from antares.terms.term import Term
-        from antares.terms.terms import Terms
+        from antares.terms.terms import Term, Terms
         self.oTermFromSingleScalings = Term.from_single_scalings(self, invariants=invariants, verbose=verbose)
-        if hasattr(self, "save_original_unknown_call_cache"):
-            self.save_original_unknown_call_cache()
+        self.oTermsFromSingleScalings = Terms([self.oTermFromSingleScalings])
+        self.oTermsFromSingleScalings.oUnknown = self
         self.num_invs, _num_exps = self.oTermFromSingleScalings.oNum.llInvs[0], self.oTermFromSingleScalings.oNum.llExps[0]
         self.den_invs, _den_exps = self.oTermFromSingleScalings.oDen.lInvs, self.oTermFromSingleScalings.oDen.lExps
         self.num_exps = dict(zip(self.num_invs, _num_exps))
         self.den_exps = dict(zip(self.den_invs, _den_exps))
-        self.oTermsFromSingleScalings = Terms([self.oTermFromSingleScalings])
-        self.oTermsFromSingleScalings.oUnknown = self
         if verbose:
-            print("")
-            print("Mass dimension & phase weights:", end='')
-            print("{},".format(self.mass_dimension), end='')
-            print(self.phase_weights, end='')
-            sys.stdout.flush()
-            print(u" \u2192 ", end='')
-            print("{},".format(self.oTermsFromSingleScalings.ansatze_mass_dimensions[0]), end='')
-            print(self.oTermsFromSingleScalings.ansatze_phase_weights[0])
-            print("")
+            print(f"\nMass dimension & phase weights: {self.mass_dimension}, {self.phase_weights}", end='')
+            print(f" → {self.oTermsFromSingleScalings.ansatze_mass_dimensions[0]}, {self.oTermsFromSingleScalings.ansatze_phase_weights[0]}")
 
     def do_double_collinear_limits(self, invariants=None, silent=False):
 

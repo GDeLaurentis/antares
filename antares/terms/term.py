@@ -1,36 +1,30 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 #   _  _                         _           __     ___                     _           _
 #  | \| |_  _ _ __  ___ _ _ __ _| |_ ___ _ _/ _|___|   \ ___ _ _  ___ _ __ (_)_ _  __ _| |_ ___ _ _
 #  | .` | || | '  \/ -_) '_/ _` |  _/ _ \ '_> _|_ _| |) / -_) ' \/ _ \ '  \| | ' \/ _` |  _/ _ \ '_|
 #  |_|\_|\_,_|_|_|_\___|_| \__,_|\__\___/_| \_____||___/\___|_||_\___/_|_|_|_|_||_\__,_|\__\___/_|
 
-
 # Author: Giuseppe
 
 import lips
 import mpmath
-import pyadic
 import re
-import sys
+import functools
+import operator
 
 from functools import reduce
 from fractions import Fraction
 from operator import mul
 from copy import copy, deepcopy
 
-
 from lips.tools import subs_dict
 from lips.invariants import Invariants
-from lips.particles_eval import unicode_powers, non_unicode_powers
+
+from syngular import Field, Monomial, Polynomial
 
 from ..core.settings import settings
 from ..core.numerical_methods import Numerical_Methods
 from ..scalings.single import single_scalings
 
-if sys.version_info.major > 2:
-    unicode = str
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
@@ -49,7 +43,7 @@ class Term(Numerical_Methods, object):
         elif isinstance(object1, tuple):
             if object2 is not None:
                 raise Exception("Term created with symmetry and denominator.")
-            elif not isinstance(object1[0], unicode) or not isinstance(object1[1], bool):
+            elif not isinstance(object1[0], str) or not isinstance(object1[1], bool):
                 raise Exception("Term created with non vailid symmetry.")
             else:
                 self.tSym = object1
@@ -96,7 +90,7 @@ class Term(Numerical_Methods, object):
         # if oUnknown.multiplicity == 4:
         #     num_invs, num_exps = [], []
 
-        oTerm = cls(Numerator([num_invs], [num_exps]), Denominator(den_invs, den_exps))
+        oTerm = cls(Numerator([num_invs], [num_exps], [1]), Denominator(den_invs, den_exps))
         oTerm.multiplicity = oUnknown.multiplicity
 
         if verbose:
@@ -151,9 +145,7 @@ class Term(Numerical_Methods, object):
                 dtype = type(list(InvsDict_or_Particles.values())[0])
             else:
                 dtype = mpmath.mpc
-            NumericalDenominator = 1
-            for inv, exp in zip(self.oDen.lInvs, self.oDen.lExps):
-                NumericalDenominator *= InvsDict_or_Particles[inv]**exp
+            NumericalDenominator = self.oDen(InvsDict_or_Particles)
             NumericalCommonNumerator = 1
             for inv, exp in zip(self.oNum.lCommonInvs, self.oNum.lCommonExps):
                 NumericalCommonNumerator *= InvsDict_or_Particles[inv]**exp
@@ -167,7 +159,7 @@ class Term(Numerical_Methods, object):
                     assert coef[1] == 0
                     NumericalTerm = coef[0]
                 for inv, exp in zip(lInvs, lExps):
-                    NumericalTerm *= InvsDict_or_Particles[inv]**exp
+                    NumericalTerm = NumericalTerm * InvsDict_or_Particles[inv] ** exp
                 NumericalNumerator += NumericalTerm
             return NumericalNumerator * NumericalCommonNumerator / NumericalDenominator
         elif isinstance(InvsDict_or_Particles, lips.Particles):
@@ -229,74 +221,52 @@ class Term(Numerical_Methods, object):
         """
         if self.am_I_a_symmetry:
             return
-        if self.oNum.lCommonInvs == [] and len(self.oNum.llInvs) > 1:
+        elif len(self.oNum.monomial) == 0 and len(self.oNum.polynomial) > 1:
             return
-        if self.oNum.lCommonInvs != []:
-            common_num_invs = copy(self.oNum.lCommonInvs)
-            common_num_exps = copy(self.oNum.lCommonExps)
-        elif len(self.oNum.llInvs) == 1:
-            common_num_invs = copy(self.oNum.llInvs[0])
-            common_num_exps = copy(self.oNum.llExps[0])
-        shared_factors = list(set(self.oDen.lInvs) & set(common_num_invs))
-        if shared_factors == []:
-            return
-        for shared_factor in shared_factors:
-            if common_num_exps[common_num_invs.index(shared_factor)] == self.oDen.lExps[self.oDen.lInvs.index(shared_factor)]:
-                common_num_exps.pop(common_num_invs.index(shared_factor))
-                common_num_invs.pop(common_num_invs.index(shared_factor))
-                self.oDen.lExps.pop(self.oDen.lInvs.index(shared_factor))
-                self.oDen.lInvs.pop(self.oDen.lInvs.index(shared_factor))
-            elif common_num_exps[common_num_invs.index(shared_factor)] > self.oDen.lExps[self.oDen.lInvs.index(shared_factor)]:
-                common_num_exps[common_num_invs.index(shared_factor)] -= self.oDen.lExps[self.oDen.lInvs.index(shared_factor)]
-                self.oDen.lExps.pop(self.oDen.lInvs.index(shared_factor))
-                self.oDen.lInvs.pop(self.oDen.lInvs.index(shared_factor))
-            elif common_num_exps[common_num_invs.index(shared_factor)] < self.oDen.lExps[self.oDen.lInvs.index(shared_factor)]:
-                self.oDen.lExps[self.oDen.lInvs.index(shared_factor)] -= common_num_exps[common_num_invs.index(shared_factor)]
-                common_num_exps.pop(common_num_invs.index(shared_factor))
-                common_num_invs.pop(common_num_invs.index(shared_factor))
-        if self.oNum.lCommonInvs != []:
-            self.oNum.lCommonInvs = common_num_invs
-            self.oNum.lCommonExps = common_num_exps
         else:
-            self.oNum.llInvs[0] = common_num_invs
-            self.oNum.llExps[0] = common_num_exps
+            if len(self.oNum.monomial) != 0:
+                monomial_to_cancel = self.oNum.monomial & self.oDen
+            else:
+                monomial_to_cancel = self.oNum.polynomial.monomials[0] & self.oDen
+            self.oNum /= monomial_to_cancel
+            self.oDen /= monomial_to_cancel
 
     def canonical_ordering(self):
         oInvariants = Invariants(self.multiplicity, Restrict3Brackets=settings.Restrict3Brackets,
                                  Restrict4Brackets=settings.Restrict4Brackets, FurtherRestrict4Brackets=settings.FurtherRestrict4Brackets)
         if self.am_I_a_symmetry is False:
             if len(self.oDen.lInvs) >= 1:
-                self.oDen.lInvs, self.oDen.lExps = map(
-                    list, zip(*sorted(zip(self.oDen.lInvs, self.oDen.lExps), key=lambda x: oInvariants.full.index(x[0]) if x[0] in oInvariants.full else 999)))
+                self.oDen = Denominator(sorted(zip(self.oDen.lInvs, self.oDen.lExps),
+                                               key=lambda x: oInvariants.full.index(x[0]) if x[0] in oInvariants.full else 999))
             for i, (lInvs, lExps) in enumerate(zip(self.oNum.llInvs, self.oNum.llExps)):
                 if len(lInvs) >= 1:
                     self.oNum.llInvs[i], self.oNum.llExps[i] = map(
                         list, zip(*sorted(zip(lInvs, lExps), key=lambda x: oInvariants.full.index(x[0]) if x[0] in oInvariants.full else 999)))
 
     def __mul_or_div__(self, other, operation):
+        from .terms import Terms
+        if isinstance(other, Terms) and len(other) == 1:
+            other = other[0]
+        if not isinstance(other, Term):
+            raise Exception(f"Attempted to {operation} Term object by {other} of type {type(other)}.")
         if self.am_I_a_symmetry is True or other.am_I_a_symmetry is True:
             raise Exception("Division not defined for term containing symmetry.")
         if len(self.oNum.llInvs) > 1 or len(other.oNum.llInvs) > 1:
             raise Exception("Division not defined for terms with more than one set of invariants in numerator.")
-        result = Term(Numerator(), Denominator())
-        for inv in self.oNum.llInvs[0] + self.oDen.lInvs + other.oNum.llInvs[0] + other.oDen.lInvs:
-            if inv in result.oNum.llInvs[0] or inv in result.oDen.lInvs:
-                continue
-            exp1 = self.oNum.llExps[0][self.oNum.llInvs[0].index(inv)] if inv in self.oNum.llInvs[0] else 0
-            exp2 = self.oDen.lExps[self.oDen.lInvs.index(inv)] if inv in self.oDen.lInvs else 0
-            exp3 = other.oNum.llExps[0][other.oNum.llInvs[0].index(inv)] if inv in other.oNum.llInvs[0] else 0
-            exp4 = other.oDen.lExps[other.oDen.lInvs.index(inv)] if inv in other.oDen.lInvs else 0
-            if operation == "mul":
-                exp = exp1 - exp2 + exp3 - exp4
-            elif operation == "div":
-                exp = exp1 - exp2 - exp3 + exp4
-            if exp > 0:
-                result.oNum.llInvs[0] += [inv]
-                result.oNum.llExps[0] += [exp]
-            elif exp < 0:
-                result.oDen.lInvs += [inv]
-                result.oDen.lExps += [-exp]
-        return result
+        if operation == "divide":
+            return Term(Numerator(Monomial(), Polynomial([
+                (self.oNum.polynomial.coeffs[0] / other.oNum.polynomial.coeffs[0],
+                 self.oNum.polynomial.monomials[0] * other.oDen)],
+                self.oNum.polynomial.field)),
+                Denominator(self.oDen * other.oNum.polynomial.monomials[0]))
+        elif operation == "multiply":
+            return Term(Numerator(Monomial(), Polynomial([
+                (self.oNum.polynomial.coeffs[0] * other.oNum.polynomial.coeffs[0],
+                 self.oNum.polynomial.monomials[0] * other.oNum.polynomial.monomials[0])],
+                self.oNum.polynomial.field)),
+                Denominator(self.oDen * other.oDen))
+        else:
+            raise Exception(f"Operation {operation} between Terms not understood.")
 
     def __neg__(self):
         return -1 * self
@@ -307,11 +277,12 @@ class Term(Numerical_Methods, object):
             oResTerm = deepcopy(self)
             if oResTerm.am_I_a_symmetry is True:
                 return oResTerm
-            for i, coef in enumerate(oResTerm.oNum.lCoefs):
-                new_coef = pyadic.GaussianRational(coef[0], coef[1]) * other
-                oResTerm.oNum.lCoefs[i] = (new_coef.real, new_coef.imag)
+            oResTerm.oNum.polynomial = Polynomial(
+                [(coeff * other, monomial) for coeff, monomial in oResTerm.oNum.polynomial.coeffs_and_monomials],
+                oResTerm.oNum.polynomial.field
+            )
             return oResTerm
-        return self.__mul_or_div__(other, "mul")
+        return self.__mul_or_div__(other, "multiply")
 
     def __rmul__(self, other):
         if type(other) is int:
@@ -326,10 +297,12 @@ class Term(Numerical_Methods, object):
             oResTerm = deepcopy(self)
             if oResTerm.am_I_a_symmetry is True:
                 return oResTerm
-            for i, coef in enumerate(oResTerm.oNum.lCoefs):
-                oResTerm.oNum.lCoefs[i] = (coef[0] / other, coef[1] / other)
+            oResTerm.oNum.polynomial = Polynomial(
+                [(coeff / other, monomial) for coeff, monomial in oResTerm.oNum.polynomial.coeffs_and_monomials],
+                oResTerm.oNum.polynomial.field
+            )
             return oResTerm
-        return self.__mul_or_div__(other, "div")
+        return self.__mul_or_div__(other, "divide")
 
     def __contains__(self, other):  # is other in self?
         if self.am_I_a_symmetry is True and other.am_I_a_symmetry is True:
@@ -341,29 +314,20 @@ class Term(Numerical_Methods, object):
         else:
             return False
 
-    def __unicode__(self):
-        return str(self)
-
     def __str__(self):
         if hasattr(self, "tSym"):
-            string = str(self.tSym)
+            return str(self.tSym)
         elif str(self.oDen) != "":
-            string = str(self.oNum) + "/(" + str(self.oDen) + ")"
+            return str(self.oNum) + "/(" + str(self.oDen) + ")"
         else:
-            string = str(self.oNum)
-        if sys.version_info.major > 2:
-            return string
-        else:
-            return string.encode('utf-8')
+            return str(self.oNum)
 
     def __rstr__(self, string):
-        if "True" in string or "False" in string:
-            # this is a symmetry
+        if "True" in string or "False" in string:  # this is a symmetry
             string = string.replace("+(", "(")
             symmetry = eval(string)
             self.__init__(symmetry)
-        else:
-            # this is kinematic expression
+        else:  # this is kinematic expression
             if ")/(" in string:
                 numerator, denominator = string.split(")/(")
                 numerator = numerator + ")"
@@ -374,7 +338,7 @@ class Term(Numerical_Methods, object):
             self.__init__(Numerator(numerator), Denominator(denominator))
 
     def __repr__(self):
-        return str(self)
+        return f"Term(\"{self}\")"
 
     def __hash__(self):
         return hash(str(self))
@@ -384,6 +348,12 @@ class Term(Numerical_Methods, object):
 
     def __ne__(self, other):
         return self.__hash__() != other.__hash__() and isinstance(other, Term)
+
+    @property
+    def variables(self):
+        if self.am_I_a_symmetry:
+            return set()
+        return self.oNum.variables | self.oDen.variables
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -405,101 +375,56 @@ def make_proper(fraction):
 
 class Numerator(object):
 
-    def __init__(self, llInvs=[[]], llExps=[[]], lCoefs=[], lCommonInvs=[], lCommonExps=[]):
-        if isinstance(llInvs, str):
-            self.__rstr__(llInvs)
+    def __init__(self, linvs=[[]], lexps=[[]], coeffs=[], common_invs=[], common_exps=[], field=Field("Qi", 0, 0)):
+        # print("in init", linvs, lexps, coeffs, common_invs, common_exps)
+        if isinstance(linvs, str) and isinstance(lexps, list):
+            self.__rstr__(linvs)
+        elif isinstance(linvs, Monomial) and isinstance(lexps, Polynomial):
+            self.monomial = linvs
+            self.polynomial = lexps
+        elif isinstance(linvs, str) and isinstance(lexps, str):
+            self.monomial = Monomial(linvs)
+            self.polynomial = Polynomial(lexps, field)
         else:
-            self.llInvs = deepcopy(llInvs)
-            self.llExps = deepcopy(llExps)
-            self.lCoefs = deepcopy(lCoefs)
-            if lCommonInvs == []:
-                self.isolate_common_invariants_and_exponents()
-            else:
-                self.lCommonInvs = deepcopy(lCommonInvs)
-                self.lCommonExps = deepcopy(lCommonExps)
-
-    def isolate_common_invariants_and_exponents(self):
-        if len(self.llInvs) > 1:
-            self.lCommonInvs = [inv for inv in self.llInvs[0] if all([inv in lInvs for lInvs in self.llInvs])]
-            self.lCommonExps = [min([self.llExps[j][self.llInvs[j].index(inv)] for j in range(len(self.llInvs))]) for inv in self.lCommonInvs]
-            self.llExps = [[Exp if self.llInvs[i][j] not in self.lCommonInvs else Exp - self.lCommonExps[self.lCommonInvs.index(self.llInvs[i][j])] for (j, Exp) in enumerate(lExps)]
-                           for (i, lExps) in enumerate(self.llExps)]
-            self.llInvs = [[inv for (j, inv) in enumerate(lInv) if self.llExps[i][j] != 0] for (i, lInv) in enumerate(self.llInvs)]
-            self.llExps = [[exp for exp in lExp if exp != 0] for lExp in self.llExps]
+            self.monomial = Monomial(common_invs, common_exps)
+            self.polynomial = Polynomial(list(zip(coeffs, [Monomial(invs, exps) for invs, exps in zip(linvs, lexps)])), field=field)
+        if len(self.polynomial) == 1 and len(self.monomial) != 0:
+            self.polynomial *= self.monomial
+            self.monomial /= self.monomial
+        if len(self.polynomial) > 1:
+            extra_common_monomial = functools.reduce(operator.and_, self.polynomial.monomials)
+            self.polynomial = self.polynomial / extra_common_monomial
+            self.monomial = self.monomial * extra_common_monomial
         else:
-            self.lCommonInvs = []
-            self.lCommonExps = []
-
-    def __unicode__(self):
-        return str(self)
+            assert self.monomial == Monomial("")
 
     def __repr__(self):
-        return str(self)
+        return f"Numerator(\"{self}\")"
 
     def __str__(self):
-        lCoefsString = self.lCoefsString
-        lInvsString = self.lInvsString
-        if len(lInvsString) == 1 and len(lCoefsString) == 0:
-            lCoefsString = [""]
-        if self.lCommonInvs == []:
-            string = "".join(lCoefsString[i] + lInvsString[i] for i in range(len(lCoefsString)))
-            if string == "":
-                string = "+(1)"
-            else:
-                string = "+(" + string + ")"
-        else:
-            string = "+" + self.CommonInvsString + "(" + "".join(lCoefsString[i] + lInvsString[i] for i in range(len(lCoefsString))) + ")"
-        if sys.version_info.major > 2:
-            return string
-        else:
-            return string.encode('utf-8')
+        return f"{self.monomial}({self.polynomial})"
 
     def __rstr__(self, string):
-        if string == "+(1)" or string == "(1)" or string == "1":
-            self.__init__()
-            return
-        string = non_unicode_powers(string)
+        string = " ".join(string.split())
         string = string.replace("|(", "|").replace(")|", "|")
         if string[0] == "+":
             string = string[1:]
         split_numerator = re.split(r"(?<!tr)(\()(?=[\+\-]{0,1}\d)", string)
         # print(split_numerator)
-        if len(split_numerator) == 1:  # single monomial without (gaussian) rational coefficient
-            lInvs, lExps = parse_monomial(split_numerator[0][1:-1])
-            llInvs, llExps = [lInvs], [lExps]
-            lCommonInvs, lCommonExps, lCoefs = [], [], []
+        if len(split_numerator) == 1:  # single monomial without gaussian rational coefficient
+            split_numerator = split_numerator[0][1:-1]  # remove parenthesis
+            self.__init__('', split_numerator)
         elif len(split_numerator) == 3:   # factored monomial times polynomial - factored monomial may be empty
-            # print(split_numerator)
             common_numerator = split_numerator[0]
             if common_numerator.count("(") > common_numerator.count(")") and common_numerator[0] == "(":
                 common_numerator = common_numerator[1:]
-            lCommonInvs, lCommonExps = parse_monomial(common_numerator)
-            lCommonExps = list(map(int, lCommonExps))
             rest_numerator = split_numerator[1] + split_numerator[2]
             if rest_numerator.count("(") < rest_numerator.count(")") and rest_numerator[-1] == ")":
                 rest_numerator = rest_numerator[:-1]
             rest_numerator = rest_numerator[1:-1]
-            split_rest_numerator = re.split(r"(?<!\||_)(?<![\(\|\+\-]\d)((?:^|[\+\-])\d+[/\d+]*[IiJj]{0,1})(?!\||_)", rest_numerator)
-            # print(split_rest_numerator)
-            split_rest_numerator_fixed = []  # rejoin split pieces until parentheses are balanced
-            comulative_string = ""
-            for entry in split_rest_numerator:
-                comulative_string += entry
-                if comulative_string.count("(") == comulative_string.count(")"):
-                    split_rest_numerator_fixed += [comulative_string]
-                    comulative_string = ""
-            split_rest_numerator = split_rest_numerator_fixed
-            split_rest_numerator = [entry for entry in split_rest_numerator if entry != '']
-            coeffs, monomials = split_rest_numerator[::2], split_rest_numerator[1::2]
-            llInvs, llExps = map(list, zip(*list(map(parse_monomial, monomials))))
-            lCoefs = list(map(lambda x: (Fraction(x), 0) if not any([imag_unit_char in x for imag_unit_char in "IiJj"])
-                              else (0, Fraction(x.replace("I", "").replace("i", "").replace("J", "").replace("j", ""))), coeffs))
+            self.__init__(common_numerator, rest_numerator)
         else:
             raise Exception("Numerator string not understood (split).")
-        llInvsCompactified = [list(set(lInvs)) for lInvs in llInvs]
-        llExpsCompactified = [[sum([exp for j, exp in enumerate(lExps) if llInvs[i][j] == inv]) for inv in llInvsCompactified[i]]
-                              for i, lExps in enumerate(llExps)]
-        self.__init__(llInvsCompactified, llExpsCompactified, lCoefs, lCommonInvs, lCommonExps)
 
     def __contains__(self, other):
         if not all([inv in self.llInvs[0] for inv in other.llInvs[0]]):
@@ -511,102 +436,93 @@ class Numerator(object):
             return False
         return True
 
-    @property
-    def lCoefsString(self):
-        lCoefsString = []
-        for i, complex_number in enumerate(self.lCoefs):
-            complex_fraction_as_string = ""
-            if complex_number[0] != 0:
-                if (i != 0 or len(self.lCoefs) == 1) and complex_number[0] > 0:
-                    complex_fraction_as_string += "+" + list(map(str, complex_number))[0]
-                else:
-                    complex_fraction_as_string += list(map(str, complex_number))[0]
-            if complex_number[1] > 0:
-                complex_fraction_as_string += "+" + list(map(str, complex_number))[1] + "I"
-            elif complex_number[1] < 0:
-                complex_fraction_as_string += list(map(str, complex_number))[1] + "I"
-            lCoefsString += [complex_fraction_as_string]
-        return lCoefsString
+    def __truediv__(self, other):
+        if isinstance(other, Monomial):
+            if len(self.monomial) != 0 and other <= self.monomial:
+                return Numerator(self.monomial / other, self.polynomial)
+            elif len(self.polynomial) == 1 and other <= self.polynomial.monomials[0]:
+                return Numerator(self.monomial, self.polynomial / other)
+            else:
+                return NotImplemented
+        else:
+            return NotImplemented
 
     @property
-    def CommonInvsString(self):
-        return unicode_powers(re.sub(r"\^1(?!\.|\d)", "", "".join(["^".join(map(unicode, entry)) for entry in zip(self.lCommonInvs, self.lCommonExps)]).replace(".0", "")))
+    def lCommonInvs(self):
+        return self.monomial.invs
+
+    @lCommonInvs.setter
+    def lCommonInvs(self, value):
+        raise AttributeError("lCommonInvs is a legacy read-only property.")
 
     @property
-    def lInvsString(self):
-        return [unicode_powers(re.sub(r"\^1(?!\.|\d)", "", "".join(["^".join(map(unicode, entry)) for entry in zip(self.llInvs[i], self.llExps[i])]).replace(".0", "")))
-                for i in range(len(self.llInvs))]
+    def lCommonExps(self):
+        return self.monomial.exps
+
+    @lCommonExps.setter
+    def lCommonExps(self, value):
+        raise AttributeError("lCommonExps is a legacy read-only property.")
+
+    @property
+    def llInvs(self):
+        return self.polynomial.linvs
+
+    @llInvs.setter
+    def llInvs(self, value):
+        raise AttributeError("llInvs is a legacy read-only property.")
+
+    @property
+    def llExps(self):
+        return self.polynomial.lexps
+
+    @llExps.setter
+    def llExps(self, value):
+        raise AttributeError("llExps is a legacy read-only property.")
+
+    @property
+    def lCoefs(self):
+        return self.polynomial.coeffs
+
+    @lCoefs.setter
+    def lCoefs(self, value):
+        raise AttributeError("lCoefs is a legacy read-only property.")
+
+    @property
+    def variables(self):
+        return self.polynomial.variables | self.monomial.variables
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
-class Denominator(object):
+class Denominator(Monomial):
 
-    def __init__(self, lInvs=[], lExps=[]):
-        if isinstance(lInvs, str):
-            self = self.__rstr__(lInvs)
-        else:
-            self.lInvs = deepcopy(lInvs)
-            self.lExps = deepcopy(lExps)
+    @property
+    def lInvs(self):
+        return self.invs
 
-    def __unicode__(self):
-        return str(self)
+    @lInvs.setter
+    def lInvs(self, value):
+        raise AttributeError("lInvs is a legacy read-only property.")
 
-    def __repr__(self):
-        return str(self)
+    @property
+    def lExps(self):
+        return self.exps
 
-    def __str__(self):
-        string = unicode_powers(re.sub(r"\^1(?!\.)", "", "".join(["^".join(map(str, entry)) for entry in zip(self.lInvs, self.lExps)]).replace(".0", "")))
-        if sys.version_info.major > 2:
-            return string
-        else:
-            return string.encode('utf-8')
+    @lExps.setter
+    def lExps(self, value):
+        raise AttributeError("lExps is a legacy read-only property.")
 
     def __rstr__(self, string):
-        string = non_unicode_powers(string)[1:-1]
-        string = string.replace("|(", "|").replace(")|", "|")
-        lInvs, lExps = parse_monomial(string)
-        self.__init__(lInvs, lExps)
+        string = string[1:-1]
+        string = string.replace("|(", "|").replace(")|", "|")  # fixes spinor chain notation
+        return super(Denominator, self).__rstr__(string)
 
-    def __hash__(self):
-        return hash(str(self))
-
-    def __eq__(self, other):
-        return self.__hash__() == other.__hash__() and isinstance(other, Denominator)
-
-    def __ne__(self, other):
-        return self.__hash__() != other.__hash__() and isinstance(other, Denominator)
-
-    def __contains__(self, other):  # is other in self?
-        if not all([inv in self.lInvs for inv in other.lInvs]):
-            return False  # all poles of other are also poles of self
-        if not all([other.lExps[other.lInvs.index(inv)] <= self.lExps[self.lInvs.index(inv)] for inv in other.lInvs]):
-            return False  # for each pole in other, that same pole in self has at least the degree of other
-        return True
-
-    def as_dict(self):
-        return dict(zip(self.lInvs, self.lExps))
+    def __repr__(self):
+        return f"Denominator(\"{self}\")"
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-
-
-def parse_monomial(string):
-    if string == '':
-        return [], []
-    splitted_string = [entry for entry in re.split(r"(?<![\+\-\(])(?<!tr5)([⟨\[]|(?<![a-zA-Z])[\(a-zA-ZΔΩΠ])", string) if entry != '']
-    splitted_string = [splitted_string[i] + splitted_string[i + 1] for i in range(len(splitted_string))[::2]]
-    # sqeuentially remerge strings until parenthesis are (minimally) balanced
-    splitted_string_partially_remerged = [splitted_string[0]]
-    for entry in splitted_string[1:]:
-        if splitted_string_partially_remerged[-1].count("(") != splitted_string_partially_remerged[-1].count(")"):
-            splitted_string_partially_remerged[-1] += entry
-        else:
-            splitted_string_partially_remerged += [entry]
-    invs, exps = list(map(list, zip(*[re.split(r"\^(?=\d+$)", entry) if re.findall(r"\^(?=\d+$)", entry) != []
-                                      else [entry, '1'] for entry in splitted_string_partially_remerged])))
-    return invs, list(map(int, exps))
 
 
 def cluster_symmetry(symmetry, rule):

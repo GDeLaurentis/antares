@@ -1,10 +1,11 @@
 import pytest
+import numpy
 
 from lips import Particles
 from lips.fields import Field
 
 from antares.core.settings import settings
-from antares.terms.terms import Term, Terms
+from antares.terms.terms import Terms
 from antares.core.tools import NaI
 
 
@@ -95,15 +96,23 @@ def test_terms_with_trace():
 
 
 def test_term_with_mass():
+    oPs = Particles(8, field=Field("finite field", 2 ** 31 - 19, 1), seed=0)
+    oPs._singular_variety(("⟨34⟩+[34]", "⟨34⟩-⟨56⟩", "⟨56⟩+[56]"), (1, 1, 1))
+    oPs.mt2 = oPs("s_34")
     string = """+(-7/3⟨2|4⟩⟨1|4|2]⟨3|4|1]+7/3⟨3|4⟩mt2²-14/3⟨3|4⟩⟨1|3|1]mt2+7/3⟨3|4⟩⟨1|3|1]²+7/3⟨2|4⟩⟨3|4|2]⟨1|4|1]-7/3⟨4|3|1]⟨1|3⟩mt2)/((s_123-mt2)⟨1|3|1]⟨1|3|2])"""
-    assert len(str(Term(string))) == len(string)
+    assert Terms(string)(oPs) == Terms(str(Terms(string)))(oPs)
+    assert Terms(string)(oPs) == oPs(string)
 
 
 def test_term_with_linear_mass():
-    oTerms = Terms("""
-    +(-7/6mt[3|1]⟨1|3|5|4⟩)/((s_123-mt2)⟨1|3|2])
-    """)
+    oPs = Particles(8, field=Field("finite field", 2 ** 31 - 19, 1), seed=0)
+    oPs._singular_variety(("⟨34⟩+[34]", "⟨34⟩-⟨56⟩", "⟨56⟩+[56]"), (1, 1, 1))
+    oPs.mt2 = oPs("s_34")
+    oPs.mt = - oPs("<34>")
+    string = "+(-7/6mt[3|1]⟨1|3|5|4⟩)/((s_123-mt2)⟨1|3|2])"
+    oTerms = Terms(string)
     assert set(oTerms[0].oNum.llInvs[0]) == {'[3|1]', 'mt', '⟨1|3|5|4⟩'}
+    assert Terms(string)(oPs) == oPs(string)
 
 
 def test_coeffs_normalization():
@@ -119,3 +128,23 @@ def test_coeffs_normalization():
 def test_coeffs_normalization_big_and_outliers():
     from big_terms import oTerms
     assert oTerms.with_normalized_coeffs.max_denominator == 64
+
+
+def test_terms_with_massive_fermions():
+    oPs = Particles(8, field=Field("finite field", 2 ** 31 - 19, 1), seed=0)
+    oPs._singular_variety(("⟨34⟩+[34]", "⟨34⟩-⟨56⟩", "⟨56⟩+[56]"), (1, 1, 1))
+    oPs.mt2 = oPs("s_34")
+    oPs.mt = - oPs("⟨34⟩")
+    oPsClusteredTensor = oPs.cluster([[1, ], [2, ], [3, 4], [5, 6], [7, 8]], massive_fermions=((3, 'u', all), (4, 'd', all)))
+    oPsClusteredTensor11 = oPs.cluster([[1, ], [2, ], [3, 4], [5, 6], [7, 8]], massive_fermions=((3, 'u', 1), (4, 'd', 1)))
+    oPsClusteredTensor12 = oPs.cluster([[1, ], [2, ], [3, 4], [5, 6], [7, 8]], massive_fermions=((3, 'u', 1), (4, 'd', 2)))
+    oPsClusteredTensor21 = oPs.cluster([[1, ], [2, ], [3, 4], [5, 6], [7, 8]], massive_fermions=((3, 'u', 2), (4, 'd', 1)))
+    oPsClusteredTensor22 = oPs.cluster([[1, ], [2, ], [3, 4], [5, 6], [7, 8]], massive_fermions=((3, 'u', 2), (4, 'd', 2)))
+    oTerms = Terms("""
+    +⟨3|4|1]s_34(1/6⟨2|4⟩⟨1|3|4|2⟩-1/6⟨2|3|4|2⟩⟨1|4⟩)/(⟨1|2⟩Δ_12|3|4|5)
+    +('12435', False, '+')
+    +('21345', True, '+')
+    +('21435', True, '+')
+    """)
+    assert (oTerms(oPsClusteredTensor) == numpy.array([[oTerms(oPsClusteredTensor11), oTerms(oPsClusteredTensor12)],
+                                                       [oTerms(oPsClusteredTensor21), oTerms(oPsClusteredTensor22)]])).all()

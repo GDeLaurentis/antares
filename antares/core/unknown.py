@@ -181,7 +181,7 @@ class Unknown(Numerical_Methods, object):
         return super(Unknown, self).mass_dimension
 
     @property
-    @caching_decorator
+    # caching_decorator
     def phase_weights(self):
         if self.what_am_I == "Numerical" and hasattr(self, "helconf") and hasattr(self, "amppart") and "external" not in self.amppart:
             phase_weights = []
@@ -196,6 +196,10 @@ class Unknown(Numerical_Methods, object):
                     phase_weights += [+1]
             return phase_weights
         return super(Unknown, self).phase_weights
+
+    @phase_weights.setter
+    def phase_weights(self, temp_phase_weights):
+        super(Unknown, self.__class__).phase_weights.fset(self, temp_phase_weights)
 
     @property
     @caching_decorator
