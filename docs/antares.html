@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>antares package &mdash; antares 0.6.3 documentation</title>
+  <title>antares package &mdash; antares 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=b8503983"></script>
+      <script src="_static/documentation_options.js?v=fe7df9b0"></script>
       <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -111,7 +111,10 @@
 <li class="toctree-l3"><a class="reference internal" href="antares.ansatze.html#antares.ansatze.eigenbasis.Image"><code class="docutils literal notranslate"><span class="pre">Image()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-fitter-module">antares.ansatze.fitter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#module-antares.ansatze.fitter">antares.ansatze.fitter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="antares.ansatze.html#antares.ansatze.fitter.SolutionToResult"><code class="docutils literal notranslate"><span class="pre">SolutionToResult()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-generator-module">antares.ansatze.generator module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-interface-module">antares.ansatze.interface module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="antares.ansatze.html#antares-ansatze-matrix-loader-module">antares.ansatze.matrix_loader module</a></li>
@@ -371,14 +374,17 @@
 <li class="toctree-l2"><a class="reference internal" href="antares.terms.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="antares.terms.html#module-antares.terms.term">antares.terms.term module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.Denominator"><code class="docutils literal notranslate"><span class="pre">Denominator</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Denominator.as_dict"><code class="docutils literal notranslate"><span class="pre">Denominator.as_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Denominator.lExps"><code class="docutils literal notranslate"><span class="pre">Denominator.lExps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Denominator.lInvs"><code class="docutils literal notranslate"><span class="pre">Denominator.lInvs</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator"><code class="docutils literal notranslate"><span class="pre">Numerator</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.CommonInvsString"><code class="docutils literal notranslate"><span class="pre">Numerator.CommonInvsString</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.isolate_common_invariants_and_exponents"><code class="docutils literal notranslate"><span class="pre">Numerator.isolate_common_invariants_and_exponents()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.lCoefsString"><code class="docutils literal notranslate"><span class="pre">Numerator.lCoefsString</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.lInvsString"><code class="docutils literal notranslate"><span class="pre">Numerator.lInvsString</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.lCoefs"><code class="docutils literal notranslate"><span class="pre">Numerator.lCoefs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.lCommonExps"><code class="docutils literal notranslate"><span class="pre">Numerator.lCommonExps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.lCommonInvs"><code class="docutils literal notranslate"><span class="pre">Numerator.lCommonInvs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.llExps"><code class="docutils literal notranslate"><span class="pre">Numerator.llExps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.llInvs"><code class="docutils literal notranslate"><span class="pre">Numerator.llInvs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Numerator.variables"><code class="docutils literal notranslate"><span class="pre">Numerator.variables</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term"><code class="docutils literal notranslate"><span class="pre">Term</span></code></a><ul>
@@ -392,12 +398,12 @@
 <li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.multiplicity"><code class="docutils literal notranslate"><span class="pre">Term.multiplicity</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.rawImage"><code class="docutils literal notranslate"><span class="pre">Term.rawImage()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.simplify_factored_monomials"><code class="docutils literal notranslate"><span class="pre">Term.simplify_factored_monomials()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.term.Term.variables"><code class="docutils literal notranslate"><span class="pre">Term.variables</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.cluster_invariant"><code class="docutils literal notranslate"><span class="pre">cluster_invariant()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.cluster_symmetry"><code class="docutils literal notranslate"><span class="pre">cluster_symmetry()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.make_proper"><code class="docutils literal notranslate"><span class="pre">make_proper()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="antares.terms.html#antares.terms.term.parse_monomial"><code class="docutils literal notranslate"><span class="pre">parse_monomial()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="antares.terms.html#module-antares.terms.terms">antares.terms.terms module</a><ul>
@@ -443,6 +449,7 @@
 <li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.toSaM"><code class="docutils literal notranslate"><span class="pre">Terms.toSaM()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.toSympy"><code class="docutils literal notranslate"><span class="pre">Terms.toSympy()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.update_invs_set"><code class="docutils literal notranslate"><span class="pre">Terms.update_invs_set()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.variables"><code class="docutils literal notranslate"><span class="pre">Terms.variables</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="antares.terms.html#antares.terms.terms.Terms.with_normalized_coeffs"><code class="docutils literal notranslate"><span class="pre">Terms.with_normalized_coeffs</span></code></a></li>
 </ul>
 </li>

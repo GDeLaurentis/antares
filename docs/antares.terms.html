@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>antares.terms package &mdash; antares 0.6.3 documentation</title>
+  <title>antares.terms package &mdash; antares 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=b8503983"></script>
+      <script src="_static/documentation_options.js?v=fe7df9b0"></script>
       <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -104,37 +104,52 @@
 <span id="antares-terms-term-module"></span><h2>antares.terms.term module<a class="headerlink" href="#module-antares.terms.term" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="antares.terms.term.Denominator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.terms.term.</span></span><span class="sig-name descname"><span class="pre">Denominator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lInvs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lExps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.term.Denominator" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="antares.terms.term.Denominator.as_dict">
-<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.term.Denominator.as_dict" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.terms.term.</span></span><span class="sig-name descname"><span class="pre">Denominator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.term.Denominator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Monomial</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.terms.term.Denominator.lExps">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lExps</span></span><a class="headerlink" href="#antares.terms.term.Denominator.lExps" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.terms.term.Denominator.lInvs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lInvs</span></span><a class="headerlink" href="#antares.terms.term.Denominator.lInvs" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="antares.terms.term.Numerator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.terms.term.</span></span><span class="sig-name descname"><span class="pre">Numerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">llInvs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[]]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">llExps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[]]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lCoefs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lCommonInvs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lCommonExps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.term.Numerator" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.terms.term.</span></span><span class="sig-name descname"><span class="pre">Numerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linvs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[]]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lexps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[[]]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">common_invs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">common_exps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Field('Qi',</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.term.Numerator" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py property">
-<dt class="sig sig-object py" id="antares.terms.term.Numerator.CommonInvsString">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CommonInvsString</span></span><a class="headerlink" href="#antares.terms.term.Numerator.CommonInvsString" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="antares.terms.term.Numerator.isolate_common_invariants_and_exponents">
-<span class="sig-name descname"><span class="pre">isolate_common_invariants_and_exponents</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.term.Numerator.isolate_common_invariants_and_exponents" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="antares.terms.term.Numerator.lCoefs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lCoefs</span></span><a class="headerlink" href="#antares.terms.term.Numerator.lCoefs" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="antares.terms.term.Numerator.lCoefsString">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lCoefsString</span></span><a class="headerlink" href="#antares.terms.term.Numerator.lCoefsString" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="antares.terms.term.Numerator.lCommonExps">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lCommonExps</span></span><a class="headerlink" href="#antares.terms.term.Numerator.lCommonExps" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="antares.terms.term.Numerator.lInvsString">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lInvsString</span></span><a class="headerlink" href="#antares.terms.term.Numerator.lInvsString" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="antares.terms.term.Numerator.lCommonInvs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lCommonInvs</span></span><a class="headerlink" href="#antares.terms.term.Numerator.lCommonInvs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.terms.term.Numerator.llExps">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">llExps</span></span><a class="headerlink" href="#antares.terms.term.Numerator.llExps" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.terms.term.Numerator.llInvs">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">llInvs</span></span><a class="headerlink" href="#antares.terms.term.Numerator.llInvs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.terms.term.Numerator.variables">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">variables</span></span><a class="headerlink" href="#antares.terms.term.Numerator.variables" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -196,6 +211,11 @@ Lighter than rerunning single scaling study, but less powerful, since single sca
 can also handle cancellations involving non-trivial rewritings (e.g. shoutens).</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.terms.term.Term.variables">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">variables</span></span><a class="headerlink" href="#antares.terms.term.Term.variables" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py function">
@@ -213,11 +233,6 @@ can also handle cancellations involving non-trivial rewritings (e.g. shoutens).<
 <span class="sig-prename descclassname"><span class="pre">antares.terms.term.</span></span><span class="sig-name descname"><span class="pre">make_proper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fraction</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.term.make_proper" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="antares.terms.term.parse_monomial">
-<span class="sig-prename descclassname"><span class="pre">antares.terms.term.</span></span><span class="sig-name descname"><span class="pre">parse_monomial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.term.parse_monomial" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 </section>
 <section id="module-antares.terms.terms">
 <span id="antares-terms-terms-module"></span><h2>antares.terms.terms module<a class="headerlink" href="#module-antares.terms.terms" title="Link to this heading"></a></h2>
@@ -229,7 +244,7 @@ can also handle cancellations involving non-trivial rewritings (e.g. shoutens).<
 
 <dl class="py function">
 <dt class="sig sig-object py" id="antares.terms.terms.LoadResults">
-<span class="sig-prename descclassname"><span class="pre">antares.terms.terms.</span></span><span class="sig-name descname"><span class="pre">LoadResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_partial_results_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callable_to_check_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.terms.LoadResults" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">antares.terms.terms.</span></span><span class="sig-name descname"><span class="pre">LoadResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_partial_results_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callable_to_check_with</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplicity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.terms.LoadResults" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
@@ -308,7 +323,7 @@ can also handle cancellations involving non-trivial rewritings (e.g. shoutens).<
 
 <dl class="py method">
 <dt class="sig sig-object py" id="antares.terms.terms.Terms.do_exploratory_double_collinear_limits">
-<span class="sig-name descname"><span class="pre">do_exploratory_double_collinear_limits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.terms.Terms.do_exploratory_double_collinear_limits" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">do_exploratory_double_collinear_limits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">invariants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.terms.Terms.do_exploratory_double_collinear_limits" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -429,6 +444,11 @@ can also handle cancellations involving non-trivial rewritings (e.g. shoutens).<
 <dl class="py method">
 <dt class="sig sig-object py" id="antares.terms.terms.Terms.update_invs_set">
 <span class="sig-name descname"><span class="pre">update_invs_set</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.terms.terms.Terms.update_invs_set" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="antares.terms.terms.Terms.variables">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">variables</span></span><a class="headerlink" href="#antares.terms.terms.Terms.variables" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
