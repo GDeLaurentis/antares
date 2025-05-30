@@ -35,12 +35,8 @@ setup(
         'pyyaml',
         'pandas',
         'multiset',
-<<<<<<< HEAD
-        # 'ortools',
-=======
         'ortools',
         'diskcache',
->>>>>>> main
     ],
     entry_points={
         'console_scripts': [
