@@ -1,5 +1,8 @@
 import pytest
 import numpy
+import pickle
+import hashlib
+import subprocess
 
 from lips import Particles
 from lips.fields import Field
@@ -7,6 +10,21 @@ from lips.fields import Field
 from antares.core.settings import settings
 from antares.terms.terms import Terms
 from antares.core.tools import NaI
+
+mpc = Field('mpc', 0, 300)
+modp = Field('finite field', 2 ** 31 - 1, 1)
+padic = Field('padic', 2 ** 31 - 1, 6)
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+
+@pytest.mark.parametrize("field", [mpc, modp, padic, ])
+def test_trivial_terms_eval_is_in_field(field):
+    oPs = Particles(6, field=field)
+    assert Terms("""+(0)""")(oPs) in oPs.field and Terms("""+(0)""")(oPs) == 0
+    assert Terms("""+(1)""")(oPs) in oPs.field and Terms("""+(1)""")(oPs) == 1
+    assert Terms("""+(123)""")(oPs) in oPs.field and Terms("""+(123)""")(oPs) == 123
 
 
 def test_str_and_rstr_big_powers():
@@ -148,3 +166,45 @@ def test_terms_with_massive_fermions():
     """)
     assert (oTerms(oPsClusteredTensor) == numpy.array([[oTerms(oPsClusteredTensor11), oTerms(oPsClusteredTensor12)],
                                                        [oTerms(oPsClusteredTensor21), oTerms(oPsClusteredTensor22)]])).all()
+
+
+def run_hashes_in_subprocess():
+    code = """
+import hashlib
+import pickle
+from antares import Terms
+oTerms = Terms('+(1/2⟨1|2⟩⁴[1|2][2|3]⟨3|1+2|5]⁴)/(⟨1|3⟩⁴[4|5][5|6]⟨1|2+3|4]⟨3|1+2|6]s_123)')
+cache_key_raw = oTerms
+cache_key_bytes = pickle.dumps(cache_key_raw)
+cache_key_hash = hashlib.sha256(cache_key_bytes).hexdigest()
+print(hash(oTerms))
+print(cache_key_hash, end="")
+"""
+    result = subprocess.run(
+        ["python", "-c", code],
+        capture_output=True,
+        check=True
+    )
+    return result.stdout.decode().split("\n")
+
+
+def test_hash_vs_sha256_process_stability():
+    hash1, hash1sha256 = run_hashes_in_subprocess()
+    hash2, hash2sha256 = run_hashes_in_subprocess()
+    assert hash1 != hash2
+    assert hash1sha256 == hash2sha256
+
+
+def test_pickle_round_trip():
+    original = Terms("""+(1/2⟨1|2⟩⁴[1|2][2|3]⟨3|1+2|5]⁴)/(⟨1|3⟩⁴[4|5][5|6]⟨1|2+3|4]⟨3|1+2|6]s_123)""")
+
+    dumped = pickle.dumps(original)
+    loaded = pickle.loads(dumped)
+
+    assert original == loaded
+
+    hash1 = hashlib.sha256(pickle.dumps(original)).hexdigest()
+    hash2 = hashlib.sha256(pickle.dumps(loaded)).hexdigest()
+
+    assert hash1 == hash2
+    assert hash(original) == hash(loaded)

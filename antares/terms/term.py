@@ -5,7 +5,6 @@
 
 # Author: Giuseppe
 
-import lips
 import mpmath
 import re
 import functools
@@ -138,31 +137,28 @@ class Term(Numerical_Methods, object):
             self.oNum.internal_masses = value
             self.oDen.internal_masses = value
 
-    def __call__(self, InvsDict_or_Particles=None):
+    def __call__(self, InvsDict_or_Particles, field=None):
         from antares.terms.terms import Terms
-        if isinstance(InvsDict_or_Particles, dict):
-            if len(list(InvsDict_or_Particles.values())) > 0:
-                dtype = type(list(InvsDict_or_Particles.values())[0])
-            else:
-                dtype = mpmath.mpc
+        if type(InvsDict_or_Particles) is dict:
+            assert field is not None
             NumericalDenominator = self.oDen(InvsDict_or_Particles)
             NumericalCommonNumerator = 1
             for inv, exp in zip(self.oNum.lCommonInvs, self.oNum.lCommonExps):
                 NumericalCommonNumerator *= InvsDict_or_Particles[inv]**exp
             NumericalNumerator = 0
             for lInvs, lExps, coef in zip(self.oNum.llInvs, self.oNum.llExps, self.oNum.lCoefs if self.oNum.lCoefs != [] else [(Fraction(1, 1), Fraction(0, 1))]):
-                if dtype == mpmath.mpc or dtype == mpmath.mpf:
+                if field.characteristic == 0:
                     coef = [make_proper(coef[0]), make_proper(coef[1])]
                     NumericalTerm = mpmath.mpc(mpmath.mpf(coef[0][0]) + mpmath.mpf(coef[0][1]) / mpmath.mpf(coef[0][2]),
                                                mpmath.mpf(coef[1][0]) + mpmath.mpf(coef[1][1]) / mpmath.mpf(coef[1][2]))
                 else:
                     assert coef[1] == 0
-                    NumericalTerm = coef[0]
+                    NumericalTerm = field(coef[0])
                 for inv, exp in zip(lInvs, lExps):
                     NumericalTerm = NumericalTerm * InvsDict_or_Particles[inv] ** exp
                 NumericalNumerator += NumericalTerm
             return NumericalNumerator * NumericalCommonNumerator / NumericalDenominator
-        elif isinstance(InvsDict_or_Particles, lips.Particles):
+        elif callable(InvsDict_or_Particles):
             return Terms([self])(InvsDict_or_Particles)
 
     def Image(self, Rule):
@@ -397,6 +393,9 @@ class Numerator(object):
             self.monomial = self.monomial * extra_common_monomial
         else:
             assert self.monomial == Monomial("")
+
+    def __eq__(self, other):
+        return isinstance(other, Numerator) and self.monomial == other.monomial and self.polynomial == other.polynomial
 
     def __repr__(self):
         return f"Numerator(\"{self}\")"

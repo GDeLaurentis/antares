@@ -821,7 +821,7 @@ def generate_BH_cpp_files(shelconf, PWRespath, convert_cut=True, convert_rationa
                         if str(oNumericalCut(oParticles)) != str(oCut(oParticles)):
                             raise Exception("Conversion failed for {}({})".format(amppart, ampindex))
                         # end of check
-                        all_invariants = set(list(all_invariants) + list(oCut.invs_set))
+                        all_invariants = set(list(all_invariants) + list(oCut.variables))
                         all_coefficients = set(list(all_coefficients) + flatten(oCut.llCoefs))
                         coefficients_declarations += '\ntemplate <class T> Complex C' + NameAmpl + '_co' + str(coef_index) + ' (C' + NameAmpl + '_mom_conf_info<T>& mci);\n'
                         lCoefficients += ['{}template <class T> std::complex<T> C{NameAmpl}_co{CoefIndex} (C{NameAmpl}_mom_conf_info<T>& mci) [[return {};]]'.format(
@@ -838,7 +838,7 @@ def generate_BH_cpp_files(shelconf, PWRespath, convert_cut=True, convert_rationa
         else:
             oRational = oRational[0][0]
             oRational = oRational.explicit_representation()
-            all_invariants = set(list(all_invariants) + list(oRational.invs_set))
+            all_invariants = set(list(all_invariants) + list(oRational.variables))
             all_coefficients = set(list(all_coefficients) + flatten(oRational.llCoefs))
             printRational = '{}template <class T> std::complex<T> R{NameAmpl} (const eval_param<T>& ep,const mass_param_coll& mpc) '\
                 '[[R{NameAmpl}_mom_conf_info<T> epi(ep); return {};]]'.format(
@@ -1095,7 +1095,7 @@ def LaTeXToPython(res_path, partial_only=False):
         python_result = re.sub(r"^\n", r"", python_result)
         python_result = python_result.replace("\\scriptscriptstyle", "").replace("\\phantom{+}", "").replace("+\\\\", "+")
         if python_result == r"\text{Therequestedquantityisidenticallyzero.}":
-            return 0, partial
+            return [Terms("(0)"), ], partial
         python_result = python_result.replace("\\langle", "⟨").replace("\\rangle", "⟩").replace("\\frac{", "(")
         python_result = re.sub(r"{([\d\|]+)}", r"\1", python_result)
         python_result = re.sub(r"{(\d).(\d)}", r"\1.\2", python_result)

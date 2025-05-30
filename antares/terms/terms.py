@@ -22,6 +22,7 @@ from lips.particles_eval import pNB as pNB_overall
 from lips.symmetries import inverse
 
 from ..core.tools import LaTeXToPython, flatten, get_common_Q_factor, get_max_abs_numerator, get_max_denominator
+from ..core.diskcached import DiskCached
 from ..core.settings import settings
 from ..core.numerical_methods import Numerical_Methods
 from ..core.bh_patch import accuracy
@@ -48,9 +49,10 @@ def caching_decorator(func):
     return decorated
 
 
-class Terms(Numerical_Methods, Terms_numerators_fit, list):
+class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
 
     def __init__(self, lllNumInvs_or_Terms, lllNumExps=None, llNumCoefs_or_Sym=None, llDenInvs=None, llDenExps=None):
+        import antares
         list.__init__(self)
         if isinstance(lllNumInvs_or_Terms, str):
             self.__rstr__(lllNumInvs_or_Terms)
@@ -70,7 +72,8 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
         self.oFittingSettings = FittingSettings()
         self.useful_symmetries = []
         self.symmetries = []
-        self.update_invs_set()
+        self.update_variables()
+        self.CACHE_PATH = antares.CACHE_PATH / "terms"
 
     def __and__(self, other):
         assert isinstance(other, Terms)
@@ -110,7 +113,7 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
                 oSumTerms = Terms(list(self))
                 for oTerm in other:
                     oSumTerms.append(oTerm)
-        oSumTerms.update_invs_set()
+        oSumTerms.update_variables()
         return oSumTerms
 
     def __sub__(self, other):
@@ -124,7 +127,7 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
         del self[:]
         for oTerm in oSumTerms:
             self.append(oTerm)
-        self.update_invs_set()
+        self.update_variables()
         return self
 
     def __mul__(self, other):
@@ -350,11 +353,6 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
     def llDenExps(self):
         return [oTerm.oDen.lExps for oTerm in self if oTerm.am_I_a_symmetry is False]
 
-    @property
-    @caching_decorator
-    def variables(self):
-        return functools.reduce(operator.or_, [oTerm.variables for oTerm in self if oTerm.am_I_a_symmetry is False])
-
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     @functools.cached_property
@@ -385,9 +383,10 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
-    def __call__(self, oParticles):
+    @DiskCached.memoized(name='cached_terms', ignore={'cached', 'verbose'})
+    def __call__(self, oParticles, cached=False, verbose=False):
         InvsDict = {}
-        for inv in self.invs_set:
+        for inv in self.variables:
             InvsDict[inv] = oParticles(inv)
         SymInvsDict = {}
         for oTerm in self:
@@ -396,7 +395,7 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
                 NewParticles = oParticles.image(inverse(oTerm.tSym[0]))
                 if oTerm.tSym[1] is True:
                     NewParticles.angles_for_squares()
-                for inv in self.invs_set:
+                for inv in self.variables:
                     NewDict[inv] = NewParticles(inv)
                 SymInvsDict[oTerm.tSym] = NewDict
         NumericalResult = 0
@@ -408,7 +407,7 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
                         break
                     elif jTerm.am_I_a_symmetry is False:
                         something_was_not_a_symmetry = True
-                        next_numerical_bit = jTerm(SymInvsDict[iTerm.tSym])
+                        next_numerical_bit = jTerm(SymInvsDict[iTerm.tSym], oParticles.field)
                         if isinstance(next_numerical_bit, numpy.ndarray):  # if result is a tensor indices must be aligned
                             massive_fermions = [i + 1 for i, oP in enumerate(oParticles) if hasattr(oP, 'spin_index')]
                             assert len(massive_fermions) <= 2  # otherwise not implemented
@@ -421,7 +420,7 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
                         else:
                             NumericalResult += next_numerical_bit
             else:
-                NumericalResult += iTerm(InvsDict)
+                NumericalResult += iTerm(InvsDict, oParticles.field)
         return NumericalResult
 
     def Image(self, Rule):
@@ -456,15 +455,27 @@ class Terms(Numerical_Methods, Terms_numerators_fit, list):
                     oTermsExplicit += to_be_appended[::-1]
             else:
                 oTermsExplicit.append(copy.copy(iTerm))
-        oTermsExplicit.update_invs_set()
+        oTermsExplicit.update_variables()
         return oTermsExplicit
 
     def canonical_ordering(self):
         for oTerm in self:
             oTerm.canonical_ordering()
 
-    def update_invs_set(self):
-        self.invs_set = functools.reduce(operator.or_, [oTerm.variables for oTerm in self], set())
+    @property
+    def variables(self):
+        if not hasattr(self, "_variables"):
+            self.variables = functools.reduce(operator.or_, [oTerm.variables for oTerm in self], set())
+        return set(self._variables)
+
+    @variables.setter
+    def variables(self, temp_variables):
+        self._variables = sorted(tuple(temp_variables))
+
+    def update_variables(self):
+        if hasattr(self, "_variables"):
+            delattr(self, '_variables')
+        self.variables
         if hasattr(self, "multiplicity"):
             for oTerm in self:
                 oTerm.multiplicity = self.multiplicity
