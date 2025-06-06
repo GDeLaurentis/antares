@@ -512,7 +512,7 @@ class _tensor_function(object):
 
 
 class tensor_function(Numerical_Methods, _tensor_function):
-    
+
     def univariate_Thiele_on_slice(self, oSlice, verbose=False):
         from ..scalings.slicing import univariate_Thiele_on_slice
         # evaluate it once in case the length is not known
@@ -533,10 +533,10 @@ class tensor_function(Numerical_Methods, _tensor_function):
             lambda i: univariate_Thiele_on_slice_given_LCD(self[i], lTerms[i], oSlice, verbose=verbose),
             range(len(self)), verbose=verbose, UseParallelisation=settings.UseParallelisation, Cores=settings.Cores
         )
-    
+
     def lTermsLCD(self, oSlice, verbose=False):
         from ..scalings.slicing import get_invariant_dict, do_codimension_one_study
-        get_invariant_dict(tuple(settings.invariants), oSlice, );  # cache invariants
+        get_invariant_dict(tuple(settings.invariants), oSlice, )  # cache invariants
         return mapThreads(
             lambda i: do_codimension_one_study(self[i], oSlice, settings.invariants, assert_factors=True, verbose=verbose, ),
             range(len(self)), UseParallelisation=settings.UseParallelisation, Cores=settings.Cores

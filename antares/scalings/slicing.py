@@ -113,7 +113,7 @@ def univariate_Thiele_on_slice_given_LCD(oFunc, oTerms, oSlice, verbose=False):
     # this may be a rational function if common numerator factor is found
     tdenom = univariate_Thiele_on_slice(oTerms, oSlice, verbose=verbose)
     # univariate field of fraction of galois field
-    FFGF = sympy.GF(oSlice.field.characteristic).frac_field(t)
+    FFGF = sympy.GF(oSlice.field.characteristic).frac_field(sympy.symbols('t'))
     return (FFGF(tnum) * FFGF(tdenom)).as_expr()
     # return FFGF(tnum) * FFGF(tdenom)
 

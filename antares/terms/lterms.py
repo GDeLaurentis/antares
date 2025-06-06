@@ -114,17 +114,15 @@ class TermsList(Numerical_Methods, list):
                         counter_dict[exp] = 1
             max_size_vector_spaces[key] = counter_dict
         return max_size_vector_spaces
-    
+
     @staticmethod
     def cumulative_pole_orders(pole_dict):
         orders = sorted(pole_dict.keys(), reverse=True)
-        
         cumulative = {}
         running_total = 0
         for order in orders:
             running_total += pole_dict[order]
             cumulative[order] = running_total
-
         return cumulative
 
     @property

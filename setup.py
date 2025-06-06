@@ -27,6 +27,9 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     data_files=[],
+    package_data={
+        'antares.ansatze': ['BG_HHH.txt', 'GB_ttH.txt'],
+    },
     install_requires=[
         'lips>=0.5.0',
         'pyadic>=0.2.4',
