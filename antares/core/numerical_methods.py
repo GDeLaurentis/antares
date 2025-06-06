@@ -11,6 +11,7 @@ import pandas
 import numpy
 import mpmath
 
+from collections.abc import Iterable
 from copy import copy
 from fractions import Fraction as Q
 
@@ -25,7 +26,7 @@ from pyadic.padic import padic_log
 
 from ..scalings.pair import pair_scalings
 from .settings import settings
-from .tools import NaI
+from .tools import NaI, mapThreads
 
 local_directory = os.path.dirname(os.path.abspath(__file__))
 mpmath.mp.dps = 300
@@ -136,6 +137,9 @@ class Numerical_Methods:
     @internal_masses.setter
     def internal_masses(self, temp_internal_masses):
         self._internal_masses = temp_internal_masses
+        if isinstance(self, Iterable):
+            for entry in self:
+                entry.internal_masses = temp_internal_masses
 
     @staticmethod
     @composed(as_scalar_if_scalar, numpy_vectorized)
@@ -245,22 +249,24 @@ class Numerical_Methods:
     def phase_weights(self, temp_phase_weights):
         self._phase_weights = temp_phase_weights
 
-    @property
-    def all_symmetries(self, possible_symmetries=None, field=settings.field):
+    def all_symmetries(self, possible_symmetries=None, field=settings.field, verbose=False):
         """Obtain the symmetries of the function, by numerical evaluation."""
         symmetries = []
         if possible_symmetries is None:
             possible_symmetries = phase_weights_compatible_symmetries(self.phase_weights)
-        for sym in possible_symmetries:
+        oParticles = Particles(self.multiplicity, seed=0, field=field, internal_masses=self.internal_masses)
+        base_self = self(oParticles)
+        for i, sym in enumerate(possible_symmetries):
+            if verbose:
+                print(f"\r@ symmetry {i}/{len(possible_symmetries)}", end="")
             sym = sym[:2]  # make sure this sym does not have a sign yet
-            oParticles = Particles(self.multiplicity, seed=0, field=field)
             # One may wish to obtain symmetries valid only on certain codimension X surfaces
             # may need to adjust tollerance for this, as the symmetry would be approximate
             # e.g.: oParticles._set("Δ_23|14|56", 10 ** -50,)
             oNewParticles = oParticles.image(sym)
-            if abs(self(oParticles) - self(oNewParticles)) <= field.tollerance:
+            if abs(base_self - self(oNewParticles)) <= field.tollerance:
                 symmetries += [sym + ("+", )]
-            elif abs(self(oParticles) + self(oNewParticles)) <= field.tollerance:
+            elif abs(base_self + self(oNewParticles)) <= field.tollerance:
                 symmetries += [sym + ("-", )]
         return symmetries
 
@@ -405,6 +411,10 @@ class Numerical_Methods:
         df.style.caption = "Collinear data.\nPower/Degeneracy of phase space/Degeneracy of restricted phase space."
         return df
 
+    def get_lcds(self, oSlice, assert_factors=True, verbose=False):
+        from ..scalings.slicing import do_codimension_one_study
+        return do_codimension_one_study(self, oSlice, settings.invariants, assert_factors=assert_factors, verbose=verbose, )
+
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
@@ -502,4 +512,32 @@ class _tensor_function(object):
 
 
 class tensor_function(Numerical_Methods, _tensor_function):
-    pass
+    
+    def univariate_Thiele_on_slice(self, oSlice, verbose=False):
+        from ..scalings.slicing import univariate_Thiele_on_slice
+        # evaluate it once in case the length is not known
+        oPoint = oSlice.copy()
+        oPoint.subs({'t': 0})
+        self(oPoint)
+        return mapThreads(lambda i: univariate_Thiele_on_slice(self[i], oSlice, verbose=verbose),
+                          range(len(self)), verbose=verbose,
+                          UseParallelisation=settings.UseParallelisation, Cores=settings.Cores)
+
+    def univariate_Thiele_on_slice_given_LCDs(self, lTerms, oSlice, verbose=False):
+        from ..scalings.slicing import univariate_Thiele_on_slice_given_LCD
+        # evaluate it once in case the length is not known
+        oPoint = oSlice.copy()
+        oPoint.subs({'t': 0})
+        self(oPoint)
+        return mapThreads(
+            lambda i: univariate_Thiele_on_slice_given_LCD(self[i], lTerms[i], oSlice, verbose=verbose),
+            range(len(self)), verbose=verbose, UseParallelisation=settings.UseParallelisation, Cores=settings.Cores
+        )
+    
+    def lTermsLCD(self, oSlice, verbose=False):
+        from ..scalings.slicing import get_invariant_dict, do_codimension_one_study
+        get_invariant_dict(tuple(settings.invariants), oSlice, );  # cache invariants
+        return mapThreads(
+            lambda i: do_codimension_one_study(self[i], oSlice, settings.invariants, assert_factors=True, verbose=verbose, ),
+            range(len(self)), UseParallelisation=settings.UseParallelisation, Cores=settings.Cores
+        )

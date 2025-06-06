@@ -5,7 +5,7 @@ import sympy
 from copy import copy
 from multiset import Multiset
 from pyadic import ModP, PAdic
-from pyadic.interpolation import Thiele_rational_interpolation
+from pyadic.interpolation import Newton_polynomial_interpolation, Thiele_rational_interpolation
 from syngular import flatten
 
 from ..terms.terms import Terms, Term, Numerator, Denominator
@@ -84,6 +84,17 @@ def match_factors(polynomial, candidate_factors_dict, field, assert_full_match=F
     return matched_irreds
 
 
+def univariate_Newton_on_slice(oFunc, oSlice, verbose=False):
+    field = oSlice.field
+
+    def f(tval):
+        oPoint = oSlice.copy()
+        oPoint.subs({'t': tval})
+        return ModP(int(oFunc(oPoint)), oPoint.field.characteristic)
+    rat_func_t = Newton_polynomial_interpolation(f, field.characteristic, verbose=verbose)
+    return rat_func_t
+
+
 def univariate_Thiele_on_slice(oFunc, oSlice, verbose=False):
     field = oSlice.field
 
@@ -93,6 +104,18 @@ def univariate_Thiele_on_slice(oFunc, oSlice, verbose=False):
         return ModP(int(oFunc(oPoint)), oPoint.field.characteristic)
     rat_func_t = Thiele_rational_interpolation(f, field.characteristic, verbose=verbose)
     return rat_func_t
+
+
+def univariate_Thiele_on_slice_given_LCD(oFunc, oTerms, oSlice, verbose=False):
+    """univariate rational functions of t via Newton polynomial interpolation of BlackBox function, with common rational factor pulled out"""
+    # this is guaranteed to be a polynomial, if full set of denominator factors is known
+    tnum = univariate_Newton_on_slice(lambda oPs: oFunc(oPs) / oTerms(oPs), oSlice, verbose=verbose)
+    # this may be a rational function if common numerator factor is found
+    tdenom = univariate_Thiele_on_slice(oTerms, oSlice, verbose=verbose)
+    # univariate field of fraction of galois field
+    FFGF = sympy.GF(oSlice.field.characteristic).frac_field(t)
+    return (FFGF(tnum) * FFGF(tdenom)).as_expr()
+    # return FFGF(tnum) * FFGF(tdenom)
 
 
 def do_codimension_one_study(oFunc, oSlice, denominator_candidates, assert_factors=True, verbose=False):

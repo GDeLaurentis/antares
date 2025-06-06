@@ -6,6 +6,7 @@ from lips.symmetries import inverse
 
 from ..core.tools import Generate_LaTeX_and_PDF
 from ..core.numerical_methods import Numerical_Methods
+from ..core.settings import settings
 from .terms import LoadResults, Terms
 
 
@@ -83,3 +84,53 @@ class TermsList(Numerical_Methods, list):
                 last_coeff = basis_element.explicit_representation()
                 basis_explicit += [last_coeff]
         return TermsList(basis_explicit, self.multiplicity)
+
+    @property
+    def poles_and_orders(self):
+        poles_and_orders = {}
+        for i, oTerms in enumerate(self):
+            these_poles_and_orders = set(zip(oTerms[0].oDen.lInvs, oTerms[0].oDen.lExps))
+            for pole, order in these_poles_and_orders:
+                if pole in poles_and_orders.keys():
+                    poles_and_orders[pole] = max(poles_and_orders[pole], order)
+                else:
+                    poles_and_orders[pole] = order
+        if settings.invariants is not None:
+            poles_and_orders = dict(sorted(poles_and_orders.items(), key=lambda x: settings.invariants.index(x[0])
+                                           if x[0] in settings.invariants else 99))
+        return poles_and_orders
+
+    @property
+    def max_sizes_poles_vector_spaces(self):
+        max_size_vector_spaces = {}
+        for key, val in self.poles_and_orders.items():
+            counter_dict = {}
+            for oTerms in self:
+                if key in oTerms[0].oDen.lInvs:
+                    exp = oTerms[0].oDen.lExps[oTerms[0].oDen.lInvs.index(key)]
+                    if exp in counter_dict.keys():
+                        counter_dict[exp] += 1
+                    else:
+                        counter_dict[exp] = 1
+            max_size_vector_spaces[key] = counter_dict
+        return max_size_vector_spaces
+    
+    @staticmethod
+    def cumulative_pole_orders(pole_dict):
+        orders = sorted(pole_dict.keys(), reverse=True)
+        
+        cumulative = {}
+        running_total = 0
+        for order in orders:
+            running_total += pole_dict[order]
+            cumulative[order] = running_total
+
+        return cumulative
+
+    @property
+    def comulative_max_sizes_poles_vector_spaces(self):
+        return {key: self.cumulative_pole_orders(val) for key, val in self.max_sizes_poles_vector_spaces.items()}
+
+    @property
+    def max_size_of_all_poles_vector_spaces(self):
+        return max([max([val2 for _, val2 in val.items()]) for _, val in self.comulative_max_sizes_poles_vector_spaces.items()]) + 1

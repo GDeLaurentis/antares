@@ -408,7 +408,7 @@ class Numerator(object):
         string = string.replace("|(", "|").replace(")|", "|")
         if string[0] == "+":
             string = string[1:]
-        split_numerator = re.split(r"(?<!tr)(\()(?=[\+\-]{0,1}\d)", string)
+        split_numerator = re.split(r"(?<!tr)(?<!tr5)(\()(?=[\+\-]{0,1}\d)", string)
         # print(split_numerator)
         if len(split_numerator) == 1:  # single monomial without gaussian rational coefficient
             split_numerator = split_numerator[0][1:-1]  # remove parenthesis
