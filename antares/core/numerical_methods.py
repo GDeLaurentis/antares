@@ -11,7 +11,6 @@ import pandas
 import numpy
 import mpmath
 
-from collections.abc import Iterable
 from copy import copy
 from fractions import Fraction as Q
 
@@ -137,7 +136,7 @@ class Numerical_Methods:
     @internal_masses.setter
     def internal_masses(self, temp_internal_masses):
         self._internal_masses = temp_internal_masses
-        if isinstance(self, Iterable):
+        if isinstance(self, list) and all([isinstance(entry, Numerical_Methods) for entry in self]):
             for entry in self:
                 entry.internal_masses = temp_internal_masses
 
@@ -411,7 +410,7 @@ class Numerical_Methods:
         df.style.caption = "Collinear data.\nPower/Degeneracy of phase space/Degeneracy of restricted phase space."
         return df
 
-    def get_lcds(self, oSlice, assert_factors=True, verbose=False):
+    def get_lcd(self, oSlice, assert_factors=True, verbose=False):
         from ..scalings.slicing import do_codimension_one_study
         return do_codimension_one_study(self, oSlice, settings.invariants, assert_factors=assert_factors, verbose=verbose, )
 
@@ -519,7 +518,7 @@ class tensor_function(Numerical_Methods, _tensor_function):
         oPoint = oSlice.copy()
         oPoint.subs({'t': 0})
         self(oPoint)
-        return mapThreads(lambda i: univariate_Thiele_on_slice(self[i], oSlice, verbose=verbose),
+        return mapThreads(lambda i: univariate_Thiele_on_slice(self[i], oSlice, verbose=False),
                           range(len(self)), verbose=verbose,
                           UseParallelisation=settings.UseParallelisation, Cores=settings.Cores)
 
@@ -538,6 +537,6 @@ class tensor_function(Numerical_Methods, _tensor_function):
         from ..scalings.slicing import get_invariant_dict, do_codimension_one_study
         get_invariant_dict(tuple(settings.invariants), oSlice, )  # cache invariants
         return mapThreads(
-            lambda i: do_codimension_one_study(self[i], oSlice, settings.invariants, assert_factors=True, verbose=verbose, ),
-            range(len(self)), UseParallelisation=settings.UseParallelisation, Cores=settings.Cores
+            lambda i: do_codimension_one_study(self[i], oSlice, settings.invariants, assert_factors=True, verbose=False, ),
+            range(len(self)), verbose=verbose, UseParallelisation=settings.UseParallelisation, Cores=settings.Cores
         )
