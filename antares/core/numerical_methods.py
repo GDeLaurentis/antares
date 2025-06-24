@@ -533,7 +533,7 @@ class tensor_function(Numerical_Methods, _tensor_function):
             range(len(self)), verbose=verbose, UseParallelisation=settings.UseParallelisation, Cores=settings.Cores
         )
 
-    def lTermsLCD(self, oSlice, verbose=False):
+    def get_lcds(self, oSlice, verbose=False):
         from ..scalings.slicing import get_invariant_dict, do_codimension_one_study
         get_invariant_dict(tuple(settings.invariants), oSlice, )  # cache invariants
         return mapThreads(

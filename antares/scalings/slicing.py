@@ -91,6 +91,7 @@ def univariate_Newton_on_slice(oFunc, oSlice, verbose=False):
         oPoint = oSlice.copy()
         oPoint.subs({'t': tval})
         return ModP(int(oFunc(oPoint)), oPoint.field.characteristic)
+
     rat_func_t = Newton_polynomial_interpolation(f, field.characteristic, verbose=verbose)
     return rat_func_t
 
@@ -102,6 +103,7 @@ def univariate_Thiele_on_slice(oFunc, oSlice, verbose=False):
         oPoint = oSlice.copy()
         oPoint.subs({'t': tval})
         return ModP(int(oFunc(oPoint)), oPoint.field.characteristic)
+
     rat_func_t = Thiele_rational_interpolation(f, field.characteristic, verbose=verbose)
     return rat_func_t
 

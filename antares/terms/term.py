@@ -437,9 +437,9 @@ class Numerator(object):
 
     def __truediv__(self, other):
         if isinstance(other, Monomial):
-            if len(self.monomial) != 0 and other <= self.monomial:
+            if len(self.monomial) != 0 and other.issubset(self.monomial):
                 return Numerator(self.monomial / other, self.polynomial)
-            elif len(self.polynomial) == 1 and other <= self.polynomial.monomials[0]:
+            elif len(self.polynomial) == 1 and other.issubset(self.polynomial.monomials[0]):
                 return Numerator(self.monomial, self.polynomial / other)
             else:
                 return NotImplemented

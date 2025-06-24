@@ -363,12 +363,12 @@ class MyThreadPool(object):      # context manager pool (no new processes, curre
 def progress_wrapper(func, *args, **kwargs):
     with lock if lock is not None else nullcontext():
         prog.increment()
-        if type(args[-1]) in [list, tuple] and type(args[-1][0]) in [str, unicode] and len(", ".join(args[-1])) < 40:
+        if type(args[-1]) in [list, tuple] and isinstance(args[-1][0], str) and len(", ".join(args[-1])) < 40:
             print("\r{} {} working on {}.                                   ".format(func.func.__name__ if hasattr(func.func, "__name__") else "function",
                                                                                      prog.write(), ", ".join(args[-1])), end="\r")
-        elif len(unicode(args[-1]).replace("\n", "")) < 40:
+        elif len(str(args[-1]).replace("\n", "")) < 40:
             print("\r{} {} working on {}.                                   ".format(func.func.__name__ if hasattr(func.func, "__name__") else "function",
-                                                                                     prog.write(), unicode(args[-1]).replace("\n", "")), end="\r")
+                                                                                     prog.write(), str(args[-1]).replace("\n", "")), end="\r")
         else:
             print("\r{} {}.                                                 ".format(func.func.__name__ if hasattr(func.func, "__name__") else "function",
                                                                                      prog.write()), end="\r")
