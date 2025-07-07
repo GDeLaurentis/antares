@@ -489,7 +489,7 @@ class Numerator(object):
     @property
     def variables(self):
         return self.polynomial.variables | self.monomial.variables
-    
+
     def as_term(self):
         return Term(str(self))
 

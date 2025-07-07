@@ -31,9 +31,10 @@ def get_invariant_dict(possible_denominators, evaluator, field=None, verbose=Tru
 {dict((key, val) for key, val in candidate_denoms_dict.items() if isinstance(val, (ModP, PAdic)))}""")
     candidate_denoms_dict = {key: val for key, val in candidate_denoms_dict.items() if not isinstance(val, (ModP, PAdic))}
     if not set(flatten([list(val.as_powers_dict().values()) for key, val in candidate_denoms_dict.items()])) == {1}:
-        # raise NotImplementedError(f"Expecting only factors to power 1 on a generic slice, dropping factors with higher powers. Got powers {set(flatten([list(val.as_powers_dict().values()) for key, val in candidate_denoms_dict.items()]))}")
+        # raise NotImplementedError(f"Expecting only factors to power 1 on a generic slice, dropping factors with higher powers.\
+        # Got powers {set(flatten([list(val.as_powers_dict().values()) for key, val in candidate_denoms_dict.items()]))}")
         print("Warning: expected only factors to power 1 on a generic slice.", end=" ")
-        print(f"Got powers {set(flatten([list(val.as_powers_dict().values()) for key, val in candidate_denoms_dict.items()]))}.", end=" ") 
+        print(f"Got powers {set(flatten([list(val.as_powers_dict().values()) for key, val in candidate_denoms_dict.items()]))}.", end=" ")
         print("Dropping factors with higher powers.")
         candidate_denoms_dict = {key: val for key, val in candidate_denoms_dict.items() if set(list(val.as_powers_dict().values())) == {1}}
     # check that no factors are shared
@@ -101,7 +102,7 @@ def match_factors(polynomial, candidate_factors_dict, field, assert_full_match=F
                 assert all_factors_appear
             else:
                 if not all_factors_appear:
-                    print("Warning: would have failed assertion, some factors are missing:", candidate, 
+                    print("Warning: would have failed assertion, some factors are missing:", candidate,
                           [(factor, factor in polynomial_power_dict.keys()) for factor in all_factors])
             # and check that they appear with the same power
             all_factors_powers = [polynomial_power_dict[factor] for factor in all_factors]
