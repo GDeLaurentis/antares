@@ -489,6 +489,9 @@ class Numerator(object):
     @property
     def variables(self):
         return self.polynomial.variables | self.monomial.variables
+    
+    def as_term(self):
+        return Term(str(self))
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -519,6 +522,9 @@ class Denominator(Monomial):
 
     def __repr__(self):
         return f"Denominator(\"{self}\")"
+
+    def as_term(self):
+        return Term('(1' + str(self) + ')')
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #

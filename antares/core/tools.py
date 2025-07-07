@@ -236,58 +236,50 @@ class fakeManager(object):
 
 class Progress(object):
 
-    def __init__(self, maximum, UseParallelisation):
+    def __init__(self, maximum, UseParallelisation, Cores):
         if UseParallelisation is True:
             self.manager = multiprocessing.Manager()
         else:
             self.manager = fakeManager()
-        self.time = self.manager.Value('f', 0)
+        self.time = self.manager.Value('f', time.time())
         self.average_time = self.manager.Value('f', 0)
-        self.current = self.manager.Value('i', -1)
+        self.current = self.manager.Value('i', 0)
         self.maximum = maximum
-        self.hours = self.manager.Value('i', 0)
-        self.minutes = self.manager.Value('i', 0)
-        self.seconds = self.manager.Value('i', 0)
+        window = max(10, self.maximum // (2 * Cores))
+        self.alpha = 1.0 / window   # smoothing factor
+        self.last_print_time = self.manager.Value('f', 0)
+        self.min_print_time_interval = 0.125
+        self.min_print_value = Cores if UseParallelisation else 1
 
     def increment(self):
+        effective_alpha = max(self.alpha, 1.0 / (self.current.value + 1))
         self.current.value += 1
+        previous_time = self.time.value
+        self.time.value = time.time()
+        self.average_time.value = effective_alpha * (self.time.value - previous_time) + (1 - effective_alpha) * self.average_time.value
 
     def decrement(self):
         self.current.value -= 1
 
     def write(self):
-        if self.current.value >= 1:
-            previous_percentage = float(math.ceil(float(self.current.value - 1) / self.maximum * 10000)) / 100
-        current_percentage = float(math.ceil(float(self.current.value) / self.maximum * 10000)) / 100
-        previous_time = self.time.value
-        self.time.value = time.time()
-        if current_percentage != 0:
-            msg = "{0:.2f}% completed.".format(current_percentage)
-            left_percentage = 100 - current_percentage
-            step_percentage = current_percentage - previous_percentage
-            if step_percentage == 0:   # not pretty but avoids division by zero
-                step_percentage = 0.01
-            nbr_left_steps = left_percentage / step_percentage
-            self.average_time.value = (
-                (self.average_time.value * (self.current.value - 1) +
-                 (self.time.value - previous_time)) / self.current.value)
+        if self.current.value != 0:
+            current_percentage = float(math.ceil(float(self.current.value) / self.maximum * 10000)) / 100
+            msg = f"{current_percentage:.2f}% completed."
+            nbr_left_steps = self.maximum - self.current.value
             seconds = int((self.average_time.value) * nbr_left_steps)
             minutes, seconds = divmod(seconds, 60)
             hours, minutes = divmod(minutes, 60)
-            delta_time = ((hours - self.hours.value) * 3600 +
-                          (minutes - self.minutes.value) * 60 +
-                          (seconds - self.seconds.value))
-            if delta_time > 5 or delta_time < 0:
-                ETA = "%d:%02d:%02d" % (hours, minutes, seconds)
-                self.hours.value = hours
-                self.minutes.value = minutes
-                self.seconds.value = seconds
+            now = time.time()
+            if self.current.value < self.min_print_value:
+                msg += " ETA: estimating."
+            elif (now - self.last_print_time.value < self.min_print_time_interval):  # time rate limiter
+                return False  # skip update
             else:
-                ETA = "%d:%02d:%02d" % (self.hours.value, self.minutes.value,
-                                        self.seconds.value)
-            msg += " ETA: {}.".format(ETA)
+                self.last_print_time.value = now
+                ETA = f"{hours:d}:{minutes:02d}:{seconds:02d}"
+                msg += f" ETA: {ETA}."
         else:
-            msg = "{0:.2f}% completed.".format(current_percentage)
+            msg = "0.00% completed."
         return msg
 
 
@@ -362,18 +354,19 @@ class MyThreadPool(object):      # context manager pool (no new processes, curre
 
 def progress_wrapper(func, *args, **kwargs):
     with lock if lock is not None else nullcontext():
+        func_name = func.func.__name__ if hasattr(func.func, "__name__") else "function"
+        prog_msg = prog.write()
+        if prog_msg is not False:
+            args_msg = (  # use type to avoid subclasses
+                ", ".join(args[-1]) if type(args[-1]) in [list, tuple] and isinstance(args[-1][0], str) and len(", ".join(args[-1])) < 40 else
+                str(args[-1]).replace("\n", "") if len(str(args[-1]).replace("\n", "")) < 40 else "N/A"
+            )
+            print(f"\r{func_name} {prog_msg} working on {args_msg}.                                   ", end="\r")
+            sys.stdout.flush()
+    res = func(*args, **kwargs)
+    with lock if lock is not None else nullcontext():
         prog.increment()
-        if type(args[-1]) in [list, tuple] and isinstance(args[-1][0], str) and len(", ".join(args[-1])) < 40:
-            print("\r{} {} working on {}.                                   ".format(func.func.__name__ if hasattr(func.func, "__name__") else "function",
-                                                                                     prog.write(), ", ".join(args[-1])), end="\r")
-        elif len(str(args[-1]).replace("\n", "")) < 40:
-            print("\r{} {} working on {}.                                   ".format(func.func.__name__ if hasattr(func.func, "__name__") else "function",
-                                                                                     prog.write(), str(args[-1]).replace("\n", "")), end="\r")
-        else:
-            print("\r{} {}.                                                 ".format(func.func.__name__ if hasattr(func.func, "__name__") else "function",
-                                                                                     prog.write()), end="\r")
-        sys.stdout.flush()
-    return func(*args, **kwargs)
+    return res
 
 
 _lambda_compatible_func = None
@@ -407,7 +400,7 @@ def mapThreads(func, *args, **kwargs):
 
     if UseParallelisation is True:
         l = multiprocessing.Lock()
-        p = Progress(len(args[-1]), UseParallelisation)
+        p = Progress(len(args[-1]), UseParallelisation, Cores)
         if ParallelisationType == 'Process' or ParallelisationType == 'Processing':
             with MyProcessPool(Cores, initializer=_init, initargs=(l, p, func_partial,)) as pool:
                 results = pool.map(worker, args[-1])
@@ -419,7 +412,7 @@ def mapThreads(func, *args, **kwargs):
     else:
         global prog, lock
         lock = None
-        prog = Progress(len(args[-1]), UseParallelisation)
+        prog = Progress(len(args[-1]), UseParallelisation, Cores)
         results = list(map(func_partial, args[-1]))
 
     if verbose:

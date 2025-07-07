@@ -190,7 +190,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
         self.__init__([Term(entry) for entry in string.splitlines() if entry.replace(" ", "") != ''])
 
     def __repr__(self):
-        return f"Terms(\"\"\"{self}\"\"\")"
+        return f"Terms(\"\"\"\n{self}\n\"\"\")"
 
     def __hash__(self):
         return hash(tuple(self))
