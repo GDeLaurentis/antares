@@ -66,6 +66,21 @@ def generate_pdf(tex, texfile, output_dir=None, interaction=None, verbose=False)
     shutil.rmtree(temp)
 
 
+def collapse_after_marker(strings, marker='}{'):
+    result = []
+    found = False
+    for s in strings:
+        if not found:
+            if marker in s:
+                found = True
+                result.append(s)
+            else:
+                result.append(s)
+        else:
+            result[-1] += s  # append to the last item
+    return result
+
+
 def main():
 
     # Parse command-line arguments
@@ -84,12 +99,14 @@ def main():
 
     with open(args.texfile, "r") as file:
         for line in file:
-            line = line.replace("*", "")  # suppress * for products
+            line = line.replace("*", "·")  # suppress * for products - might be needed actually
             if r"\scriptscriptstyle" not in line:
                 result += line
             else:
-                splitted = re.split(r'(?<!\(|{|}|\))(\+|\-)(?=\d+[/s⟨\[]|\d+i)', line)
-                # pprint(splitted)
+                # replace logic here with just str and repr from terms
+                splitted = re.split(r'(?<!\(|{|}|\))(\+|\-)(?=\d+[/s⟨\[a-z-A-Z]|\d+i)', line)
+                splitted = collapse_after_marker(splitted)
+                # print("here:", len(splitted), splitted)
                 if len(splitted) < 9:
                     result += line
                     continue

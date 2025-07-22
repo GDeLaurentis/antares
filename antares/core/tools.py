@@ -28,6 +28,7 @@ import mpmath
 import fractions
 import copyreg
 
+from copy import deepcopy
 from pathlib import Path
 
 from lips.tools import pSijk, pd5, ptr5, pDijk, pOijk, pPijk, pA2, pS2, p3B, pNB  # noqa
@@ -1183,6 +1184,35 @@ def flatten(temp_list, recursion_level=0, treat_list_subclasses_as_list=True, tr
         else:
             flat_list += [entry]
     return flat_list
+
+
+def crease(iterable, template, depth, called_recursively=False, verbose=False):
+    """Inverse function to flatten. Requires a template to define the shape. Rugged shape is supported."""
+    if verbose:
+        print(f"crease called at depth {depth}")
+    if not called_recursively:
+        iterable = flatten(iterable)           # make sure it's flat
+        creased_iterable = deepcopy(template)  # make a copy of template to return result, without deleting the template
+    else:
+        creased_iterable = template
+    if verbose:
+        print(f"len(iterable): {len(iterable)}, len(flatten(template, max_recursion={depth})): {len(flatten(template, max_recursion=depth))}")
+    assert len(iterable) == len(flatten(template, max_recursion=depth))
+    if depth == 0:
+        for i, _ in enumerate(creased_iterable):
+            creased_iterable[i] = iterable[i]
+        assert flatten(creased_iterable) == iterable
+        return creased_iterable
+    elif depth > 0:
+        for i, _ in enumerate(creased_iterable):
+            if verbose:
+                print(f"slice: {len(flatten(creased_iterable[:i], max_recursion=1))}:{len(flatten(creased_iterable[:i + 1], max_recursion=1))}")
+            ith_iterable = iterable[len(flatten(creased_iterable[:i], max_recursion=1)):len(flatten(creased_iterable[:i + 1], max_recursion=1))]
+            creased_iterable[i] = crease(ith_iterable, creased_iterable[i], depth=depth - 1, called_recursively=True, verbose=verbose)
+        assert flatten(creased_iterable) == iterable
+        return creased_iterable
+    else:
+        raise ValueError("crease called with negative depth.")
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #

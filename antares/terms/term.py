@@ -5,11 +5,14 @@
 
 # Author: Giuseppe
 
+import numpy
 import mpmath
 import re
 import functools
 import operator
+import warnings
 
+from collections.abc import Sequence
 from functools import reduce
 from fractions import Fraction
 from operator import mul
@@ -20,6 +23,7 @@ from lips.invariants import Invariants
 
 from syngular import Field, Monomial, Polynomial
 
+from ..core.tools import flatten
 from ..core.settings import settings
 from ..core.numerical_methods import Numerical_Methods
 from ..scalings.single import single_scalings
@@ -99,11 +103,21 @@ class Term(Numerical_Methods, object):
         return oTerm
 
     @property
+    def is_symmetry(self):
+        return hasattr(self, "tSym")
+
+    @property
     def am_I_a_symmetry(self):
-        if hasattr(self, "tSym"):
-            return True
-        else:
-            return False
+        warnings.warn(
+            "am_I_a_symmetry is deprecated, use is_symmetry instead.",
+            category=DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.is_symmetry
+
+    @property
+    def ansatz(self):
+        return self.oNum.polynomial.monomials
 
     @property
     def multiplicity(self):
@@ -117,7 +131,7 @@ class Term(Numerical_Methods, object):
     @multiplicity.setter
     def multiplicity(self, value):
         self._multiplicity = value
-        if not self.am_I_a_symmetry:
+        if not self.is_symmetry:
             self.oNum.multiplicity = value
             self.oDen.multiplicity = value
 
@@ -133,37 +147,86 @@ class Term(Numerical_Methods, object):
     @internal_masses.setter
     def internal_masses(self, value):
         self._internal_masses = value
-        if not self.am_I_a_symmetry:
+        if not self.is_symmetry:
             self.oNum.internal_masses = value
             self.oDen.internal_masses = value
 
-    def __call__(self, InvsDict_or_Particles, field=None):
+    def __getitem__(self, item):
+
+        # NumPy boolean mask
+        if (
+            (isinstance(item, numpy.ndarray) and item.dtype == bool) or
+            (isinstance(item, Sequence) and all(isinstance(i, bool) for i in item))
+        ):
+            result = deepcopy(self)
+            result.oNum.polynomial = self.oNum.polynomial[item]
+
+        else:
+            raise NotImplementedError(f"Unsupported indexing type: {type(item)}")
+
+        return result
+
+    def __call__(self, InvsDict_or_Particles):
         from antares.terms.terms import Terms
         if type(InvsDict_or_Particles) is dict:
-            assert field is not None
+            field = InvsDict_or_Particles['field']
+            # denominator monomial & common (factored) numerator monomial
             NumericalDenominator = self.oDen(InvsDict_or_Particles)
-            NumericalCommonNumerator = 1
-            for inv, exp in zip(self.oNum.lCommonInvs, self.oNum.lCommonExps):
-                NumericalCommonNumerator *= InvsDict_or_Particles[inv]**exp
-            NumericalNumerator = 0
-            for lInvs, lExps, coef in zip(self.oNum.llInvs, self.oNum.llExps, self.oNum.lCoefs if self.oNum.lCoefs != [] else [(Fraction(1, 1), Fraction(0, 1))]):
-                if field.characteristic == 0:
-                    coef = [make_proper(coef[0]), make_proper(coef[1])]
-                    NumericalTerm = mpmath.mpc(mpmath.mpf(coef[0][0]) + mpmath.mpf(coef[0][1]) / mpmath.mpf(coef[0][2]),
-                                               mpmath.mpf(coef[1][0]) + mpmath.mpf(coef[1][1]) / mpmath.mpf(coef[1][2]))
+            NumericalCommonNumerator = self.oNum.monomial(InvsDict_or_Particles)
+            # numerator polynomial (with or without contraction with (gaussian) rational coefficients)
+            if all(entry is None for entry in self.oNum.lCoefs):
+                rat_coefs = None
+            else:
+                rat_coefs = []
+                for coef in self.oNum.lCoefs:
+                    if field.characteristic == 0:
+                        coef = [make_proper(coef[0]), make_proper(coef[1])]   # is this make proper story really needed ?!
+                        coef = mpmath.mpc(mpmath.mpf(coef[0][0]) + mpmath.mpf(coef[0][1]) / mpmath.mpf(coef[0][2]),
+                                          mpmath.mpf(coef[1][0]) + mpmath.mpf(coef[1][1]) / mpmath.mpf(coef[1][2]))
+                    else:
+                        assert coef[1] == 0
+                        coef = field(coef[0])
+                    rat_coefs += [coef]
+                rat_coefs = numpy.array(rat_coefs)
+
+            # print(InvsDict_or_Particles)
+
+            run_on_gpu = settings.UseGpu and (len(self.oNum.llInvs) > 1000 or rat_coefs is None)
+
+            if run_on_gpu:
+                from linac import load_matrices
+                monomials = [flatten([[inv, ] * exp for inv, exp in zip(lInvs, lExps)]) for lInvs, lExps in zip(self.oNum.llInvs, self.oNum.llExps)]
+                prefactor = NumericalCommonNumerator / NumericalDenominator
+                numerical_monomials = load_matrices(
+                    ['prefactor'], [monomials], {'prefactor': prefactor} | InvsDict_or_Particles, use_cuda=True)[0].T
+            else:
+                numerical_monomials = []
+                for lInvs, lExps in zip(self.oNum.llInvs, self.oNum.llExps):
+                    numerical_monomial = 1
+                    for inv, exp in zip(lInvs, lExps):
+                        numerical_monomial = numerical_monomial * InvsDict_or_Particles[inv] ** exp
+                    numerical_monomials += [numerical_monomial]
+                numerical_monomials = numpy.array(numerical_monomials)
+
+            if rat_coefs is None:
+                # print(numpy.atleast_2d(numerical_monomials).shape)
+                if not run_on_gpu:
+                    return ((NumericalCommonNumerator / NumericalDenominator) * numpy.atleast_2d(numerical_monomials)).T
                 else:
-                    assert coef[1] == 0
-                    NumericalTerm = field(coef[0])
-                for inv, exp in zip(lInvs, lExps):
-                    NumericalTerm = NumericalTerm * InvsDict_or_Particles[inv] ** exp
-                NumericalNumerator += NumericalTerm
-            return NumericalNumerator * NumericalCommonNumerator / NumericalDenominator
+                    return numpy.atleast_2d(numerical_monomials).T
+            else:
+                numerical_poly = numpy.einsum("i,i...->...", rat_coefs, numerical_monomials)  # @ dot product fails with tensor monomials
+                if not run_on_gpu:
+                    return NumericalCommonNumerator / NumericalDenominator * numerical_poly
+                else:
+                    return numerical_poly
+
         elif callable(InvsDict_or_Particles):
             return Terms([self])(InvsDict_or_Particles)
 
     def Image(self, Rule):
         from antares.ansatze.eigenbasis import Image
-        if self.am_I_a_symmetry:
+        if self.is_symmetry:
             newSym = Image(self.tSym, Rule)
             oSymTerm = Term(newSym)
             if hasattr(self, "multiplicity"):
@@ -185,7 +248,7 @@ class Term(Numerical_Methods, object):
 
     def rawImage(self, Rule):
         from antares.topologies.topology import convert_invariant
-        if self.am_I_a_symmetry:
+        if self.is_symmetry:
             raise Exception("rawImage of symmetry not implemented")
         else:
             oSymNum = Numerator([[convert_invariant(inv, Rule) for inv in lInvs] for lInvs in self.oNum.llInvs], self.oNum.llExps, self.oNum.lCoefs,
@@ -195,7 +258,7 @@ class Term(Numerical_Methods, object):
         return oSymTerm
 
     def cluster(self, rule):
-        if self.am_I_a_symmetry:
+        if self.is_symmetry:
             return Term(cluster_symmetry(self.tSym, rule))
         else:
             oNum = Numerator([[cluster_invariant(inv, rule) for inv in lInvs] for lInvs in self.oNum.llInvs], self.oNum.llExps, self.oNum.lCoefs,
@@ -205,7 +268,7 @@ class Term(Numerical_Methods, object):
 
     @property
     def is_fully_reduced(self):
-        if not self.am_I_a_symmetry and len(self.oNum.lCoefs) == 1:
+        if not self.is_symmetry and len(self.oNum.lCoefs) == 1:
             return True
         else:
             return False
@@ -215,7 +278,7 @@ class Term(Numerical_Methods, object):
         Lighter than rerunning single scaling study, but less powerful, since single scalings
         can also handle cancellations involving non-trivial rewritings (e.g. shoutens).
         """
-        if self.am_I_a_symmetry:
+        if self.is_symmetry:
             return
         elif len(self.oNum.monomial) == 0 and len(self.oNum.polynomial) > 1:
             return
@@ -230,7 +293,7 @@ class Term(Numerical_Methods, object):
     def canonical_ordering(self):
         oInvariants = Invariants(self.multiplicity, Restrict3Brackets=settings.Restrict3Brackets,
                                  Restrict4Brackets=settings.Restrict4Brackets, FurtherRestrict4Brackets=settings.FurtherRestrict4Brackets)
-        if self.am_I_a_symmetry is False:
+        if self.is_symmetry is False:
             if len(self.oDen.lInvs) >= 1:
                 self.oDen = Denominator(sorted(zip(self.oDen.lInvs, self.oDen.lExps),
                                                key=lambda x: oInvariants.full.index(x[0]) if x[0] in oInvariants.full else 999))
@@ -245,7 +308,7 @@ class Term(Numerical_Methods, object):
             other = other[0]
         if not isinstance(other, Term):
             raise Exception(f"Attempted to {operation} Term object by {other} of type {type(other)}.")
-        if self.am_I_a_symmetry is True or other.am_I_a_symmetry is True:
+        if self.is_symmetry is True or other.is_symmetry is True:
             raise Exception("Division not defined for term containing symmetry.")
         if len(self.oNum.llInvs) > 1 or len(other.oNum.llInvs) > 1:
             raise Exception("Division not defined for terms with more than one set of invariants in numerator.")
@@ -271,7 +334,7 @@ class Term(Numerical_Methods, object):
         if (isinstance(other, int) or isinstance(other, Fraction) or (
                 isinstance(other, complex) and other.real.is_integer() and other.imag.is_integer())):
             oResTerm = deepcopy(self)
-            if oResTerm.am_I_a_symmetry is True:
+            if oResTerm.is_symmetry is True:
                 return oResTerm
             oResTerm.oNum.polynomial = Polynomial(
                 [(coeff * other, monomial) for coeff, monomial in oResTerm.oNum.polynomial.coeffs_and_monomials],
@@ -291,7 +354,7 @@ class Term(Numerical_Methods, object):
         if (isinstance(other, int) or isinstance(other, Fraction) or (
                 isinstance(other, complex) and other.real.is_integer() and other.imag.is_integer())):
             oResTerm = deepcopy(self)
-            if oResTerm.am_I_a_symmetry is True:
+            if oResTerm.is_symmetry is True:
                 return oResTerm
             oResTerm.oNum.polynomial = Polynomial(
                 [(coeff / other, monomial) for coeff, monomial in oResTerm.oNum.polynomial.coeffs_and_monomials],
@@ -301,9 +364,9 @@ class Term(Numerical_Methods, object):
         return self.__mul_or_div__(other, "divide")
 
     def __contains__(self, other):  # is other in self?
-        if self.am_I_a_symmetry is True and other.am_I_a_symmetry is True:
+        if self.is_symmetry is True and other.is_symmetry is True:
             return True if self == other else False
-        elif self.am_I_a_symmetry is True or other.am_I_a_symmetry is True:
+        elif self.is_symmetry is True or other.is_symmetry is True:
             return False
         if other.oNum in self.oNum and other.oDen in self.oDen:
             return True
@@ -331,6 +394,7 @@ class Term(Numerical_Methods, object):
             else:
                 numerator = string
                 denominator = ""
+            # print(numerator, denominator)
             self.__init__(Numerator(numerator), Denominator(denominator))
 
     def __repr__(self):
@@ -347,7 +411,7 @@ class Term(Numerical_Methods, object):
 
     @property
     def variables(self):
-        if self.am_I_a_symmetry:
+        if self.is_symmetry:
             return set()
         return self.oNum.variables | self.oDen.variables
 
@@ -408,7 +472,7 @@ class Numerator(object):
         string = string.replace("|(", "|").replace(")|", "|")
         if string[0] == "+":
             string = string[1:]
-        split_numerator = re.split(r"(?<!tr)(?<!tr5)(\()(?=[\+\-]{0,1}\d)", string)
+        split_numerator = re.split(r"(?<!tr)(?<!tr5)(\()(?=[\+\-]{0,1}[?\d])", string)
         # print(split_numerator)
         if len(split_numerator) == 1:  # single monomial without gaussian rational coefficient
             split_numerator = split_numerator[0][1:-1]  # remove parenthesis
@@ -485,6 +549,14 @@ class Numerator(object):
     @lCoefs.setter
     def lCoefs(self, value):
         raise AttributeError("lCoefs is a legacy read-only property.")
+
+    @property
+    def coeffs(self):
+        return self.polynomial.coeffs
+
+    @coeffs.setter
+    def coeffs(self, value):
+        self.polynomial.coeffs = value
 
     @property
     def variables(self):

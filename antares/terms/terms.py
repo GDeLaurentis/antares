@@ -9,10 +9,15 @@ import sys
 import math
 import re
 import copy
+import numbers
 import numpy
 import sympy
 import functools
 import operator
+
+from collections.abc import Sequence
+
+from syngular import Monomial, Polynomial, Qi
 
 from lips import Particles
 from lips.invariants import Invariants
@@ -21,7 +26,7 @@ from lips.tools import pNB as pNB_internal
 from lips.particles_eval import pNB as pNB_overall
 from lips.symmetries import inverse
 
-from ..core.tools import LaTeXToPython, flatten, get_common_Q_factor, get_max_abs_numerator, get_max_denominator
+from ..core.tools import LaTeXToPython, flatten, crease, get_common_Q_factor, get_max_abs_numerator, get_max_denominator
 from ..core.diskcached import DiskCached
 from ..core.settings import settings
 from ..core.numerical_methods import Numerical_Methods
@@ -85,8 +90,8 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
     def __add__(self, other):
         if other is None:
             return self
-        if any([oTerm.am_I_a_symmetry for oTerm in self]):
-            if any([oTerm.am_I_a_symmetry for oTerm in other]):
+        if any([oTerm.is_symmetry for oTerm in self]):
+            if any([oTerm.is_symmetry for oTerm in other]):
                 last_symmetry_1 = self.index_of_last_symmetry()
                 last_symmetry_2 = other.index_of_last_symmetry()
                 oSumTerms = Terms(list(self[0:last_symmetry_1 + 1]))
@@ -102,7 +107,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
                 for oTerm in other:
                     oSumTerms.append(oTerm)
         else:
-            if any([oTerm.am_I_a_symmetry for oTerm in other]):
+            if any([oTerm.is_symmetry for oTerm in other]):
                 last_symmetry_2 = other.index_of_last_symmetry()
                 oSumTerms = Terms(list(other[0:last_symmetry_2 + 1]))
                 for oTerm in self:
@@ -146,30 +151,86 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
         return Terms([oTerm / other for oTerm in self])
 
     def __getitem__(self, item):
-        if isinstance(list.__getitem__(self, item), Term):
-            oTerm = list.__getitem__(self, item)
-            if hasattr(self, "multiplicity"):
-                oTerm.multiplicity = self.multiplicity
-            return oTerm
-        else:
-            oTerms = Terms(list.__getitem__(self, item))
-            if hasattr(self, "oFittingSettings"):
-                oTerms.oFittingSettings = self.oFittingSettings
-            if hasattr(self, "oUnknown"):
-                oTerms.oUnknown = self.oUnknown
-            if hasattr(self, "multiplicity"):
-                oTerms.multiplicity = self.multiplicity
-            return oTerms
 
-    def __getslice__(self, i, j):
-        NewTerms = Terms(list.__getslice__(self, i, j))
+        # Single index
+        if isinstance(item, numbers.Integral):
+            result = list.__getitem__(self, item)
+            self._copy_metadata(result)
+            return result
+
+        # Python slice object
+        elif isinstance(item, slice):
+            selected = list.__getitem__(self, item)
+
+        # NumPy boolean mask
+        elif (
+            (isinstance(item, numpy.ndarray) and item.dtype == bool) or
+            (isinstance(item, Sequence) and all(isinstance(i, bool) for i in item))
+        ):
+            mask = numpy.array(item)
+            if mask.shape[0] != len(self):
+                raise IndexError(f"Boolean mask length {mask.shape[0]} does not match Terms length {len(self)}")
+            selected = [x for x, keep in zip(self, mask) if keep]
+
+        # NumPy integer array or Python list of integers
+        elif isinstance(item, (numpy.ndarray, Sequence)) and all(isinstance(i, numbers.Integral) for i in item):
+            selected = [list.__getitem__(self, i) for i in item]
+
+        # forward indexing to Term
+        elif isinstance(item, (numpy.ndarray, Sequence)) and all(isinstance(i, (numpy.ndarray, Sequence)) for i in item):
+            selected = numpy.array(self, dtype=object)
+            selected[self.is_not_symmetry_mask] = [t[i] for t, i in zip(selected[self.is_not_symmetry_mask], item)]
+
+        else:
+            raise NotImplementedError(f"Unsupported indexing type: {type(item)}")
+
+        # For all non-single-Term results: return a new Terms object with metadata copied
+        result = Terms(selected)
+        self._copy_metadata(result)
+        return result
+
+    def _copy_metadata(self, other):
         if hasattr(self, "oFittingSettings"):
-            NewTerms.oFittingSettings = self.oFittingSettings
+            other.oFittingSettings = self.oFittingSettings
         if hasattr(self, "oUnknown"):
-            NewTerms.oUnknown = self.oUnknown
+            other.oUnknown = self.oUnknown
         if hasattr(self, "multiplicity"):
-            NewTerms.multiplicity = self.multiplicity
-        return NewTerms
+            other.multiplicity = self.multiplicity
+
+    @property
+    def is_not_symmetry_mask(self):
+        return ~numpy.array([t.is_symmetry for t in self], dtype=bool)
+
+    def remove_zero_terms(self):
+        """Remove zero-terms *and* possibly any dangling symmetry terms that follow them."""
+        result = []
+        i = 0
+        n = len(self)
+
+        while i < n:
+            # 1. Collect all consecutive non-symmetry terms
+            block = []
+            while i < n and not self[i].is_symmetry:
+                block.append(self[i])
+                i += 1
+
+            # 2. Collect all consecutive symmetry terms
+            sym_block = []
+            while i < n and self[i].is_symmetry:
+                sym_block.append(self[i])
+                i += 1
+
+            # 3. Filter out empty terms in block
+            non_zero_terms = [t for t in block if t.oNum.polynomial != 0]
+
+            # 4. If at least one non-zero term remains, keep filtered terms and symmetries
+            if non_zero_terms:
+                result.extend(non_zero_terms)
+                result.extend(sym_block)
+            # else discard entire block + symmetries
+
+        self[:] = result
+        return self
 
     def __contains__(self, other):  # is other in self?
         if isinstance(other, Term):
@@ -190,16 +251,20 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
         self.__init__([Term(entry) for entry in string.splitlines() if entry.replace(" ", "") != ''])
 
     def __repr__(self):
-        return f"Terms(\"\"\"\n{self}\n\"\"\")"
+        content = f"\n{self}\n" if len(self) > 1 else str(self)
+        return f'Terms("""{content}""")'
 
     def __hash__(self):
         return hash(tuple(self))
+
+    def is_ansatz(self):
+        return any([any(entry is None for entry in oTerm.oNum.lCoefs) for oTerm in self if not oTerm.is_symmetry])
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def index_of_last_symmetry(self):
         for index, oTerm in list(enumerate(self))[::-1]:
-            if oTerm.am_I_a_symmetry is True:
+            if oTerm.is_symmetry is True:
                 return index
         else:
             return None
@@ -298,7 +363,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
         lM = []
         oUnknown_mass_dimension = self.oUnknown.mass_dimension
         for i in range(len(self)):
-            if self[i].am_I_a_symmetry is True:
+            if self[i].is_symmetry is True:
                 continue
             mdPartial = self[i].mass_dimension
             lM += [oUnknown_mass_dimension - mdPartial]
@@ -312,7 +377,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
         lPW = []
         oUnknown_phase_weights = self.oUnknown.phase_weights
         for i in range(len(self)):
-            if self[i].am_I_a_symmetry is True:
+            if self[i].is_symmetry is True:
                 continue
             pwPartial = self[i].phase_weights
             lPW += [[_i - _j for _i, _j in zip(oUnknown_phase_weights, pwPartial)]]
@@ -331,27 +396,38 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
     @property
     @caching_decorator
     def lllNumInvs(self):
-        return [oTerm.oNum.llInvs for oTerm in self if oTerm.am_I_a_symmetry is False]
+        return [oTerm.oNum.llInvs for oTerm in self if oTerm.is_symmetry is False]
 
     @property
     @caching_decorator
     def lllNumExps(self):
-        return [oTerm.oNum.llExps for oTerm in self if oTerm.am_I_a_symmetry is False]
+        return [oTerm.oNum.llExps for oTerm in self if oTerm.is_symmetry is False]
 
     @property
     @caching_decorator
     def llCoefs(self):
-        return [oTerm.oNum.lCoefs for oTerm in self if oTerm.am_I_a_symmetry is False]
+        return [oTerm.oNum.lCoefs for oTerm in self if oTerm.is_symmetry is False]
+
+    @property
+    def coeffs(self):
+        return [t.oNum.coeffs for t in self[self.is_not_symmetry_mask]]
+
+    @coeffs.setter
+    def coeffs(self, values):
+        if numpy.all(values == flatten(values)):
+            values = crease(values, self.ansatze, depth=1)
+        for t, v in zip(self, values):
+            t.oNum.coeffs = v
 
     @property
     @caching_decorator
     def llDenInvs(self):
-        return [oTerm.oDen.lInvs for oTerm in self if oTerm.am_I_a_symmetry is False]
+        return [oTerm.oDen.lInvs for oTerm in self if oTerm.is_symmetry is False]
 
     @property
     @caching_decorator
     def llDenExps(self):
-        return [oTerm.oDen.lExps for oTerm in self if oTerm.am_I_a_symmetry is False]
+        return [oTerm.oDen.lExps for oTerm in self if oTerm.is_symmetry is False]
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
@@ -385,42 +461,64 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
 
     @DiskCached.memoized(name='cached_terms', ignore={'cached', 'verbose'})
     def __call__(self, oParticles, cached=False, verbose=False):
+        from lips.symmetries import identity
+        if self.is_ansatz() and numpy.isscalar(oParticles('1')):
+            raise Exception("Terms ansatz should be called only with vectorized input. Scalar input is not supported.")
         InvsDict = {}
-        for inv in self.variables:
+        for inv in {'1'} | self.variables:
             InvsDict[inv] = oParticles(inv)
+        InvsDict['field'] = oParticles.field
         SymInvsDict = {}
         for oTerm in self:
-            if oTerm.am_I_a_symmetry is True and oTerm.tSym not in SymInvsDict.keys():
+            if oTerm.is_symmetry is True and oTerm.tSym not in SymInvsDict.keys():
                 NewDict = {}
-                NewParticles = oParticles.image(inverse(oTerm.tSym[0]))
-                if oTerm.tSym[1] is True:
-                    NewParticles.angles_for_squares()
-                for inv in self.variables:
+                NewParticles = oParticles.image(inverse(oTerm.tSym))
+                for inv in {'1'} | self.variables:
                     NewDict[inv] = NewParticles(inv)
+                NewDict['field'] = oParticles.field
                 SymInvsDict[oTerm.tSym] = NewDict
+        # determine whether evaluation at a single point returns a scalar - ansatz not supported for tensor evals
+        massive_fermions = [i + 1 for i, oP in enumerate(oParticles) if hasattr(oP, 'spin_index')]
+        scalar_eval_is_scalar = all(isinstance(oP.spin_index[1], int) for oP in oParticles if hasattr(oP, 'spin_index'))
         NumericalResult = 0
         for i, iTerm in enumerate(self):
-            if iTerm.am_I_a_symmetry is True:
+            if verbose:
+                print(f"\rEvaluating term nbr {i}/{len(self)}")
+            if iTerm.is_symmetry and iTerm.tSym[:2] == identity(len(iTerm.tSym[0])):
+                pass
+            elif iTerm.is_symmetry:
                 something_was_not_a_symmetry = False
+                folding_offset = 0
                 for j, jTerm in enumerate(self[:i][::-1]):
-                    if jTerm.am_I_a_symmetry and something_was_not_a_symmetry:
+                    if jTerm.is_symmetry and something_was_not_a_symmetry:
                         break
-                    elif jTerm.am_I_a_symmetry is False:
+                    elif jTerm.is_symmetry is False:
                         something_was_not_a_symmetry = True
-                        next_numerical_bit = jTerm(SymInvsDict[iTerm.tSym], oParticles.field)
-                        if isinstance(next_numerical_bit, numpy.ndarray):  # if result is a tensor indices must be aligned
-                            massive_fermions = [i + 1 for i, oP in enumerate(oParticles) if hasattr(oP, 'spin_index')]
+                        this_term = jTerm(SymInvsDict[iTerm.tSym])
+                        chosen_operator = operator.isub if iTerm.tSym[2] == "-" else operator.iadd
+                        # if result is a tensor indices must be aligned
+                        if isinstance(this_term, numpy.ndarray) and not scalar_eval_is_scalar:
                             assert len(massive_fermions) <= 2  # otherwise not implemented
-                            from lips.symmetries import identity
                             if ("".join(iTerm.tSym[0][i - 1] for i in massive_fermions) ==
                                "".join(identity(len(iTerm.tSym[0]))[0][i - 1] for i in massive_fermions)[::-1]):
-                                next_numerical_bit = next_numerical_bit.T
-                        if iTerm.tSym[2] == "-":
-                            NumericalResult -= next_numerical_bit
+                                this_term = this_term.T
+                        if numpy.isscalar(this_term) or len(this_term.shape) == 1 or not scalar_eval_is_scalar:
+                            NumericalResult = chosen_operator(NumericalResult, this_term)
                         else:
-                            NumericalResult += next_numerical_bit
+                            chosen_operator(NumericalResult[:, -(folding_offset + this_term.shape[1]):(NumericalResult.shape[1] - folding_offset)], this_term)
+                            if oParticles.field.characteristic != 0:
+                                NumericalResult = NumericalResult % oParticles.field.characteristic
+                            folding_offset += this_term.shape[1]
             else:
-                NumericalResult += iTerm(InvsDict, oParticles.field)
+                this_term = iTerm(InvsDict)
+                if numpy.isscalar(this_term) or len(this_term.shape) == 1 or not scalar_eval_is_scalar:
+                    NumericalResult += this_term
+                else:
+                    if isinstance(NumericalResult, int) and NumericalResult == 0:
+                        NumericalResult = this_term
+                    else:
+                        # print(NumericalResult.shape, this_term.shape)
+                        NumericalResult = numpy.block([NumericalResult, this_term])
         return NumericalResult
 
     def Image(self, Rule):
@@ -437,13 +535,13 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
         oTermsExplicit = copy.copy(self)
         del oTermsExplicit[:]
         for i, iTerm in enumerate(self):
-            if iTerm.am_I_a_symmetry is True:
+            if iTerm.is_symmetry is True:
                 something_was_not_a_symmetry = False
                 to_be_appended = []
                 for j, jTerm in enumerate(self[:i][::-1]):
-                    if jTerm.am_I_a_symmetry and something_was_not_a_symmetry:
+                    if jTerm.is_symmetry and something_was_not_a_symmetry:
                         break
-                    elif jTerm.am_I_a_symmetry is False:
+                    elif jTerm.is_symmetry is False:
                         something_was_not_a_symmetry = True
                         if raw is False:
                             to_be_appended.append(copy.copy(jTerm.Image(iTerm.tSym)))
@@ -482,7 +580,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
 
     def relevant_old_Terms(self, i):
         oOldTerms = self.oUnknown.recursively_extract_terms()
-        return [_oTerm for _oTerm in oOldTerms if not _oTerm.am_I_a_symmetry and _oTerm.is_fully_reduced and
+        return [_oTerm for _oTerm in oOldTerms if not _oTerm.is_symmetry and _oTerm.is_fully_reduced and
                 # all numerator invariants have changed by at most 1 power
                 all([True if inv in _oTerm.oNum.llInvs[0] and abs(_oTerm.oNum.llExps[0][_oTerm.oNum.llInvs[0].index(inv)] - self[i].oNum.llExps[0][self[i].oNum.llInvs[0].index(inv)]) <= 1 or
                      inv not in _oTerm.oNum.llInvs[0] and self[i].oNum.llExps[0][self[i].oNum.llInvs[0].index(inv)] == 1 else False for inv in self[i].oNum.llInvs[0]]) and
@@ -504,11 +602,11 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
                                      Restrict4Brackets=settings.Restrict4Brackets, FurtherRestrict4Brackets=settings.FurtherRestrict4Brackets)
             all_invariants = oInvariants.full
             other_invariants = [inv for inv in oInvariants.invs_2 + oInvariants.invs_3 + oInvariants.invs_s if all(
-                [inv not in oTerm.oDen.lInvs + flatten(oTerm.oNum.llInvs) for oTerm in self if not oTerm.am_I_a_symmetry])]
+                [inv not in oTerm.oDen.lInvs + flatten(oTerm.oNum.llInvs) for oTerm in self if not oTerm.is_symmetry])]
         else:
             all_invariants = copy.copy(invariants)
             other_invariants = [inv for inv in all_invariants if all(
-                [inv not in oTerm.oDen.lInvs + flatten(oTerm.oNum.llInvs) for oTerm in self if not oTerm.am_I_a_symmetry])]
+                [inv not in oTerm.oDen.lInvs + flatten(oTerm.oNum.llInvs) for oTerm in self if not oTerm.is_symmetry])]
         # check all double scalings of the invariants only in iDen with the ones not appearing anywhere
         _pair_invs, _pair_exps, _pair_friends = pair_scalings(self.oUnknown, self[0].oDen.lInvs, other_invariants, all_invariants)
         if hasattr(self.oUnknown, "save_original_unknown_call_cache"):
@@ -564,6 +662,33 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
     def check_md_pw_consistency(self):
         raise NotImplementedError
 
+    def insert_ansatze(self, ansatze):
+        assert len(ansatze) == len([oTerm for oTerm in self if not oTerm.is_symmetry])
+        i = 0
+        for iTerm in self:
+            if iTerm.is_symmetry:
+                continue
+            assert len(iTerm.oNum.polynomial) == 1
+            # print(f"Inserting ansatz for {iTerm}")
+            iTerm.oNum = Numerator(iTerm.oNum.polynomial[0][1], Polynomial([(None, Monomial(monoms)) for monoms in ansatze[i]], field=Qi))
+            i += 1
+        self.update_variables()
+
+    def get_ansatze(self, *args, **kwargs):
+        return Ansatz(self.ansatze_mass_dimensions, self.ansatze_phase_weights, *args, **kwargs)
+
+    def as_ansatz(self):
+        ansatze = self.get_ansatze()
+        self.insert_ansatze(ansatze)
+
+    @property
+    def ansatz_size(self):
+        return sum(map(len, self.ansatze))
+
+    @property
+    def ansatze(self):
+        return [t.ansatz for t in self[self.is_not_symmetry_mask]]
+
     def order_terms_by_complexity(self):
         lM = self.ansatze_mass_dimensions
         lPW = self.ansatze_phase_weights
@@ -577,7 +702,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
         invariants_for_ordering = []
         powers_for_ordering = {}
         for oTerm in self:
-            if oTerm.am_I_a_symmetry is True:
+            if oTerm.is_symmetry is True:
                 continue
             for inv in oTerm.oDen.lInvs:
                 if inv not in invariants_for_ordering:
@@ -626,7 +751,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
             switched = False
             i = 0
             while i < len(self) - 1:
-                if self[i].am_I_a_symmetry is True or self[i + 1].am_I_a_symmetry is True:
+                if self[i].is_symmetry is True or self[i + 1].is_symmetry is True:
                     pass
                 elif switch(self[i].oDen, self[i + 1].oDen) is True:
                     self[i], self[i + 1] = self[i + 1], self[i]
@@ -639,7 +764,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
             lPW = self.ansatze_phase_weights
             for i, iTerm in enumerate(self):
                 print(iTerm,)
-                if iTerm.am_I_a_symmetry is False:
+                if iTerm.is_symmetry is False:
                     print(" ------- [{}, {}]".format(lM[i], lPW[i]))
                 else:
                     print("")
@@ -697,7 +822,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
         # generate latex message and print the full result
         latex_result = ""
         for iTerm in self:
-            if iTerm.am_I_a_symmetry:
+            if iTerm.is_symmetry:
                 if iTerm.tSym[2] == "-":
                     latex_result += r"\scriptscriptstyle({},\;\text{{{}}},\;{})".format(iTerm.tSym[0], iTerm.tSym[1], iTerm.tSym[2])
                 else:
@@ -784,7 +909,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
     def toFortran(self, dsubs=None):
         fortran_exprs = []
         for oTerm in self:
-            if oTerm.am_I_a_symmetry:
+            if oTerm.is_symmetry:
                 fortran_exprs += [str(oTerm)]
             else:
                 num_expr = self._parse_term(str(oTerm.oNum), dsubs=dsubs)

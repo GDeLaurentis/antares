@@ -51,7 +51,7 @@ class DiskCached(object):
                 cleaned_args = [arg for i, arg in enumerate(args) if i not in ignore_positions]
 
                 # Accessing default kwargs in here is non trivial, enche the inspect.signature story above
-                if verbose:
+                if False and verbose:  # for debugging only
                     print("decorator_args:", decorator_args)
                     print("decorator_kwargs:", decorator_kwargs)
                     print("args:", args)
