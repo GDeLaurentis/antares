@@ -674,12 +674,12 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
             i += 1
         self.update_variables()
 
-    def get_ansatze(self, *args, **kwargs):
-        return Ansatz(self.ansatze_mass_dimensions, self.ansatze_phase_weights, *args, **kwargs)
+#    def get_ansatze(self, *args, **kwargs):
+#        return Ansatz(self.ansatze_mass_dimensions, self.ansatze_phase_weights, *args, **kwargs)
 
-    def as_ansatz(self):
-        ansatze = self.get_ansatze()
-        self.insert_ansatze(ansatze)
+#    def as_ansatz(self):
+#        ansatze = self.get_ansatze()
+#        self.insert_ansatze(ansatze)
 
     @property
     def ansatz_size(self):
