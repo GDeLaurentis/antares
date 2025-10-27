@@ -9,6 +9,7 @@
 [![Docs](https://github.com/GDeLaurentis/antares/actions/workflows/cd_docs.yml/badge.svg?label=Docs)](https://gdelaurentis.github.io/antares/)
 [![PyPI](https://img.shields.io/pypi/v/antares-hep?label=PyPI)](https://pypi.org/project/antares-hep/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/antares-hep.svg?label=PyPI%20downloads)](https://pypistats.org/packages/antares-hep)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/GDeLaurentis/syngular/HEAD)
 [![DOI](https://zenodo.org/badge/902351393.svg)](https://doi.org/10.5281/zenodo.14501989)
 [![Python](https://img.shields.io/pypi/pyversions/antares-hep?label=Python)](https://pypi.org/project/antares-hep/)
 
