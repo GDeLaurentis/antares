@@ -21,9 +21,10 @@ from copy import copy, deepcopy
 from lips.tools import subs_dict
 from lips.invariants import Invariants
 
-from syngular import Field, Monomial, Polynomial
+from syngular import Field, Monomial, Polynomial, Q, Qi
 
-from ..core.tools import flatten
+from pycoretools import flatten
+
 from ..core.settings import settings
 from ..core.numerical_methods import Numerical_Methods
 from ..scalings.single import single_scalings
@@ -34,9 +35,9 @@ from ..scalings.single import single_scalings
 
 class Term(Numerical_Methods, object):
 
-    def __init__(self, object1, object2=None):
+    def __init__(self, object1, object2=None, field=Field("Qi", 0, 0)):
         if isinstance(object1, str):
-            self.__rstr__(object1)
+            self.__rstr__(object1, field=field)
         elif isinstance(object1, Numerator):
             if not isinstance(object2, Denominator):
                 raise Exception("Term object created with Numerator but no Denominator.")
@@ -46,6 +47,8 @@ class Term(Numerical_Methods, object):
         elif isinstance(object1, tuple):
             if object2 is not None:
                 raise Exception("Term created with symmetry and denominator.")
+            elif len(object1) != 3:
+                raise ValueError(f"Term create with invalid symmetry: {object1}. Perhaps you forgot to specify the sign?")
             elif not isinstance(object1[0], str) or not isinstance(object1[1], bool):
                 raise Exception("Term created with non vailid symmetry.")
             else:
@@ -53,6 +56,7 @@ class Term(Numerical_Methods, object):
         else:
             raise Exception("Bad constructor.")
         self.simplify_factored_monomials()
+        self.field = field
 
     @classmethod
     def from_single_scalings(cls, oUnknown, invariants=None, verbose=False):
@@ -180,25 +184,37 @@ class Term(Numerical_Methods, object):
                 rat_coefs = []
                 for coef in self.oNum.lCoefs:
                     if field.characteristic == 0:
-                        coef = [make_proper(coef[0]), make_proper(coef[1])]   # is this make proper story really needed ?!
-                        coef = mpmath.mpc(mpmath.mpf(coef[0][0]) + mpmath.mpf(coef[0][1]) / mpmath.mpf(coef[0][2]),
-                                          mpmath.mpf(coef[1][0]) + mpmath.mpf(coef[1][1]) / mpmath.mpf(coef[1][2]))
+                        if coef in Q:
+                            coef = mpmath.mpf(str(coef.real))
+                        if coef in Qi:
+                            coef = mpmath.mpc(str(coef.real), str(coef.imag))
+                        # coef = [make_proper(coef[0]), make_proper(coef[1])]   # is this make proper story really needed ?!
+                        # coef = mpmath.mpc(mpmath.mpf(coef[0][0]) + mpmath.mpf(coef[0][1]) / mpmath.mpf(coef[0][2]),
+                        #                   mpmath.mpf(coef[1][0]) + mpmath.mpf(coef[1][1]) / mpmath.mpf(coef[1][2]))
                     else:
-                        assert coef[1] == 0
-                        coef = field(coef[0])
+                        if hasattr(coef, 'imag'):
+                            assert coef.imag == 0 or field.i in field  # choose if field extensions are allowed
+                            if coef.imag == 0:
+                                coef = field(coef.real)
+                            else:
+                                coef = field(coef.real) + field.i * field(coef.imag)
+                        else:
+                            coef = field(coef)
                     rat_coefs += [coef]
                 rat_coefs = numpy.array(rat_coefs)
 
             # print(InvsDict_or_Particles)
 
-            run_on_gpu = settings.UseGpu and (len(self.oNum.llInvs) > 1000 or rat_coefs is None)
+            # disabling this for non-ansatze
+            run_on_gpu = rat_coefs is None and settings.UseGpu
 
-            if run_on_gpu:
+            if rat_coefs is None:
                 from linac import load_matrices
-                monomials = [flatten([[inv, ] * exp for inv, exp in zip(lInvs, lExps)]) for lInvs, lExps in zip(self.oNum.llInvs, self.oNum.llExps)]
+                monomials = [flatten([[inv, ] * exp for inv, exp in zip(lInvs, lExps)])
+                             for lInvs, lExps in zip(self.oNum.llInvs, self.oNum.llExps)]
                 prefactor = NumericalCommonNumerator / NumericalDenominator
                 numerical_monomials = load_matrices(
-                    ['prefactor'], [monomials], {'prefactor': prefactor} | InvsDict_or_Particles, use_cuda=True)[0].T
+                    ['prefactor'], [monomials], {'prefactor': prefactor} | InvsDict_or_Particles, use_cuda=settings.UseGpu)[0].T
             else:
                 numerical_monomials = []
                 for lInvs, lExps in zip(self.oNum.llInvs, self.oNum.llExps):
@@ -210,16 +226,15 @@ class Term(Numerical_Methods, object):
 
             if rat_coefs is None:
                 # print(numpy.atleast_2d(numerical_monomials).shape)
-                if not run_on_gpu:
-                    return ((NumericalCommonNumerator / NumericalDenominator) * numpy.atleast_2d(numerical_monomials)).T
-                else:
-                    return numpy.atleast_2d(numerical_monomials).T
+                # if not using load matrices for some reason, use this:
+                # return ((NumericalCommonNumerator / NumericalDenominator) * numpy.atleast_2d(numerical_monomials)).T
+                return numpy.atleast_2d(numerical_monomials).T
             else:
                 numerical_poly = numpy.einsum("i,i...->...", rat_coefs, numerical_monomials)  # @ dot product fails with tensor monomials
                 if not run_on_gpu:
                     return NumericalCommonNumerator / NumericalDenominator * numerical_poly
                 else:
-                    return numerical_poly
+                    return numerical_poly  # this branch is currently inaccessible
 
         elif callable(InvsDict_or_Particles):
             return Terms([self])(InvsDict_or_Particles)
@@ -304,26 +319,35 @@ class Term(Numerical_Methods, object):
 
     def __mul_or_div__(self, other, operation):
         from .terms import Terms
+        if self.is_symmetry:  # this should be allowed buy may break if the symmetries are not respected by 'other'
+            warnings.warn(
+                "Multiplication or division for Terms containing symmetries assumes `other` respects the same symmetries.",
+                category=UserWarning,
+                stacklevel=2,
+            )
+            return self
         if isinstance(other, Terms) and len(other) == 1:
             other = other[0]
         if not isinstance(other, Term):
             raise Exception(f"Attempted to {operation} Term object by {other} of type {type(other)}.")
-        if self.is_symmetry is True or other.is_symmetry is True:
-            raise Exception("Division not defined for term containing symmetry.")
-        if len(self.oNum.llInvs) > 1 or len(other.oNum.llInvs) > 1:
-            raise Exception("Division not defined for terms with more than one set of invariants in numerator.")
+        if len(other.oNum.llInvs) > 1:
+            raise Exception("Multiplication and division not defined for terms with more than one set of invariants in numerator.")
         if operation == "divide":
-            return Term(Numerator(Monomial(), Polynomial([
-                (self.oNum.polynomial.coeffs[0] / other.oNum.polynomial.coeffs[0],
-                 self.oNum.polynomial.monomials[0] * other.oDen)],
-                self.oNum.polynomial.field)),
-                Denominator(self.oDen * other.oNum.polynomial.monomials[0]))
+            return Term(
+                Numerator(
+                    self.oNum.monomial * other.oDen,
+                    self.oNum.polynomial / other.oNum.polynomial.coeffs[0]
+                ),
+                Denominator(self.oDen * other.oNum.polynomial.monomials[0])
+            )
         elif operation == "multiply":
-            return Term(Numerator(Monomial(), Polynomial([
-                (self.oNum.polynomial.coeffs[0] * other.oNum.polynomial.coeffs[0],
-                 self.oNum.polynomial.monomials[0] * other.oNum.polynomial.monomials[0])],
-                self.oNum.polynomial.field)),
-                Denominator(self.oDen * other.oDen))
+            return Term(
+                Numerator(
+                    self.oNum.monomial,
+                    self.oNum.polynomial * other.oNum.polynomial
+                ),
+                Denominator(self.oDen * other.oDen)
+            )
         else:
             raise Exception(f"Operation {operation} between Terms not understood.")
 
@@ -381,7 +405,7 @@ class Term(Numerical_Methods, object):
         else:
             return str(self.oNum)
 
-    def __rstr__(self, string):
+    def __rstr__(self, string, field=Field("Qi", 0, 0)):
         if "True" in string or "False" in string:  # this is a symmetry
             string = string.replace("+(", "(")
             symmetry = eval(string)
@@ -395,7 +419,7 @@ class Term(Numerical_Methods, object):
                 numerator = string
                 denominator = ""
             # print(numerator, denominator)
-            self.__init__(Numerator(numerator), Denominator(denominator))
+            self.__init__(Numerator(numerator, field=field), Denominator(denominator))
 
     def __repr__(self):
         return f"Term(\"{self}\")"
@@ -438,7 +462,7 @@ class Numerator(object):
     def __init__(self, linvs=[[]], lexps=[[]], coeffs=[], common_invs=[], common_exps=[], field=Field("Qi", 0, 0)):
         # print("in init", linvs, lexps, coeffs, common_invs, common_exps)
         if isinstance(linvs, str) and isinstance(lexps, list):
-            self.__rstr__(linvs)
+            self.__rstr__(linvs, field=field)
         elif isinstance(linvs, Monomial) and isinstance(lexps, Polynomial):
             self.monomial = linvs
             self.polynomial = lexps
@@ -467,25 +491,47 @@ class Numerator(object):
     def __str__(self):
         return f"{self.monomial}({self.polynomial})"
 
-    def __rstr__(self, string):
+    def __rstr__(self, string, field=Field("Qi", 0, 0)):
+        def parenthesis_are_balanced(string):
+            balance = 0
+            for char in string:
+                if char == ")":
+                    balance -= 1
+                if char == "(":
+                    balance += 1
+                if balance < 0:
+                    return False
+            if balance != 0:
+                return False
+            return True
+
+        def prune_parenthesis(string):
+            while string[0] == "(" and string[-1] == ")" and parenthesis_are_balanced(string[1:-1]):
+                string = string[1:-1]
+            return string
+
         string = " ".join(string.split())
         string = string.replace("|(", "|").replace(")|", "|")
         if string[0] == "+":
             string = string[1:]
-        split_numerator = re.split(r"(?<!tr)(?<!tr5)(\()(?=[\+\-]{0,1}[?\d])", string)
+        string = prune_parenthesis(string)
+        split_numerator = re.split(r"(?<!tr)(?<!tr5)(\()(?=[\+\-(]{0,1}[?\d])", string)
+        if len(split_numerator) > 2:
+            split_numerator = split_numerator[:1] + ["".join(split_numerator[1:])]
         # print(split_numerator)
-        if len(split_numerator) == 1:  # single monomial without gaussian rational coefficient
-            split_numerator = split_numerator[0][1:-1]  # remove parenthesis
-            self.__init__('', split_numerator)
-        elif len(split_numerator) == 3:   # factored monomial times polynomial - factored monomial may be empty
+        if len(split_numerator) == 1:  # just polynomial part
+            split_numerator = split_numerator[0]
+            split_numerator = prune_parenthesis(split_numerator)  # remove parenthesis
+            self.__init__('', split_numerator, field=field)
+        elif len(split_numerator) == 2:   # factored monomial times polynomial - factored monomial may be empty
             common_numerator = split_numerator[0]
-            if common_numerator.count("(") > common_numerator.count(")") and common_numerator[0] == "(":
-                common_numerator = common_numerator[1:]
-            rest_numerator = split_numerator[1] + split_numerator[2]
-            if rest_numerator.count("(") < rest_numerator.count(")") and rest_numerator[-1] == ")":
-                rest_numerator = rest_numerator[:-1]
-            rest_numerator = rest_numerator[1:-1]
-            self.__init__(common_numerator, rest_numerator)
+            # if common_numerator.count("(") > common_numerator.count(")") and common_numerator[0] == "(":
+            #     common_numerator = common_numerator[1:]
+            rest_numerator = split_numerator[1]
+            # if rest_numerator.count("(") < rest_numerator.count(")") and rest_numerator[-1] == ")":
+            #     rest_numerator = rest_numerator[:-1]
+            rest_numerator = prune_parenthesis(rest_numerator)
+            self.__init__(common_numerator, rest_numerator, field=field)
         else:
             raise Exception("Numerator string not understood (split).")
 
@@ -588,6 +634,8 @@ class Denominator(Monomial):
         raise AttributeError("lExps is a legacy read-only property.")
 
     def __rstr__(self, string):
+        assert len(string) == 0 or string[0] == "(", "Forgot a parenthesis?"
+        assert len(string) == 0 or string[-1] == ")", "Forgot a parenthesis?"
         string = string[1:-1]
         string = string.replace("|(", "|").replace(")|", "|")  # fixes spinor chain notation
         return super(Denominator, self).__rstr__(string)

@@ -1,4 +1,5 @@
 import pathlib
+import numpy
 
 from lips import Particles
 from syngular import Field
@@ -31,3 +32,10 @@ def test_basis_explicit_representation():
     basis = TermsList(test_folder / 'test_basis', multiplicity=6, verbose=True)
     oPs = Particles(6, field=Field("finite field", 2 ** 31 - 1, 1))
     assert basis(oPs) == basis.explicit_representation()(oPs)
+
+
+def test_basis_indexing():
+    basis = TermsList(test_folder / 'test_basis', multiplicity=6, verbose=True)
+    oPs = Particles(6, field=Field("finite field", 2 ** 31 - 1, 1))
+    indices = [0, 1, 2, 3, 6, 7]
+    assert basis[numpy.array(indices)](oPs) == basis[indices](oPs)

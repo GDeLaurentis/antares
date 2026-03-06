@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 #   _____              _           _
 #  |_   _|__ _ __  ___| |___  __ _(_)___ ___
 #    | |/ _ \ '_ \/ _ \ / _ \/ _` | / -_|_-<
@@ -9,7 +6,6 @@
 
 # Author: Giuseppe
 
-import sys
 import re
 import itertools
 
@@ -17,10 +13,7 @@ from lips import Particles
 from lips.tools import pNB as pNB_internal
 from lips.particles_eval import pNB as pNB_overall
 
-from ..core.tools import flatten
-
-if sys.version_info[0] > 2:
-    unicode = str
+from pycoretools import flatten
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -98,7 +91,7 @@ def helconf_from_label(label):
 class Topology(str):
 
     def __new__(cls, helconf_or_BHUnknown):
-        if type(helconf_or_BHUnknown) in [str, unicode]:
+        if type(helconf_or_BHUnknown) in [str, ]:
             label = helconf_or_BHUnknown
         else:
             label = get_label(helconf_or_BHUnknown)
@@ -110,7 +103,7 @@ class Topology(str):
         return super(Topology, cls).__new__(cls, topology)
 
     def __init__(self, helconf_or_BHUnknown):
-        if type(helconf_or_BHUnknown) in [str, unicode]:
+        if type(helconf_or_BHUnknown) in [str, ]:
             self.label = helconf_or_BHUnknown
         else:
             self.label = get_label(helconf_or_BHUnknown)
@@ -405,7 +398,7 @@ def topology_info(oBHUnknown):
 
 
 def convert_invariant(Invariant, Rule):
-    if type(Invariant) not in [unicode, str]:
+    if type(Invariant) not in [str, ]:
         return Invariant
     if Invariant == "1":
         return "1"
@@ -413,7 +406,7 @@ def convert_invariant(Invariant, Rule):
     OneLinePermutation = Rule[0]
     ComplexConjugation = Rule[1]
     n = len(OneLinePermutation)
-    RuleDict = dict(zip([unicode(entry) for entry in range(1, n + 1)], [entry for entry in OneLinePermutation]))
+    RuleDict = dict(zip([str(entry) for entry in range(1, n + 1)], [entry for entry in OneLinePermutation]))
     # Special Variables
     if "Δ" in Invariant or "Ω" in Invariant or "Π" in Invariant:
         from antares.core.tools import pDijk, pOijk, pPijk
@@ -435,7 +428,7 @@ def convert_invariant(Invariant, Rule):
                      entry[[i for i, _entry in enumerate(entry) if _entry != entry[i - 1] + 1][-1]:] +
                      entry[:[i for i, _entry in enumerate(entry) if _entry != entry[i - 1] + 1][-1]] for entry in NonOLists]
     # Convert Invariant
-    Invariant = "".join([character if character not in RuleDict or (character == "5" and Invariant[i - 2:i] == "tr")
+    Invariant = "".join([character if character not in RuleDict or (character == "5" and Invariant[i - 2:i] == "tr") or Invariant[i - 1] == "*"
                          else RuleDict[character] for i, character in enumerate(Invariant)])
     if ("Δ" in Invariant and Invariant.count("|") == 1) or "Ω" in Invariant or "Π" in Invariant:
         if "Δ" in Invariant:

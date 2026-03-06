@@ -11,9 +11,10 @@
 
 from lips import Particles, myException
 from syngular import SingularException
+from pycoretools import mapThreads, retry
 
 from ..core.settings import settings
-from ..core.tools import mapThreads, log_linear_fit, retry, log_linear_fit_Exception
+from ..core.tools import log_linear_fit, log_linear_fit_Exception
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #

@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 #   _   _      _
 #  | | | |_ _ | |___ _  _____ __ ___ _
 #  | |_| | ' \| / / ' \/ _ \ V  V / ' \
@@ -19,10 +16,11 @@ from copy import deepcopy
 from lips import Particles
 
 from lips.invariants import Invariants
+from pycoretools import flatten
 
 from .bh_unknown import BHUnknown
 from .settings import settings
-from .tools import Generate_LaTeX_and_PDF, forbidden_ordering, flatten
+from .tools import generate_latex_and_pdf, forbidden_ordering
 from .numerical_methods import Numerical_Methods
 
 local_directory = os.path.dirname(os.path.abspath(__file__))
@@ -251,7 +249,7 @@ class Unknown(Numerical_Methods, object):
     def print_partial_result(self, partial=True, compile_tex_to_pdf=False):
         oTerms = self.recursively_extract_terms()
         oTerms.rearrange_and_finalise()
-        Generate_LaTeX_and_PDF(oTerms.Write_LaTex(), self.res_path, partial=partial, compile_tex_to_pdf=compile_tex_to_pdf)
+        generate_latex_and_pdf(oTerms.Write_LaTex(), self.res_path, partial=partial, compile_tex_to_pdf=compile_tex_to_pdf)
 
     def recursively_extract_original_unknown(self):
         if hasattr(self.original_unknown, "original_unknown") and hasattr(self.original_unknown, "recursively_extract_original_unknown"):

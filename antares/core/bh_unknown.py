@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 #   ___ _  _   _   _      _
 #  | _ ) || | | | | |_ _ | |___ _  _____ __ ___ _
 #  | _ \ __ | | |_| | ' \| / / ' \/ _ \ V  V / ' \
@@ -20,9 +17,11 @@ import antares
 
 from lips.invariants import Invariants
 
+from pycoretools import flatten
+
 from .settings import settings
 from .bh_patch import BH_found, gmpTools_found
-from .tools import OutputGrabber, MyShelf, mpc_to_cgmp, cgmp_to_mpc, flatten
+from .tools import OutputGrabber, MyShelf, mpc_to_cgmp, cgmp_to_mpc
 from .numerical_methods import Numerical_Methods
 
 if BH_found:

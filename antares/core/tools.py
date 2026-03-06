@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 #    ___             _____         _
 #   / __|___ _ _ ___|_   _|__  ___| |___
 #  | (__/ _ \ '_/ -_)_| |/ _ \/ _ \ (_-<
@@ -18,18 +15,16 @@ import math
 import time
 import random
 import functools
-import itertools
-import multiprocessing
-import multiprocessing.pool
 import threading
 import numpy
 import types
 import mpmath
 import fractions
 import copyreg
+import warnings
 
-from copy import deepcopy
 from pathlib import Path
+from pycoretools import flatten, chunks
 
 from lips.tools import pSijk, pd5, ptr5, pDijk, pOijk, pPijk, pA2, pS2, p3B, pNB  # noqa
 
@@ -37,8 +32,6 @@ from .bh_patch import BH_found
 if BH_found:
     from .bh_patch import BH
 
-if sys.version_info[0] > 2:
-    unicode = str
 
 MainPythonDirectory = os.path.dirname(os.path.abspath(__file__))[:-5]
 
@@ -112,18 +105,6 @@ Pauli_z = numpy.array([[1, 0], [0, -1]])
 Pauli = numpy.array([Pauli_zero, Pauli_x, Pauli_y, Pauli_z])
 Pauli_bar = numpy.array([Pauli_zero, -Pauli_x, -Pauli_y, -Pauli_z])
 
-# Lorentz Invariants String Patterns - deprecated, use lips - remove in future
-# pSijk = re.compile(r'^(?:s_|S_)(\d+)$')
-# pd5 = re.compile(r'^δ5$')
-# ptr5 = re.compile(r'^(?:tr5_)(\d+)$')
-# pDijk = re.compile(r'(?:^Δ_(\d+)$)|(?:^Δ_(\d+)\|(\d+)\|(\d+)$)')
-# pOijk = re.compile(r'^(?:Ω_)(\d+)$')
-# pPijk = re.compile(r'^(?:Π_)(\d+)$')
-# pA2 = re.compile(r'^(?:⟨)([0-9])(?:\|)([0-9])(?:⟩)$')
-# pS2 = re.compile(r'^(?:\[)([0-9])(?:\|)([0-9])(?:\])$')
-# p3B = re.compile(r'^(?:⟨|\[)(\d)(?:\|\({0,1})([\d[\+|-]*]*)(?:\){0,1}\|)(\d)(?:⟩|\])$')
-# pNB = re.compile(r'^(?:⟨|\[)(?P<start>\d)(?:\|)(?P<middle>(?:(?:\([\d[\+|-]{1,}]{,1}\))|(?:[\d[\+|-]{1,}]{,1}))*)(?:\|)(?P<end>\d)(?:⟩|\])$')
-
 # BlackHat variables
 if BH_found:
     Lambda = BH.LambdaRGMP
@@ -175,258 +156,12 @@ class MyShelf(object):     # context manager shelf
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
-def retry(ExceptionsToCheck, max_tries=2, silent=False):
-    def deco_retry(func):
-        @functools.wraps(func)
-        def f_retry(*args, **kwargs):
-            current_try = 0
-            while current_try < max_tries:
-                try:
-                    return_value = func(*args, **kwargs)
-                except ExceptionsToCheck as e:
-                    last_exception = e
-                    if silent is False:
-                        print("\r{}: {}...  ".format(type(e).__name__, str(e)[:75]), end="")
-                        if type(args[-1]) in [list, tuple]:
-                            print(", ".join(args[-1]), end="")
-                        else:
-                            print("Last arg: {}".format(args[-1]), end="")
-                    current_try += 1
-                else:
-                    if current_try != 0 and silent is False:
-                        print("\r{}: {}... ".format(type(last_exception).__name__, str(last_exception)[:75]), end="")
-                        if type(args[-1]) in [list, tuple]:
-                            print(", ".join(args[-1]), end="")
-                        else:
-                            print("Last arg: {}".format(args[-1]), end="")
-                        print(" ~ Corrected on try {}!                                                               ".format(current_try + 1))
-                    return return_value
-            if silent is False:
-                print("\r{}: {}... ".format(type(last_exception).__name__, str(last_exception)[:75]), end="")
-                if type(args[-1]) in [list, tuple]:
-                    print(", ".join(args[-1]), end="")
-                else:
-                    print("Last arg: {}".format(args[-1]), end="")
-                print(" ~ Uncorrected after {} tries. :(                                                           ".format(max_tries))
-            return None
-        return f_retry
-    return deco_retry
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-
-
-class fakeValue(object):
-
-    def __init__(self, type_, init_value):
-        if type_ == 'f':
-            self.value = float(init_value)
-        elif type_ == 'i':
-            self.value = int(init_value)
-
-
-class fakeManager(object):
-
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def Value(type_, init_value):
-        return fakeValue(type_, init_value)
-
-
-class Progress(object):
-
-    def __init__(self, maximum, UseParallelisation, Cores):
-        if UseParallelisation is True:
-            self.manager = multiprocessing.Manager()
-        else:
-            self.manager = fakeManager()
-        self.time = self.manager.Value('f', time.time())
-        self.average_time = self.manager.Value('f', 0)
-        self.current = self.manager.Value('i', 0)
-        self.maximum = maximum
-        window = max(10, self.maximum // (2 * Cores))
-        self.alpha = 1.0 / window   # smoothing factor
-        self.last_print_time = self.manager.Value('f', 0)
-        self.min_print_time_interval = 0.125
-        self.min_print_value = Cores if UseParallelisation else 1
-
-    def increment(self):
-        effective_alpha = max(self.alpha, 1.0 / (self.current.value + 1))
-        self.current.value += 1
-        previous_time = self.time.value
-        self.time.value = time.time()
-        self.average_time.value = effective_alpha * (self.time.value - previous_time) + (1 - effective_alpha) * self.average_time.value
-
-    def decrement(self):
-        self.current.value -= 1
-
-    def write(self):
-        if self.current.value != 0:
-            current_percentage = float(math.ceil(float(self.current.value) / self.maximum * 10000)) / 100
-            msg = f"{current_percentage:.2f}% completed."
-            nbr_left_steps = self.maximum - self.current.value
-            seconds = int((self.average_time.value) * nbr_left_steps)
-            minutes, seconds = divmod(seconds, 60)
-            hours, minutes = divmod(minutes, 60)
-            now = time.time()
-            if self.current.value < self.min_print_value:
-                msg += " ETA: estimating."
-            elif (now - self.last_print_time.value < self.min_print_time_interval):  # time rate limiter
-                return False  # skip update
-            else:
-                self.last_print_time.value = now
-                ETA = f"{hours:d}:{minutes:02d}:{seconds:02d}"
-                msg += f" ETA: {ETA}."
-        else:
-            msg = "0.00% completed."
-        return msg
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-
-
 try:
     from pytest_cov.embed import cleanup_on_sigterm
 except ImportError:
     pass
 else:
     cleanup_on_sigterm()
-
-
-class NoDaemonProcess(multiprocessing.Process):
-
-    def _get_daemon(self):  # make 'daemon' attribute always return False
-        return False
-
-    def _set_daemon(self, value):
-        pass
-
-    daemon = property(_get_daemon, _set_daemon)
-
-
-class NoDaemonProcessPool(multiprocessing.pool.Pool):
-    # see https://stackoverflow.com/questions/52948447/error-group-argument-must-be-none-for-now-in-multiprocessing-pool
-    def Process(self, *args, **kwargs):
-        proc = super(NoDaemonProcessPool, self).Process(*args, **kwargs)
-        proc.__class__ = NoDaemonProcess
-        return proc
-
-
-class MyProcessPool(object):      # context manager pool (spawns new processes, sidesteps the GIL)
-
-    def __init__(self, processes=1, initializer=None, initargs=None):
-        self.processes = processes
-        self.initializer = initializer
-        self.initargs = initargs
-
-    def __enter__(self):
-        self.obj = NoDaemonProcessPool(self.processes, self.initializer, self.initargs)
-        # self.obj = multiprocessing.Pool(self.processes, self.initializer, self.initargs)
-        return self.obj
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.obj.close()
-        self.obj.join()
-        self.obj.terminate()
-
-
-class MyThreadPool(object):      # context manager pool (no new processes, currently affected by GIL)
-
-    def __init__(self, processes=1, initializer=None, initargs=None):
-        self.processes = processes
-        self.initializer = initializer
-        self.initargs = initargs
-
-    def __enter__(self):
-        # self.obj = NoDaemonThreadPool(self.processes, self.initializer, self.initargs)
-        self.obj = multiprocessing.pool.ThreadPool(self.processes, self.initializer, self.initargs)
-        return self.obj
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.obj.close()
-        self.obj.join()
-        self.obj.terminate()
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-
-
-def progress_wrapper(func, *args, **kwargs):
-    with lock if lock is not None else nullcontext():
-        func_name = func.func.__name__ if hasattr(func.func, "__name__") else "function"
-        prog_msg = prog.write()
-        if prog_msg is not False:
-            args_msg = (  # use type to avoid subclasses
-                ", ".join(args[-1]) if type(args[-1]) in [list, tuple] and isinstance(args[-1][0], str) and len(", ".join(args[-1])) < 40 else
-                str(args[-1]).replace("\n", "") if len(str(args[-1]).replace("\n", "")) < 40 else "N/A"
-            )
-            print(f"\r{func_name} {prog_msg} working on {args_msg}.                                   ", end="\r")
-            sys.stdout.flush()
-    res = func(*args, **kwargs)
-    with lock if lock is not None else nullcontext():
-        prog.increment()
-    return res
-
-
-_lambda_compatible_func = None
-
-
-def worker(x):
-    return _lambda_compatible_func(x)
-
-
-def _init(l, p, func, ):
-    global lock, prog, _lambda_compatible_func
-    lock = l
-    prog = p
-    _lambda_compatible_func = func
-
-
-def mapThreads(func, *args, **kwargs):
-    # Default keyword arguments
-    UseParallelisation = kwargs.pop("UseParallelisation", True)
-    ParallelisationType = kwargs.pop("ParallelisationType", ('Thread', 'Process')[1])
-    Cores = kwargs.pop("Cores", os.cpu_count() // 2)
-    verbose = kwargs.pop("verbose", True)
-
-    # map is applied to the last argument
-    _func_partial = functools.partial(func, *args[:-1], **kwargs)
-
-    if verbose:
-        func_partial = functools.partial(progress_wrapper, _func_partial)
-    else:
-        func_partial = _func_partial
-
-    if UseParallelisation is True:
-        l = multiprocessing.Lock()
-        p = Progress(len(args[-1]), UseParallelisation, Cores)
-        if ParallelisationType == 'Process' or ParallelisationType == 'Processing':
-            with MyProcessPool(Cores, initializer=_init, initargs=(l, p, func_partial,)) as pool:
-                results = pool.map(worker, args[-1])
-        elif ParallelisationType == 'Thread' or ParallelisationType == 'Threading':
-            with MyThreadPool(Cores, initializer=_init, initargs=(l, p, func_partial,)) as pool:
-                results = pool.map(worker, args[-1])
-        else:
-            raise ValueError("ParallelisationType must be either Process(ing) or Thread(ing).")
-    else:
-        global prog, lock
-        lock = None
-        prog = Progress(len(args[-1]), UseParallelisation, Cores)
-        results = list(map(func_partial, args[-1]))
-
-    if verbose:
-        print("\r                                                                                                                   ", end="\r")
-        sys.stdout.flush()
-    return results
-
-
-def filterThreads(lambda_func, iterable):
-    lambda_func.__name__ = str("filterThreads")
-    TrueOrFalseList = mapThreads(lambda_func, iterable)
-    iterable = [entry for i, entry in enumerate(iterable) if TrueOrFalseList[i] is True]
-    return iterable
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -661,40 +396,67 @@ def Compute(lBrackets, lExponents, lCoefficients, oParticles):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
-def Generate_LaTeX_and_PDF(message, res_path, partial=False, compile_tex_to_pdf=True):
-    if partial is False:
-        print("\nWriting LaTeX and PDF result file.")
-    else:
-        print("Writing LaTeX and PDF partial result file.\n")
-    if partial is False:
-        res_path += ".tex"
-    else:
-        res_path += "_partial.tex"
-    os.makedirs(os.path.dirname(res_path), exist_ok=True)
-    with open(res_path, "w") as oFile:
-        oFile.write("\\documentclass[varwidth, border=5pt]{standalone}\n")
-        oFile.write("\\usepackage[paperwidth=575cm, paperheight=575cm, margin=1in, landscape]{geometry}\n")
-        oFile.write("\\DeclareMathSizes{1}{1}{1}{0.1}\n")
-        oFile.write("\\usepackage{unicode-math}\n")
-        oFile.write("\\usepackage{mathtools}\n")
-        oFile.write("\\newcommand{\\tr}{\\text{tr}}\n")
-        oFile.write("\\newcommand{\\trfive}{\\text{tr5}}\n")
-        oFile.write("\\standaloneenv{my}\n\n")
-        oFile.write("\\begin{document}\n")
-        if sys.version_info[0] > 2:
-            oFile.write(message)
-        else:
-            oFile.write(message.encode('utf8'))
-        oFile.write("\\end{document}\n")
+def generate_latex_and_pdf(message, res_path, partial: bool = False, compile_tex_to_pdf: bool = True, verbose: bool = True, ):
+    """
+    Write a standalone LaTeX file (optionally tagged as partial) and, if requested,
+    compile it to a PDF with the provided SpinorLatexCompiler command line utility.
+
+    - If `partial` is False, write `<res_path>.tex`.
+    - If `partial` is True, write `<res_path>_partial.tex`.
+
+    If an identical file already exists, skip rewriting and recompiling.
+    """
+
+    res_path = Path(res_path)
+
+    if partial:  # /path/foo -> /path/foo_partial.tex
+        tex_path = res_path.with_suffix('')  # strip any existing suffix
+        tex_path = tex_path.parent / f"{tex_path.name}_partial.tex"
+    else:        # /path/foo -> /path/foo.tex
+        tex_path = res_path.with_suffix(".tex")
+
+    if verbose:
+        kind = "partial result" if partial else "result"
+        print(f"Writing LaTeX and PDF {kind} file: {tex_path}")
+
+    tex_path.parent.mkdir(parents=True, exist_ok=True)
+
+    file_message = (
+        "\\documentclass[varwidth, border=5pt]{standalone}\n"
+        "\\usepackage[paperwidth=575cm, paperheight=575cm, margin=1in, landscape]{geometry}\n"
+        "\\DeclareMathSizes{1}{1}{1}{0.1}\n"
+        "\\usepackage{unicode-math}\n"
+        "\\usepackage{mathtools}\n"
+        "\\newcommand{\\tr}{\\text{tr}}\n"
+        "\\newcommand{\\trfive}{\\text{tr5}}\n"
+        "\\standaloneenv{my}\n\n"
+        "\\begin{document}\n"
+        f"{message}"
+        "\\end{document}\n"
+    )
+
+    # If file exists and is identical, skip rewriting and recompiling
+    if tex_path.exists():
+        existing = tex_path.read_text(encoding="utf-8")
+        if existing == file_message:
+            if verbose:
+                print(f"Identical file already present for {tex_path.name}. Skipping it.")
+            return
+
+    # Write .tex file
+    tex_path.write_text(file_message, encoding="utf-8")
+
+    # Optionally compile to PDF
     if compile_tex_to_pdf:
-        with open(os.devnull, 'wb') as devnull:
-            subprocess.check_call(['SpinorLatexCompiler', Path(res_path).name],
-                                  stdout=devnull, stderr=devnull, cwd=Path(res_path).parent)
-        if partial is False:
-            if os.path.isfile(res_path[:-4] + "_partial.tex"):
-                os.system("rm " + res_path[:-4].replace("(", "(").replace(")", ")") + "_partial.tex")
-            if os.path.isfile(res_path[:-4] + "_partial.pdf"):
-                os.system("rm " + res_path[:-4].replace("(", "(").replace(")", ")") + "_partial.pdf")
+        with open(os.devnull, "wb") as devnull:
+            subprocess.check_call(["SpinorLatexCompiler", tex_path.name], stdout=devnull, stderr=devnull, cwd=tex_path.parent, )
+
+        # If this is the final (non-partial) file, clean up any old partial outputs
+        if not partial:
+            partial_tex = tex_path.with_name(f"{tex_path.stem}_partial.tex")
+            partial_pdf = tex_path.with_name(f"{tex_path.stem}_partial.pdf")
+            partial_tex.unlink(missing_ok=True)
+            partial_pdf.unlink(missing_ok=True)
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -980,13 +742,13 @@ def printBHcpp(oTerms, NameAmpl, coef_index=None, size_limit=20):
     for i, iTerm in enumerate(oTerms):
         if iTerm.oNum.lCommonInvs != []:
             numerator_common = "template <class T> std::complex<T> " + UniqueName + "numerator_common_{0} ({NameAmpl}_mom_conf_info<T>& mci) [[return {1};]]\n".format(
-                i, printBHcpp_inner(unicode(Numerator([iTerm.oNum.lCommonInvs], [iTerm.oNum.lCommonExps]))), NameAmpl=NameAmpl)
+                i, printBHcpp_inner(str(Numerator([iTerm.oNum.lCommonInvs], [iTerm.oNum.lCommonExps]))), NameAmpl=NameAmpl)
         denominator = "template <class T> std::complex<T> " + UniqueName + "denominator_{0} ({NameAmpl}_mom_conf_info<T>& mci) [[return {1};]]\n".format(
-            i, printBHcpp_inner(unicode(Denominator(iTerm.oDen.lInvs, iTerm.oDen.lExps))), NameAmpl=NameAmpl)
+            i, printBHcpp_inner(StopAsyncIteration(Denominator(iTerm.oDen.lInvs, iTerm.oDen.lExps))), NameAmpl=NameAmpl)
         numerators = []
         for chunk in chunks(zip(iTerm.oNum.llInvs, iTerm.oNum.llExps, iTerm.oNum.lCoefs), size_limit):
             chunk_of_llInvs, chunk_of_llExps, chunk_of_lCoefs = zip(*chunk)
-            numerators += [printBHcpp_inner(unicode(Numerator(chunk_of_llInvs, chunk_of_llExps, chunk_of_lCoefs)))]
+            numerators += [printBHcpp_inner(str(Numerator(chunk_of_llInvs, chunk_of_llExps, chunk_of_lCoefs)))]
         numerator = "".join(["template <class T> std::complex<T> " + UniqueName + "numerator_{0}_{1} ({NameAmpl}_mom_conf_info<T>& mci) [[return {2};]]\n".format(
             i, j, numerator, NameAmpl=NameAmpl) for j, numerator in enumerate(numerators)])
         if iTerm.oNum.lCommonInvs != []:
@@ -1065,7 +827,7 @@ def fraction_to_proper_fraction(match):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
-def LaTeXToPython(res_path, partial_only=False):
+def LaTeXToPython(res_path, partial_only=False, multiplicity=None):
     from ..terms.terms import Terms
 
     res_path = str(res_path)
@@ -1111,8 +873,51 @@ def LaTeXToPython(res_path, partial_only=False):
         python_result = python_result.replace("\\trfive", "tr5")
         python_result = python_result.replace("\\", "")
         # print(python_result, end="\n\n")
+        python_result = patch_old_format(python_result, multiplicity)
         python_results[i] = Terms(python_result)
     return python_results, partial
+
+
+def patch_old_format(python_result, multiplicity):
+    """Replaces Ω_ijk, Π_ijk, Δ_ijk with explicit expressions or new Gram format"""
+    # it must be possible to take a permutation of an invariant in the naive way (replacing indices!)
+    from lips.particles_eval import pOijk, pPijk, pDijk_adjacent
+    from lips import Particles
+    from syngular import Field
+    from ..terms.terms import Terms
+    Omatch = pOijk.findall(python_result)
+    Pmatch = pPijk.findall(python_result)
+    Dmatch = pDijk_adjacent.findall(python_result)
+    if Omatch != [] or Pmatch != [] or Dmatch != []:
+        warnings.warn(
+            "Old format detected. Please update the imported function.",
+            stacklevel=2
+        )
+        if multiplicity is None:
+            raise Exception("Old format results can only be loaded with multiplicity specified.")
+        python_result_old = python_result
+        oPs = Particles(6, field=Field("finite field", 2 ** 31 - 19, 1))
+        Omatch = list(set(Omatch))
+        Pmatch = list(set(Pmatch))
+        Dmatch = list(set(Dmatch))
+        for match in Dmatch:
+            NonOverlappingLists = oPs.ijk_to_3NonOverlappingLists(list(map(int, match)))
+            python_result = python_result.replace("Δ_" + match, "Δ_" + "|".join(["".join(map(str, list)) for list in NonOverlappingLists]))
+        for match in Pmatch:
+            ijk = list(map(int, match))
+            nol = oPs.ijk_to_3NonOverlappingLists(ijk)
+            Pi = "s_" + "".join(map(str, nol[2] + [nol[0][0]])) + "-s_" + "".join(map(str, nol[2] + [nol[0][1]]))
+            python_result = python_result.replace("Π_" + match, f"({Pi})")
+        for match in Omatch:
+            ijk = list(map(int, match))
+            nol = oPs.ijk_to_3NonOverlappingLists(ijk)
+            Omega = ("s_" + "".join(map(str, nol[2])) + "s_" + "".join(map(str, nol[1])) + "*2" + "-(" +
+                     "s_" + "".join(map(str, nol[2])) + "+" + "s_" + "".join(map(str, nol[1])) + "-" +
+                     "s_" + "".join(map(str, nol[0])) + ")" + "s_" + "".join(map(str, nol[2] + [nol[0][0]])))
+            python_result = python_result.replace("Ω_" + match, f"({Omega})")
+        assert python_result_old != python_result
+        assert Terms(python_result_old)(oPs) == Terms(python_result)(oPs)
+    return python_result
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -1165,136 +970,33 @@ def forbidden_ordering(list_one, list_two, oUnknown):
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
+# Back-compatibility - to be removed
 
-def flatten(temp_list, recursion_level=0, treat_list_subclasses_as_list=True, treat_tuples_as_lists=False, max_recursion=None):
-    from sympy.matrices.dense import MutableDenseMatrix
-    from numpy import ndarray
-    flat_list = []
-    for entry in temp_list:
-        if type(entry) is list and (max_recursion is None or recursion_level < max_recursion):
-            flat_list += flatten(entry, recursion_level=recursion_level + 1, treat_list_subclasses_as_list=treat_list_subclasses_as_list,
-                                 treat_tuples_as_lists=treat_tuples_as_lists, max_recursion=max_recursion)
-        elif ((issubclass(type(entry), list) or type(entry) in [MutableDenseMatrix, ndarray]) and
-              treat_list_subclasses_as_list is True and (max_recursion is None or recursion_level < max_recursion)):
-            flat_list += flatten(entry, recursion_level=recursion_level + 1, treat_list_subclasses_as_list=treat_list_subclasses_as_list,
-                                 treat_tuples_as_lists=treat_tuples_as_lists, max_recursion=max_recursion)
-        elif (type(entry) is tuple and treat_tuples_as_lists is True and (max_recursion is None or recursion_level < max_recursion)):
-            flat_list += flatten(entry, recursion_level=recursion_level + 1, treat_list_subclasses_as_list=treat_list_subclasses_as_list,
-                                 treat_tuples_as_lists=treat_tuples_as_lists, max_recursion=max_recursion)
-        else:
-            flat_list += [entry]
-    return flat_list
+import warnings  # noqa
 
 
-def crease(iterable, template, depth, called_recursively=False, verbose=False):
-    """Inverse function to flatten. Requires a template to define the shape. Rugged shape is supported."""
-    if verbose:
-        print(f"crease called at depth {depth}")
-    if not called_recursively:
-        iterable = flatten(iterable)           # make sure it's flat
-        creased_iterable = deepcopy(template)  # make a copy of template to return result, without deleting the template
-    else:
-        creased_iterable = template
-    if verbose:
-        print(f"len(iterable): {len(iterable)}, len(flatten(template, max_recursion={depth})): {len(flatten(template, max_recursion=depth))}")
-    assert len(iterable) == len(flatten(template, max_recursion=depth))
-    if depth == 0:
-        for i, _ in enumerate(creased_iterable):
-            creased_iterable[i] = iterable[i]
-        assert flatten(creased_iterable) == iterable
-        return creased_iterable
-    elif depth > 0:
-        for i, _ in enumerate(creased_iterable):
-            if verbose:
-                print(f"slice: {len(flatten(creased_iterable[:i], max_recursion=1))}:{len(flatten(creased_iterable[:i + 1], max_recursion=1))}")
-            ith_iterable = iterable[len(flatten(creased_iterable[:i], max_recursion=1)):len(flatten(creased_iterable[:i + 1], max_recursion=1))]
-            creased_iterable[i] = crease(ith_iterable, creased_iterable[i], depth=depth - 1, called_recursively=True, verbose=verbose)
-        assert flatten(creased_iterable) == iterable
-        return creased_iterable
-    else:
-        raise ValueError("crease called with negative depth.")
+def __getattr__(name):
+    if name in {"mapThreads", "filterThreads"}:
+        warnings.warn(
+            f"antares.core.tools.{name} is deprecated and will be removed in a future release; "
+            f"use pycoretools.concurrency.{name} (or: from pycoretools import {name}).",
+            FutureWarning,
+            stacklevel=2,
+        )
+        from pycoretools import concurrency
+        return getattr(concurrency, name)
+    elif name in {"flatten", "crease"}:
+        warnings.warn(
+            f"antares.core.tools.{name} is deprecated and will be removed in a future release; "
+            f"use pycoretools.iterables.{name} (or: from pycoretools import {name}).",
+            FutureWarning,
+            stacklevel=2,
+        )
+        from pycoretools import iterables
+        return getattr(iterables, name)
+
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-
-
-def chunks(l, n):
-    """Yield successive n-sized chunks from l."""
-    for i in range(0, len(l), n):
-        yield l[i:i + n]
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-
-def all_non_empty_subsets(iterable):
-    return itertools.chain(*map(lambda x: itertools.combinations(iterable, x), range(1, len(iterable) + 1)))
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-
-
-class Singleton:
-
-    _instances = {}
-
-    def __new__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super().__new__(cls)
-        return cls._instances[cls]
-
-
-class NotAnInteger(Singleton):
-
-    def __init__(self):
-        pass
-
-    def __repr__(self):
-        return "NaI"
-
-    def __str__(self):
-        return "NaI"
-
-    def __add__(self, other):
-        return self
-
-    def __sub__(self, other):
-        return self
-
-    def __mul__(self, other):
-        return self
-
-    def __truediv__(self, other):
-        return self
-
-    def __floordiv__(self, other):
-        return self
-
-    def __mod__(self, other):
-        return self
-
-    def __pow__(self, other):
-        return self
-
-    def __radd__(self, other):
-        return self
-
-    def __rsub__(self, other):
-        return self
-
-    def __rmul__(self, other):
-        return self
-
-    def __rtruediv__(self, other):
-        return self
-
-    def __rfloordiv__(self, other):
-        return self
-
-    def __rmod__(self, other):
-        return self
-
-    def __rpow__(self, other):
-        return self
-
-
-NaI = NotAnInteger()
+def __dir__():
+    return sorted(list(globals().keys()) + ["mapThreads", "filterThreads", "flatten", "crease"])

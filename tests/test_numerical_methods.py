@@ -6,7 +6,7 @@ from lips.fields.field import Field
 from antares.core.settings import settings
 from antares.core.numerical_methods import num_func, tensor_function
 from antares.terms.terms import Terms
-from antares.core.tools import NaI
+from pycoretools import NaI
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #

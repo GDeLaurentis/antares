@@ -9,7 +9,7 @@ from lips.fields import Field
 
 from antares.core.settings import settings
 from antares.terms.terms import Terms
-from antares.core.tools import NaI
+from pycoretools import NaI
 
 mpc = Field('mpc', 0, 300)
 modp = Field('finite field', 2 ** 31 - 1, 1)
@@ -208,3 +208,19 @@ def test_pickle_round_trip():
 
     assert hash1 == hash2
     assert hash(original) == hash(loaded)
+
+
+def test_terms_symmetry_sign_not_specified():
+    with pytest.raises(ValueError, match="Perhaps you forgot to specify the sign?"):
+        Terms("""
+            (⟨3|𝟒|𝟓|𝟔|1+2|3⟩)/((⟨3|𝟒|𝟓|𝟔|1+2|3⟩[3|𝟒|𝟓|𝟔|1+2|3]+mt²tr5(3|𝟒|𝟓|𝟔)²))
+            +('123456', True, )
+            """)
+
+
+def terms_can_be_evaluated_on_semianalytical_slice():
+    seed = 0
+    field = Field("finite field", 2 ** 31 - 1, 1)
+    oSlice = Particles(6, field=field, seed=seed)
+    oSlice.univariate_slice(extra_constraints=(), algorithm='covariant', seed=seed)
+    Terms("""+(1⟨6|2+4|3]⟨6|2+3|4][24])/(⟨56⟩⟨1|2+3|4]s234[34]²)""")(oSlice)

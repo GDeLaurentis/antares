@@ -17,7 +17,7 @@ import operator
 
 from collections.abc import Sequence
 
-from syngular import Monomial, Polynomial, Qi
+from syngular import Field, Monomial, Polynomial, RingPoints, Qi
 
 from lips import Particles
 from lips.invariants import Invariants
@@ -26,7 +26,9 @@ from lips.tools import pNB as pNB_internal
 from lips.particles_eval import pNB as pNB_overall
 from lips.symmetries import inverse
 
-from ..core.tools import LaTeXToPython, flatten, crease, get_common_Q_factor, get_max_abs_numerator, get_max_denominator
+from pycoretools import flatten, crease, mapThreads
+
+from ..core.tools import LaTeXToPython, get_common_Q_factor, get_max_abs_numerator, get_max_denominator
 from ..core.diskcached import DiskCached
 from ..core.settings import settings
 from ..core.numerical_methods import Numerical_Methods
@@ -56,11 +58,12 @@ def caching_decorator(func):
 
 class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
 
-    def __init__(self, lllNumInvs_or_Terms, lllNumExps=None, llNumCoefs_or_Sym=None, llDenInvs=None, llDenExps=None):
+    def __init__(self, lllNumInvs_or_Terms, lllNumExps=None, llNumCoefs_or_Sym=None, llDenInvs=None, llDenExps=None,
+                 field=Field("Qi", 0, 0)):
         import antares
         list.__init__(self)
         if isinstance(lllNumInvs_or_Terms, str):
-            self.__rstr__(lllNumInvs_or_Terms)
+            self.__rstr__(lllNumInvs_or_Terms, field=field)
         elif all([isinstance(oTerm, Term) for oTerm in lllNumInvs_or_Terms]):
             for oTerm in lllNumInvs_or_Terms:
                 self.append(oTerm)
@@ -74,11 +77,25 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
                                                                              llDenInvs[i] == [] and llDenExps[i] == [])) or
                             len(llNumCoefs_or_Sym[i][0]) == 2  # i.e. just a number
                             else Term(llNumCoefs_or_Sym[i][0]))
+        self._field = field
         self.oFittingSettings = FittingSettings()
         self.useful_symmetries = []
         self.symmetries = []
         self.update_variables()
         self.CACHE_PATH = antares.CACHE_PATH / "terms"
+
+    @property
+    def field(self):
+        return self._field
+
+    @field.setter
+    def field(self, temp_field):
+        if not isinstance(temp_field, Field):
+            raise Exception(f"Provided field {temp_field} is not an instance of Field.")
+        if not hasattr(self, "field") or temp_field != self.field:
+            self._field = temp_field
+            for t in self[self.is_not_symmetry_mask]:
+                t.oNum.polynomial.field = temp_field
 
     def __and__(self, other):
         assert isinstance(other, Terms)
@@ -197,6 +214,10 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
         if hasattr(self, "multiplicity"):
             other.multiplicity = self.multiplicity
 
+    def simplify_factored_monomials(self):
+        for e in self:
+            e.simplify_factored_monomials()
+
     @property
     def is_not_symmetry_mask(self):
         return ~numpy.array([t.is_symmetry for t in self], dtype=bool)
@@ -230,6 +251,8 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
             # else discard entire block + symmetries
 
         self[:] = result
+        if len(self) == 0:
+            self.append(Term("(0)"))
         return self
 
     def __contains__(self, other):  # is other in self?
@@ -247,11 +270,13 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
     def __str__(self):
         return "\n".join([f"+{oTerm}" for oTerm in self])
 
-    def __rstr__(self, string):
-        self.__init__([Term(entry) for entry in string.splitlines() if entry.replace(" ", "") != ''])
+    def __rstr__(self, string, field=Field("Qi", 0, 0)):
+        self.__init__([Term(entry, field=field) for entry in string.splitlines() if entry.replace(" ", "") != ''])
 
     def __repr__(self):
         content = f"\n{self}\n" if len(self) > 1 else str(self)
+        if self.field.name not in ['gaussian rational', 'Qi']:
+            return f'Terms("""{content}""", field={self.field})'
         return f'Terms("""{content}""")'
 
     def __hash__(self):
@@ -416,7 +441,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
     def coeffs(self, values):
         if numpy.all(values == flatten(values)):
             values = crease(values, self.ansatze, depth=1)
-        for t, v in zip(self, values):
+        for t, v in zip(self[self.is_not_symmetry_mask], values):
             t.oNum.coeffs = v
 
     @property
@@ -464,22 +489,23 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
         from lips.symmetries import identity
         if self.is_ansatz() and numpy.isscalar(oParticles('1')):
             raise Exception("Terms ansatz should be called only with vectorized input. Scalar input is not supported.")
-        InvsDict = {}
-        for inv in {'1'} | self.variables:
-            InvsDict[inv] = oParticles(inv)
+        invs = {'1'} | self.variables
+        InvsDict = dict(zip(invs, mapThreads(
+            oParticles, invs, UseParallelisation=(isinstance(oParticles, RingPoints) and len(oParticles) > 10), verbose=False)))
         InvsDict['field'] = oParticles.field
         SymInvsDict = {}
         for oTerm in self:
             if oTerm.is_symmetry is True and oTerm.tSym not in SymInvsDict.keys():
-                NewDict = {}
                 NewParticles = oParticles.image(inverse(oTerm.tSym))
-                for inv in {'1'} | self.variables:
-                    NewDict[inv] = NewParticles(inv)
+                NewDict = dict(zip(invs, mapThreads(
+                    NewParticles, invs, UseParallelisation=(isinstance(NewParticles, RingPoints) and len(NewParticles) > 10), verbose=False)))
                 NewDict['field'] = oParticles.field
                 SymInvsDict[oTerm.tSym] = NewDict
         # determine whether evaluation at a single point returns a scalar - ansatz not supported for tensor evals
-        massive_fermions = [i + 1 for i, oP in enumerate(oParticles) if hasattr(oP, 'spin_index')]
-        scalar_eval_is_scalar = all(isinstance(oP.spin_index[1], int) for oP in oParticles if hasattr(oP, 'spin_index'))
+        # logic to be improved
+        massive_fermions = [i + 1 for i, oP in enumerate(oParticles) if hasattr(oP, 'left_spin_index')]
+        scalar_eval_is_scalar = all(isinstance(oP.left_spin_index[1], int) and isinstance(oP.right_spin_index[1], int)
+                                    for oP in oParticles if hasattr(oP, 'left_spin_index') and hasattr(oP, 'right_spin_index'))
         NumericalResult = 0
         for i, iTerm in enumerate(self):
             if verbose:
@@ -495,6 +521,8 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
                     elif jTerm.is_symmetry is False:
                         something_was_not_a_symmetry = True
                         this_term = jTerm(SymInvsDict[iTerm.tSym])
+                        if (isinstance(this_term, numpy.ndarray) and numpy.issubdtype(this_term.dtype, numpy.integer)):
+                            this_term = this_term.astype(int)  # warning, there may be an overflow issue for ints between 63 and 64 bits
                         chosen_operator = operator.isub if iTerm.tSym[2] == "-" else operator.iadd
                         # if result is a tensor indices must be aligned
                         if isinstance(this_term, numpy.ndarray) and not scalar_eval_is_scalar:
@@ -502,16 +530,20 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
                             if ("".join(iTerm.tSym[0][i - 1] for i in massive_fermions) ==
                                "".join(identity(len(iTerm.tSym[0]))[0][i - 1] for i in massive_fermions)[::-1]):
                                 this_term = this_term.T
-                        if numpy.isscalar(this_term) or len(this_term.shape) == 1 or not scalar_eval_is_scalar:
+                        if numpy.isscalar(this_term) or (hasattr(this_term, 'shape') and len(this_term.shape) == 1) or not scalar_eval_is_scalar:
                             NumericalResult = chosen_operator(NumericalResult, this_term)
                         else:
                             chosen_operator(NumericalResult[:, -(folding_offset + this_term.shape[1]):(NumericalResult.shape[1] - folding_offset)], this_term)
-                            if oParticles.field.characteristic != 0:
+                            if oParticles.field.characteristic != 0 and (
+                                isinstance(NumericalResult, int) or (isinstance(NumericalResult, numpy.ndarray) and
+                                                                     numpy.issubdtype(NumericalResult.dtype, numpy.integer))):
                                 NumericalResult = NumericalResult % oParticles.field.characteristic
                             folding_offset += this_term.shape[1]
             else:
                 this_term = iTerm(InvsDict)
-                if numpy.isscalar(this_term) or len(this_term.shape) == 1 or not scalar_eval_is_scalar:
+                if (isinstance(this_term, numpy.ndarray) and numpy.issubdtype(this_term.dtype, numpy.integer)):
+                    this_term = this_term.astype(int)  # warning, there may be an overflow issue for ints between 63 and 64 bits
+                if numpy.isscalar(this_term) or (hasattr(this_term, 'shape') and len(this_term.shape) == 1) or not scalar_eval_is_scalar:
                     NumericalResult += this_term
                 else:
                     if isinstance(NumericalResult, int) and NumericalResult == 0:
@@ -820,6 +852,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
 
     def Write_LaTex(self):
         # generate latex message and print the full result
+        self.simplify_factored_monomials()
         latex_result = ""
         for iTerm in self:
             if iTerm.is_symmetry:
@@ -831,7 +864,7 @@ class Terms(DiskCached, Numerical_Methods, Terms_numerators_fit, list):
                 continue
             #  print the analytic expression
             if iTerm.oDen != Denominator():
-                if len(iTerm.oNum.polynomial) > 1:
+                if iTerm.oNum.monomial != Monomial(""):
                     latex_result += rf"\scriptscriptstyle\frac{{{iTerm.oNum}}}{{{iTerm.oDen}}}"
                 else:
                     latex_result += rf"\scriptscriptstyle\frac{{{str(iTerm.oNum)[1:-1]}}}{{{iTerm.oDen}}}"
@@ -974,7 +1007,7 @@ def string_toSaM(string):
     string = pA2.sub(r"Spaa[Sp[\1],Sp[\2]]", string)
     string = pS2.sub(r"Spbb[Sp[\1],Sp[\2]]", string)
     string = pSijk.sub(lambda match: f"S[{','.join(f'Sp[{num}]' for num in match.group(1))}]", string)
-    string = pDijk_non_adjacent.sub(lambda match: f"Delta[{','.join(['{' + ','.join(f'Sp[{num}]' for num in group) + '}' for group in match.groups() ])}]", string)
+    string = pDijk_non_adjacent.sub(lambda match: f"Delta[{','.join(['{' + ','.join(f'Sp[{num}]' for num in group) + '}' for group in match.groups()])}]", string)
 
     def parse_pNB(match):
         abcd = pNB_internal.search(match.group())
@@ -1009,7 +1042,7 @@ def string_toSaM(string):
 
 def LoadResults(res_path, load_partial_results_only=False, silent=True, callable_to_check_with=None, multiplicity=None):
 
-    lResults, loaded_result_is_partial = LaTeXToPython(res_path, load_partial_results_only)
+    lResults, loaded_result_is_partial = LaTeXToPython(res_path, load_partial_results_only, multiplicity)
 
     if lResults is None:
         return None, None

@@ -1,10 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 # Author: Giuseppe
 
 import os
-import sys
 import functools
 import operator
 import pandas
@@ -14,9 +10,13 @@ import mpmath
 from copy import copy
 from fractions import Fraction as Q
 
+from pycoretools import NaI, mapThreads
+
 from lips import Particles
 from lips.invariants import Invariants
 from lips.symmetries import phase_weights_compatible_symmetries
+
+from syngular import Field
 
 # from linac.tensor_function import tensor_function as _tensor_function
 
@@ -25,13 +25,9 @@ from pyadic.padic import padic_log
 
 from ..scalings.pair import pair_scalings
 from .settings import settings
-from .tools import NaI, mapThreads
 
 local_directory = os.path.dirname(os.path.abspath(__file__))
 mpmath.mp.dps = 300
-
-if sys.version_info.major > 2:
-    unicode = str
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -381,8 +377,8 @@ class Numerical_Methods:
                         original_scaling = " ({})".format(original_scaling)
                     else:
                         original_scaling = ""
-                    print(("[" + _pair_invs[i][0] + ", " + _pair_invs[i][1] + "]:").ljust(col_width) + unicode(_pair_exps[i]) + original_scaling + ", " + (unicode(
-                        len(_pair_friends[i]))).ljust(2) + u" \u2192 " + unicode(len(_true_friends[i])))
+                    print(("[" + _pair_invs[i][0] + ", " + _pair_invs[i][1] + "]:").ljust(col_width) + str(_pair_exps[i]) + original_scaling + ", " + (str(
+                        len(_pair_friends[i]))).ljust(2) + u" \u2192 " + str(len(_true_friends[i])))
                 print("")
         else:
             if silent is False:
@@ -403,17 +399,19 @@ class Numerical_Methods:
     @property
     def collinear_data(self):
         df = pandas.DataFrame(columns=self.den_invs, index=self.den_invs, data=[
-            [str(self.pair_exps[inv1, inv2] if type(self.pair_exps[inv1, inv2]) in [str, unicode] else int(self.pair_exps[inv1, inv2])
+            [str(self.pair_exps[inv1, inv2] if type(self.pair_exps[inv1, inv2]) in [str, ] else int(self.pair_exps[inv1, inv2])
                  if self.pair_exps[inv1, inv2].is_integer() else self.pair_exps[inv1, inv2]) +
              "/" + str(len(self.pair_friends[inv1, inv2])) + "/" + str(len(self.true_friends[inv1, inv2]))
              if (inv1, inv2) in self.pair_exps else self.den_exps[inv1] if inv1 == inv2 else None for inv2 in self.den_invs] for inv1 in self.den_invs])
         df.style.caption = "Collinear data.\nPower/Degeneracy of phase space/Degeneracy of restricted phase space."
         return df
 
-    def get_lcd(self, oSlice, assert_factors=True, verbose=False):
+    def get_lcd(self, oSlice, oSlice_for_invariants=None, assert_factors=True, degree_bounds={}, keep_all_non_unique=False, verbose=False):
         from ..scalings.slicing import do_codimension_one_study
-        return do_codimension_one_study(self, oSlice, settings.invariants, assert_factors=assert_factors, verbose=verbose, )
-
+        if oSlice_for_invariants is None:
+            oSlice_for_invariants = oSlice
+        return do_codimension_one_study(self, oSlice, settings.invariants, oSlice_for_invariants=oSlice_for_invariants, assert_factors=assert_factors,
+                                        degree_bounds=degree_bounds, keep_all_non_unique=keep_all_non_unique, verbose=verbose, )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
@@ -531,34 +529,51 @@ class _tensor_function(object):
         for i in range(selfFlattened.shape[0]):
             yield selfFlattened[i]
 
+    def as_span(self, input_generator, field=Field("finite field", 2 ** 31 - 1, 1), **vs_kwargs, ):
+        """
+        Return the VectorSpaceOfFunctions spanned by the components of this tensor_function.
+        All arguments are passed directly to VectorSpaceOfFunctions.
+        """
+        # from .vector_spaces.over_function_fields import VectorSpaceOfFunctions
+        # return VectorSpaceOfFunctions(self.flatten(), input_generator, field=field, **vs_kwargs, )
+
 
 class tensor_function(Numerical_Methods, _tensor_function):
 
     def univariate_Thiele_on_slice(self, oSlice, verbose=False):
         from ..scalings.slicing import univariate_Thiele_on_slice
-        # evaluate it once in case the length is not known
-        oPoint = oSlice.copy()
-        oPoint.subs({'t': 0})
-        self(oPoint)
+        try:
+            len(self)
+        except AttributeError:
+            # evaluate it once in case the length is not known
+            oPoint = oSlice.copy()
+            oPoint.subs({'t': 0})
+            self(oPoint)
         return mapThreads(lambda i: univariate_Thiele_on_slice(self[i], oSlice, verbose=False),
                           range(len(self)), verbose=verbose,
                           UseParallelisation=settings.UseParallelisation, Cores=settings.Cores)
 
     def univariate_Thiele_on_slice_given_LCDs(self, lTerms, oSlice, verbose=False):
         from ..scalings.slicing import univariate_Thiele_on_slice_given_LCD
-        # evaluate it once in case the length is not known
-        oPoint = oSlice.copy()
-        oPoint.subs({'t': 0})
-        self(oPoint)
+        try:
+            len(self)
+        except AttributeError:
+            # evaluate it once in case the length is not known
+            oPoint = oSlice.copy()
+            oPoint.subs({'t': 0})
+            self(oPoint)
+        assert len(self) == len(lTerms), f"Length of tensor_function (self) and list of Terms are expected to be the same, got {len(self)} and {len(lTerms)}."
         return mapThreads(
             lambda i: univariate_Thiele_on_slice_given_LCD(self[i], lTerms[i], oSlice, verbose=verbose),
             range(len(self)), verbose=verbose, UseParallelisation=settings.UseParallelisation, Cores=settings.Cores
         )
 
-    def get_lcds(self, oSlice, verbose=False):
+    def get_lcds(self, oSlice, oSlice_for_invariants=None, verbose=False):
         from ..scalings.slicing import get_invariant_dict, do_codimension_one_study
-        get_invariant_dict(tuple(settings.invariants), oSlice, )  # cache invariants
+        if oSlice_for_invariants is None:
+            oSlice_for_invariants = oSlice
+        get_invariant_dict(tuple(settings.invariants), oSlice_for_invariants, )  # cache invariants
         return mapThreads(
-            lambda i: do_codimension_one_study(self[i], oSlice, settings.invariants, assert_factors=True, verbose=False, ),
+            lambda i: do_codimension_one_study(self[i], oSlice, settings.invariants, oSlice_for_invariants=oSlice_for_invariants, assert_factors=True, verbose=False, ),
             range(len(self)), verbose=verbose, UseParallelisation=settings.UseParallelisation, Cores=settings.Cores
         )
