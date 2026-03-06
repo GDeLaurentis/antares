@@ -133,6 +133,7 @@ class TermsList(Numerical_Methods, list):
         partial_symmetries: symmetries under which the vector space is not necessarly closed, but which may be useful;
         new_functions: number of new functions, or None for full recomputation.
         """
+        from linac.vector_spaces import VectorSpaceOfFunctions
         all_functions = [entry for entry in self if not isinstance(entry, tuple)]
         if new_functions is all:
             functions = all_functions

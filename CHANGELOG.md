@@ -16,6 +16,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 
 
+## [0.7.1] - 2026-03-06
+
+### Added
+
+- (private) (wip) Basis change functions
+- Parallelisation of invs computation in Terms for vectorized input (bottleneck for fitting)
+- Automatic patching in `LoadResults` of old format results with old delta, omega and pi invariants (use mandelstams poly instead).
+- `TermsList.reinsert_symmetries`
+
+### Changed
+
+- Migration of basic utils to pycoretools
+- Various improvements to slicing (especially for non UFD's)
+- Better error message for terms with symmetries with unspecified sign
+- Improved parsers
+- Term(s) objects carry Field information
+- (private) Empty ansatz is valid ansatz.
+- Better handling of casting to field of rational coefficients;
+- Improved analytic terms division to support numerators with polynomials with more than one monomial in first argument
+
+### Fixed
+
+- Patching float rationalisation returns (gaussian) rational instance instead of tuple
+- Better logic to get `tensor_function` length without evaluating it
+
+### Deprecated
+
+- (private) Removing external gmp solver
+- `make_proper` fraction function, should not impact stability
+- `mapThreads`, `crease`, `flatten` etc should be imported from pycoretools
+
+
 ## [0.7.0] - 2025-04-24
 
 ### Added
@@ -72,7 +104,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.6.0] - 2024-06-18
 
 
-[unreleased]: https://github.com/GDeLaurentis/antares/compare/v0.7.0...HEAD
+[unreleased]: https://github.com/GDeLaurentis/antares/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/GDeLaurentis/antares/releases/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/GDeLaurentis/antares/releases/compare/v0.6.3...v0.7.0
 [0.6.3]: https://github.com/GDeLaurentis/antares/releases/compare/v0.6.2...v0.6.3
 [0.6.2]: https://github.com/GDeLaurentis/antares/releases/compare/v0.6.1...v0.6.2
