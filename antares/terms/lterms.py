@@ -4,7 +4,7 @@ import pathlib
 
 from syngular import Field
 from lips.symmetries import inverse
-from linac.vector_spaces import VectorSpaceOfFunctions
+# from linac.vector_spaces import VectorSpaceOfFunctions
 
 from ..core.tools import generate_latex_and_pdf
 from ..core.numerical_methods import Numerical_Methods, tensor_function
