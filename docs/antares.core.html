@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>antares.core package &mdash; antares 0.7.0 documentation</title>
+  <title>antares.core package &mdash; antares 0.7.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=fe7df9b0"></script>
+      <script src="_static/documentation_options.js?v=5a057da9"></script>
       <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -61,7 +61,7 @@
 <li class="toctree-l3"><a class="reference internal" href="antares.html#antares-bh-to-readable-module">antares.bh_to_readable module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="antares.html#antares-check-results-module">antares.check_results module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="antares.html#antares-encode-cut-constructible-parts-module">antares.encode_cut_constructible_parts module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="antares.html#antares-numerical-to-analytical-module">antares.numerical_to_analytical module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="antares.html#module-antares.numerical_to_analytical">antares.numerical_to_analytical module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="antares.html#module-antares">Module contents</a></li>
 </ul>
 </li>
@@ -314,9 +314,9 @@
 <dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">Numerical_Methods</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py property">
+<dl class="py method">
 <dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.all_symmetries">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">all_symmetries</span></span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.all_symmetries" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">all_symmetries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">possible_symmetries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Field('mpc',</span> <span class="pre">0,</span> <span class="pre">300)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.all_symmetries" title="Link to this definition"></a></dt>
 <dd><p>Obtain the symmetries of the function, by numerical evaluation.</p>
 </dd></dl>
 
@@ -343,6 +343,11 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.finite_field_phase_weight">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">finite_field_phase_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">powers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.finite_field_phase_weight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.Numerical_Methods.get_lcd">
+<span class="sig-name descname"><span class="pre">get_lcd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oSlice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oSlice_for_invariants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">assert_factors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">degree_bounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_all_non_unique</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.Numerical_Methods.get_lcd" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -485,6 +490,27 @@
 <dt class="sig sig-object py" id="antares.core.numerical_methods.tensor_function">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">tensor_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callable_function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.tensor_function" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#antares.core.numerical_methods.Numerical_Methods" title="antares.core.numerical_methods.Numerical_Methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">Numerical_Methods</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">_tensor_function</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.tensor_function.get_lcds">
+<span class="sig-name descname"><span class="pre">get_lcds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oSlice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oSlice_for_invariants</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.tensor_function.get_lcds" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.tensor_function.univariate_Thiele_on_slice">
+<span class="sig-name descname"><span class="pre">univariate_Thiele_on_slice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oSlice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.tensor_function.univariate_Thiele_on_slice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.tensor_function.univariate_Thiele_on_slice_given_LCDs">
+<span class="sig-name descname"><span class="pre">univariate_Thiele_on_slice_given_LCDs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lTerms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oSlice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.tensor_function.univariate_Thiele_on_slice_given_LCDs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.numerical_methods.update_shape">
+<span class="sig-prename descclassname"><span class="pre">antares.core.numerical_methods.</span></span><span class="sig-name descname"><span class="pre">update_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.numerical_methods.update_shape" title="Link to this definition"></a></dt>
+<dd><p>Decorator to update shape/size metadata after function call.</p>
 </dd></dl>
 
 </section>
@@ -572,20 +598,9 @@
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="antares.core.tools.Generate_LaTeX_and_PDF">
-<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Generate_LaTeX_and_PDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_tex_to_pdf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Generate_LaTeX_and_PDF" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="antares.core.tools.LaTeXToPython">
-<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">LaTeXToPython</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.LaTeXToPython" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">LaTeXToPython</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplicity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.LaTeXToPython" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="antares.core.tools.MyProcessPool">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">MyProcessPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.MyProcessPool" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="antares.core.tools.MyShelf">
@@ -593,45 +608,10 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="antares.core.tools.MyThreadPool">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">MyThreadPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.MyThreadPool" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="antares.core.tools.Negative_Entries">
 <span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Negative_Entries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lIntegers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Negative_Entries" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="antares.core.tools.NoDaemonProcess">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">NoDaemonProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">daemon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.NoDaemonProcess" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Process</span></code></p>
-<dl class="py property">
-<dt class="sig sig-object py" id="antares.core.tools.NoDaemonProcess.daemon">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">daemon</span></span><a class="headerlink" href="#antares.core.tools.NoDaemonProcess.daemon" title="Link to this definition"></a></dt>
-<dd><p>Return whether process is a daemon</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="antares.core.tools.NoDaemonProcessPool">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">NoDaemonProcessPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxtasksperchild</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.NoDaemonProcessPool" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pool</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="antares.core.tools.NoDaemonProcessPool.Process">
-<span class="sig-name descname"><span class="pre">Process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.NoDaemonProcessPool.Process" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="antares.core.tools.NotAnInteger">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">NotAnInteger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.NotAnInteger" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#antares.core.tools.Singleton" title="antares.core.tools.Singleton"><code class="xref py py-class docutils literal notranslate"><span class="pre">Singleton</span></code></a></p>
-</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="antares.core.tools.OutputGrabber">
@@ -674,33 +654,6 @@ and save the text in <cite>capturedtext</cite>.</p>
 <span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Positive_Entries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lIntegers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Positive_Entries" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="antares.core.tools.Progress">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UseParallelisation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Progress" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="antares.core.tools.Progress.decrement">
-<span class="sig-name descname"><span class="pre">decrement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Progress.decrement" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="antares.core.tools.Progress.increment">
-<span class="sig-name descname"><span class="pre">increment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Progress.increment" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="antares.core.tools.Progress.write">
-<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Progress.write" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="antares.core.tools.Singleton">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Singleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Singleton" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="antares.core.tools.Sum_Abs">
 <span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Sum_Abs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lIntegers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Sum_Abs" title="Link to this definition"></a></dt>
@@ -709,11 +662,6 @@ and save the text in <cite>capturedtext</cite>.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="antares.core.tools.Write">
 <span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">Write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lBrackets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lExponents</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lCoefficients</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.Write" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="antares.core.tools.all_non_empty_subsets">
-<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">all_non_empty_subsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.all_non_empty_subsets" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -728,41 +676,8 @@ and save the text in <cite>capturedtext</cite>.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="antares.core.tools.chunks">
-<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.chunks" title="Link to this definition"></a></dt>
-<dd><p>Yield successive n-sized chunks from l.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="antares.core.tools.configuration_unpacker">
 <span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">configuration_unpacker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sys_argv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.configuration_unpacker" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="antares.core.tools.fakeManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">fakeManager</span></span><a class="headerlink" href="#antares.core.tools.fakeManager" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="antares.core.tools.fakeManager.Value">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.fakeManager.Value" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="antares.core.tools.fakeValue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">fakeValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.fakeValue" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="antares.core.tools.filterThreads">
-<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">filterThreads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lambda_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.filterThreads" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="antares.core.tools.flatten">
-<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursion_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treat_list_subclasses_as_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treat_tuples_as_lists</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_recursion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.flatten" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -779,6 +694,18 @@ and save the text in <cite>capturedtext</cite>.</p>
 <dt class="sig sig-object py" id="antares.core.tools.generate_BH_cpp_files">
 <span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">generate_BH_cpp_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shelconf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PWRespath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convert_rational</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.generate_BH_cpp_files" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.generate_latex_and_pdf">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">generate_latex_and_pdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compile_tex_to_pdf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.generate_latex_and_pdf" title="Link to this definition"></a></dt>
+<dd><p>Write a standalone LaTeX file (optionally tagged as partial) and, if requested,
+compile it to a PDF with the provided SpinorLatexCompiler command line utility.</p>
+<ul class="simple">
+<li><p>If <cite>partial</cite> is False, write <cite>&lt;res_path&gt;.tex</cite>.</p></li>
+<li><p>If <cite>partial</cite> is True, write <cite>&lt;res_path&gt;_partial.tex</cite>.</p></li>
+</ul>
+<p>If an identical file already exists, skip rewriting and recompiling.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="antares.core.tools.get_common_Q_factor">
@@ -808,11 +735,6 @@ and save the text in <cite>capturedtext</cite>.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="antares.core.tools.mapThreads">
-<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">mapThreads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.mapThreads" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="antares.core.tools.mpc_to_cgmp">
 <span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">mpc_to_cgmp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mpc_nbr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.mpc_to_cgmp" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -829,6 +751,12 @@ and save the text in <cite>capturedtext</cite>.</p>
 <dd></dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="antares.core.tools.patch_old_format">
+<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">patch_old_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">python_result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplicity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.patch_old_format" title="Link to this definition"></a></dt>
+<dd><p>Replaces Ω_ijk, Π_ijk, Δ_ijk with explicit expressions or new Gram format</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="antares.core.tools.printBHcpp">
 <span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">printBHcpp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">oTerms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">NameAmpl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coef_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.printBHcpp" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -839,23 +767,8 @@ and save the text in <cite>capturedtext</cite>.</p>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="antares.core.tools.progress_wrapper">
-<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">progress_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.progress_wrapper" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="antares.core.tools.rand_frac">
 <span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">rand_frac</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.rand_frac" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="antares.core.tools.retry">
-<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">retry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ExceptionsToCheck</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.retry" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="antares.core.tools.worker">
-<span class="sig-prename descclassname"><span class="pre">antares.core.tools.</span></span><span class="sig-name descname"><span class="pre">worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#antares.core.tools.worker" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
